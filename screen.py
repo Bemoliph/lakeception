@@ -19,7 +19,7 @@ class Screen(object):
         self.font = pygame.font.SysFont(self.font_face, self.font_size)
     
     def _charToSprite(self, char, color):
-        return self.font.render(char, False, color)
+        return self.font.render(char, False, color, self.background_color)
     
     def getFontRect(self, coords, text):
         # Scalars were experimentally determined so chars touched instead of

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pygame
-import os
 
 from lakeutils import hex2rgb
 
@@ -8,10 +7,8 @@ class Screen(object):
     def __init__(self, world, window_res, viewport_res):
         self.world = world
         
-        pygame.init()
         self.background_color = hex2rgb("000000")
         self.window = pygame.display.set_mode(window_res)
-        self.window.fill(self.background_color)
         
         self.viewport_res = viewport_res
         self.viewport_tiles = [None] * (viewport_res[0] * viewport_res[1])
@@ -56,6 +53,7 @@ class Screen(object):
                 self.window.blit(sprite, sprite_rect)
     
     def draw(self):
+        self.window.fill(self.background_color)
         self.drawViewport()
         
         pygame.display.update()

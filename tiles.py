@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 
 from lakeutils import hex2rgb

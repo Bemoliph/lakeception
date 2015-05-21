@@ -1,37 +1,29 @@
+# -*- coding: utf-8 -*-
+import pygame
+
 from world import World
 from screen import Screen
-from time import sleep
-import pygame
-# contains KEYDOWN and other key codes
-from pygame.locals import *
+from input import Input
 
 class Game(object):
     def __init__(self):
+        pygame.init()
+        
         self.world = World("Test World", (5,5), debug=True)
-        self.screen = Screen(self.world, (400, 400), (10, 10))
-   
+        self.screen = Screen(self.world, (300, 300), (10, 10))
+        self.input = Input(self)
+        
+        self.framerate = 60
+        self.clock = pygame.time.Clock()
+        
+        self.quitting = False
+    
     def tick(self):
+        self.input.tick()
         self.screen.draw()
+        self.clock.tick(self.framerate)
 
 if __name__ == "__main__":
     g = Game()
-    stillWannaPlay = True
-    while stillWannaPlay:
+    while not g.quitting:
         g.tick()
-        for event in pygame.event.get():
-            if event.type == KEYDOWN:
-                key = event.key
-                # INPUT TOWN
-                if key == K_UP:
-                    move(0, -1)
-                elif key == K_RIGHT:
-                    move(1, 0)
-                elif key == K_DOWN:
-                    move(0, 1)
-                elif key == K_LEFT:
-                    move(-1, 0)
-            # player quits q.q
-            elif event.type == QUIT:
-                stillWannaPlay = False
-                break
-        pygame.display.update()

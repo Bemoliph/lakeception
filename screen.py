@@ -21,31 +21,33 @@ def hex2rgb(hex_str):
 class Screen(object):
     def __init__(self, world, resX, resY):
         self.world = world
-        resolution = (resX, resY)
         self.grid = {"x": world.dimensions[0], "y": world.dimensions[1]}
-        gray = hex2rgb("B23530")
-        player_color = hex2rgb("7F3333")
-        bg_color = hex2rgb("000000")
-
+        
         pygame.init()
-        self.screen = pygame.display.set_mode(resolution)
-        self.screen.fill(bg_color)
+        resolution = (resX, resY)
+        self.window = pygame.display.set_mode(resolution)
+        bg_color = hex2rgb("000000")
+        self.window.fill(bg_color)
 
         # LE GLOBALS 
         # initially haxed & adapted from http://stackoverflow.com/a/19120806
-        # self.screen horizontal res / grid width
+        # self.window horizontal res / grid width
         font_size =  100 / self.grid["x"]
         current_position = [0, 1]
-        CHARSET = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~.*╔╗╚╝║═123456789"
-        self.charmap = {}
-        for char in CHARSET:
-            self.charmap[char] = pygame.font.SysFont("monospace", font_size).render(char, False, gray)
-        player = pygame.font.SysFont("monospace", font_size).render("@", False, player_color)
-
-
+        
+        charset = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~.*╔╗╚╝║═123456789"
+        gray = hex2rgb("B23530")
+        self.charmap = {char:self._charToImage(char, "monospace", font_size, gray) for char in charset}
+        
+        player_color = hex2rgb("7F3333")
+        self.player = self._charToImage("@", "monospace", font_size, player_color)
+    
+    def _charToImage(self, char, font, font_size, color):
+        return pygame.font.SysFont(font, font_size).render(char, False, color)
+    
     def getFontRect(self, coordinates, tile):
         row, column = coordinates
-        cellWidth = self.screen.get_width() / self.grid["x"]
+        cellWidth = self.window.get_width() / self.grid["x"]
         # Rect uses Top and Left, so we need to add half of the cellWidth to get
         # to the center of the cell, and then subtract half of the e.g. tile width
         # to get the ~true~ center for displaying the character surface
@@ -87,6 +89,6 @@ class Screen(object):
                 # Find the screen position for the world cell
                 font_pos = self.getFontRect((row, column), tile)
                 # Write the tile to the screen
-                self.screen.blit(tile, font_pos)
+                self.window.blit(tile, font_pos)
 
         pygame.display.update()

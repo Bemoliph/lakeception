@@ -1,51 +1,35 @@
 # -*- coding: utf-8 -*-
 import pygame
-import struct
 import os
-from pygame.locals import *
 
-# Utility functions ahoy
-def hex2rgb(hex_str):
-    return struct.unpack('BBB', hex_str.decode('hex'))
-
-# determine the screen position of a simple surface within the grid
-# def getCellRect(coordinates, screen):
-#     row, column = coordinates
-#     cellWidth = screen.get_width() / grid["x"]
-#     cellWidth = font_size
-#     return pygame.Rect(row * cellWidth,
-#                        column * cellWidth,
-#                        cellWidth, cellWidth)
-
+from lakeutils import hex2rgb
 
 class Screen(object):
-    def __init__(self, world, resX, resY):
+    def __init__(self, world, windowResolution):
         self.world = world
-        self.grid = {"x": world.dimensions[0], "y": world.dimensions[1]}
         
         pygame.init()
-        self.resolution = (resX, resY)
-        self.background_color = hex2rgb("000000")
-        self.window = pygame.display.set_mode(self.resolution)
+        self.background_color = 0x000000
+        self.window = pygame.display.set_mode(windowResolution)
         self.window.fill(self.background_color)
         
         self.sprites = {}
         self.font_face = "monospace"
-        self.font_size = 100 / self.grid["x"]
+        self.font_size = 20
     
     def _charToSprite(self, char, color):
         return pygame.font.SysFont(self.font_face, self.font_size).render(char, False, color)
     
     def getFontRect(self, coordinates, tile):
-        row, column = coordinates
-        cellWidth = self.window.get_width() / self.grid["x"]
-        # Rect uses Top and Left, so we need to add half of the cellWidth to get
-        # to the center of the cell, and then subtract half of the e.g. tile width
-        # to get the ~true~ center for displaying the character surface
-        return pygame.Rect(row * cellWidth + cellWidth/2 - tile.get_width() / 2,
-                           column * cellWidth + cellWidth/2 - tile.get_height() / 2,
-                           cellWidth,
-                           cellWidth)
+        # Scalars were experimentally determined so chars touched instead of
+        # overlap/gap.  Seems to work for big and small font sizes.
+        width = self.font_size * 0.60
+        height = self.font_size * 1.10
+        
+        x = coordinates[0] * width
+        y = coordinates[1] * height
+        
+        return pygame.Rect((x, y), (width, height))
     
     def getSprite(self, tile):
         char = tile.getIcon()

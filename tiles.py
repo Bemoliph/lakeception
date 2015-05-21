@@ -1,8 +1,6 @@
 import random
-import struct
 
-def hex2rgb(hex_str):
-    return struct.unpack('BBB', hex_str.decode('hex'))
+from lakeutils import hex2rgb
 
 class Tile(object):
     def __init__(self, name, description, icons, color):

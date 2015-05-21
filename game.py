@@ -8,7 +8,7 @@ from pygame.locals import *
 class Game(object):
     def __init__(self):
         self.world = World("Test World", (5,5), debug=True)
-        self.screen = Screen(self.world, 800, 400)
+        self.screen = Screen(self.world, (400, 400))
    
     def tick(self):
         self.screen.draw((-2,-2), (12,12))

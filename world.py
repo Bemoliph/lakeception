@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import random
+from tiles import Tile
 
 class World(object):
     def __init__(self, name, dimensions, debug=False):
@@ -13,7 +13,7 @@ class World(object):
             self.tiles = self.generateWorld()
     
     def generateWorld(self):
-        waterTile = Tile("water", "some water", "...........,~")
+        waterTile = Tile("water", "some water", "...........,~", "3035B2")
         
         # Flood the world with water!
         # All elements are references to the same water tile to save memory.
@@ -23,17 +23,16 @@ class World(object):
         return tiles
     
     def generateDebugWorld(self):
-        # Use a cool pipe shape to make positional debugging easier:
+        # Use cool pipe shapes to make positional debugging easier:
         #     ╔═══╗   (0,0)
         #     ║123║
-        #     ║456║     5x5 world
+        #     ║456║    5x5 world
         #     ║789║
         #     ╚═══╝          (4,4)        
-        abc = u"╔═══╗║123║║456║║789║╚═══╝"
-        #abc = u"╔═╗║1║╚═╝"
+        grid = u"╔═══╗║123║║456║║789║╚═══╝"
         tiles = []
-        for letter in abc:
-            t = Tile(letter, letter, letter)
+        for char in grid:
+            t = Tile(char, char, char, "B23530")
             tiles.append(t)
         
         return tiles
@@ -76,23 +75,6 @@ class World(object):
                 index += 1
         
         return areaTiles
-
-class Tile(object):
-    def __init__(self, name, description, icons):
-        self.name = name
-        self.description = description
-        # A collection of characters representing the tile.
-        # A random icon is chosen each frame draw for ~ambience~
-        self.icons = icons
-    
-    def getIcon(self):
-        return random.choice(self.icons)
-    
-    def __unicode__(self):
-        return self.getIcon()
-    
-    def __repr__(self):
-        return self.__unicode__()
 
 if __name__ == "__main__":
     w = World("Test World", (5,5), debug=True)

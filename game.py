@@ -8,7 +8,7 @@ class Game(object):
 		self.screen = Screen(self.world)
 	
 	def tick(self):
-		self.screen.draw((0,0), (12,12))
+		self.screen.draw((-2,-2), (12,12))
 
 if __name__ == "__main__":
 	g = Game()

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 
 class World(object):
@@ -22,75 +23,57 @@ class World(object):
 		return tiles
 	
 	def generateDebugWorld(self):
-		# Use 25 letters of the alphabet for 25 unique tiles.
-		# Should help make positional debugging easier:
-		#     ABCDE   (0,0)
-		#     FGHJI
-		#     KLMNO     5x5 world
-		#     PQRST
-		#     UVWXY          (4,4)
-		
-		abc = "ABCDEFGHIJKLMNOPQRSTUVWXY"
+		# Use a cool pipe shape to make positional debugging easier:
+		#     ╔═══╗   (0,0)
+		#     ║123║
+		#     ║456║     5x5 world
+		#     ║789║
+		#     ╚═══╝          (4,4)		
+		abc = u"╔═══╗║123║║456║║789║╚═══╝"
+		#abc = u"╔═╗║1║╚═╝"
 		tiles = []
 		for letter in abc:
-			t = Tile(letter, letter, letter+letter.lower())
+			t = Tile(letter, letter, letter)
 			tiles.append(t)
 		
 		return tiles
 	
-	def _pointToIndex(self, point):
+	def _pointToIndex(self, point, width, height):
 		x, y = point
-		worldWidth = self.dimensions[0]
 		
-		index = y * worldWidth + x
+		index = (y % height) * width + (x % width)
 		
 		return index
 	
-	def _indexToPoint(self, index):
-		worldWidth = self.dimensions[0]
-		
-		x = i % worldWidth
-		y = i // worldWidth
+	def _indexToPoint(self, index, width):
+		x = index % width
+		y = index // width
 		
 		return (x, y)
 	
 	def getTileAtPoint(self, point):
-		index = self._pointToIndex(point)
+		worldWidth, worldHeight = self.dimensions
+		
+		index = self._pointToIndex(point, worldWidth, worldHeight)
 		
 		return self.tiles[index]
 	
 	def getTilesInArea(self, topLeft, bottomRight):
-		worldWidth = self.dimensions[0]
-		
+		# Crunch some attributes of the requested area
 		x1, y1 = topLeft
 		x2, y2 = bottomRight
 		
 		areaWidth = x2-x1+1
 		areaHeight = y2-y1+1
+		area = areaWidth * areaHeight
 		
-		areaTiles = []
-		for row in xrange(0, areaHeight):
-			# Add "actual" tiles to row
-			row = row % self.dimensions[1] # vertically wrap if row out of bounds
-			rowStart = self._pointToIndex( (x1, y1+row) )
-			rowEnd = (row + 1) * worldWidth
-			rowTiles = self.tiles[rowStart : rowEnd]
-			
-			# Add horizontal repeats as necessary to support visual world looping
-			# Actual + Full Width Repeats + Tail End Repeat
-			# [3 4 5]+[1 2 3 4 5][1 2 3 4 5]+[1 2 3]
-			repeatWidth = areaWidth - len(rowTiles)
-			if repeatWidth:
-				# Add any full width repeats
-				repeatCount = repeatWidth // worldWidth
-				repeatStart = row * worldWidth
-				rowTiles.extend(self.tiles[repeatStart : repeatStart+worldWidth] * repeatCount)
-				
-				# Add any "tail end" repeat
-				tailWidth = repeatWidth % worldWidth
-				rowTiles.extend(self.tiles[repeatStart : repeatStart+tailWidth])
-			
-			areaTiles.extend(rowTiles)
+		# Build a (wrapping) view of the requested area
+		areaTiles = [None] * area # Pre-size the list to avoid Python internally resizing/copying needlessly
+		index = 0
+		for y in xrange(y1, y2+1):
+			for x in xrange(x1, x2+1):
+				areaTiles[index] = self.getTileAtPoint((x, y))
+				index += 1
 		
 		return areaTiles
 
@@ -105,12 +88,12 @@ class Tile(object):
 	def getIcon(self):
 		return random.choice(self.icons)
 	
-	def __str__(self):
+	def __unicode__(self):
 		return self.getIcon()
 	
 	def __repr__(self):
-		return self.__str__()
+		return self.__unicode__()
 
 if __name__ == "__main__":
 	w = World("Test World", (5,5), debug=True)
-	print w.getTilesInArea((0,0), (4,3))
+	print w.getTilesInArea((-1,-1), (4,3))

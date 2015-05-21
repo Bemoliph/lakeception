@@ -9,9 +9,8 @@ class Screen(object):
 		height = bottomRight[1] - topLeft[1] + 1
 		visibleTiles = self.world.getTilesInArea(topLeft, bottomRight)
 		
-		# TODO:  Is it cheating to use curses?
 		#os.system('cls' if os.name == 'nt' else 'clear')
 		for row in xrange(0, height):
 			rowIndex = row*width
 			rowIcons = visibleTiles[rowIndex : rowIndex+width]
-			print "".join(map(str, rowIcons))
+			print "".join(map(unicode, rowIcons))

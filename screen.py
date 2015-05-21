@@ -9,25 +9,26 @@ class Screen(object):
         self.world = world
         
         pygame.init()
-        self.background_color = 0x000000
+        self.background_color = hex2rgb("000000")
         self.window = pygame.display.set_mode(windowResolution)
         self.window.fill(self.background_color)
         
         self.sprites = {}
         self.font_face = "monospace"
-        self.font_size = 20
+        self.font_size = 24
+        self.font = pygame.font.SysFont(self.font_face, self.font_size)
     
     def _charToSprite(self, char, color):
-        return pygame.font.SysFont(self.font_face, self.font_size).render(char, False, color)
+        return self.font.render(char, False, color)
     
-    def getFontRect(self, coordinates, tile):
+    def getFontRect(self, coords, text):
         # Scalars were experimentally determined so chars touched instead of
         # overlap/gap.  Seems to work for big and small font sizes.
-        width = self.font_size * 0.60
-        height = self.font_size * 1.10
+        width, height = self.font.size(text)
+        height *= 0.9
         
-        x = coordinates[0] * width
-        y = coordinates[1] * height
+        x = coords[0] * width
+        y = coords[1] * height
         
         return pygame.Rect((x, y), (width, height))
     
@@ -37,7 +38,7 @@ class Screen(object):
         if char not in self.sprites:
             self.sprites[char] = self._charToSprite(char, tile.color)
         
-        return self.sprites[char]
+        return self.sprites[char], char
     
     def draw(self, topLeft, bottomRight):
         width = bottomRight[0] - topLeft[0] + 1
@@ -46,10 +47,9 @@ class Screen(object):
         visibleTiles = self.world.getTilesInArea(topLeft, bottomRight)
         for y in xrange(0, height):
             for x in xrange(0, width):
-                tile = visibleTiles[y * width + x]
-                sprite = self.getSprite(tile)
+                sprite, char = self.getSprite(visibleTiles[y * width + x])
+                sprite_pos = self.getFontRect((x, y), char)
                 
-                sprite_pos = self.getFontRect((x, y), sprite)
                 self.window.blit(sprite, sprite_pos)
         
         pygame.display.update()

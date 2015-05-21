@@ -32,13 +32,15 @@ class Screen(object):
         
         return pygame.Rect((x, y), (width, height))
     
-    def getSprite(self, tile):
+    def getSprite(self, tile, coords):
         char = tile.getIcon()
         
         if char not in self.sprites:
             self.sprites[char] = self._charToSprite(char, tile.color)
         
-        return self.sprites[char], char
+        sprite_rect = self.getFontRect(coords, char)
+        
+        return self.sprites[char], sprite_rect
     
     def draw(self, topLeft, bottomRight):
         width = bottomRight[0] - topLeft[0] + 1
@@ -47,9 +49,7 @@ class Screen(object):
         visibleTiles = self.world.getTilesInArea(topLeft, bottomRight)
         for y in xrange(0, height):
             for x in xrange(0, width):
-                sprite, char = self.getSprite(visibleTiles[y * width + x])
-                sprite_pos = self.getFontRect((x, y), char)
-                
-                self.window.blit(sprite, sprite_pos)
+                sprite, sprite_rect = self.getSprite(visibleTiles[y * width + x], (x,y))
+                self.window.blit(sprite, sprite_rect)
         
         pygame.display.update()

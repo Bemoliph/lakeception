@@ -4,9 +4,10 @@ from tiles import Tile
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         self.name = name
+        self.player_pos = (0,0) # TODO: Give player a proper representation
         
         if debug:
-            self.dimensions = (5, 5) # Force debug world dimensions
+            self.dimensions = (5,5) # Force debug world dimensions
             self.tiles = self.generateDebugWorld()
         else:
             self.dimensions = dimensions
@@ -57,25 +58,19 @@ class World(object):
         
         return self.tiles[index]
     
-    def getTilesInArea(self, topLeft, bottomRight):
-        # Crunch some attributes of the requested area
-        x1, y1 = topLeft
-        x2, y2 = bottomRight
+    def getTilesAroundPlayer(self, size, visible_tiles):
+        # Crunch some attributes of the requested area centered on the player
+        width, height = size
+        playerX, playerY = self.player_pos
         
-        areaWidth = x2-x1+1
-        areaHeight = y2-y1+1
-        area = areaWidth * areaHeight
+        x1 = playerX - (width // 2)
+        y1 = playerY - (height // 2)
+        x2 = playerX + (width // 2)
+        y2 = playerY + (height // 2)
         
-        # Build a (wrapping) view of the requested area
-        areaTiles = [None] * area # Pre-size the list to avoid Python internally resizing/copying needlessly
+        # Build a (wrapping) view, filling the supplied list
         index = 0
-        for y in xrange(y1, y2+1):
-            for x in xrange(x1, x2+1):
-                areaTiles[index] = self.getTileAtPoint((x, y))
+        for y in xrange(y1, y2):
+            for x in xrange(x1, x2):
+                visible_tiles[index] = self.getTileAtPoint((x, y))
                 index += 1
-        
-        return areaTiles
-
-if __name__ == "__main__":
-    w = World("Test World", (5,5), debug=True)
-    print w.getTilesInArea((-1,-1), (4,3))

@@ -8,10 +8,10 @@ from pygame.locals import *
 class Game(object):
     def __init__(self):
         self.world = World("Test World", (5,5), debug=True)
-        self.screen = Screen(self.world, (400, 400))
+        self.screen = Screen(self.world, (400, 400), (10, 10))
    
     def tick(self):
-        self.screen.draw((-2,-2), (12,12))
+        self.screen.draw()
 
 if __name__ == "__main__":
     g = Game()
@@ -35,5 +35,3 @@ if __name__ == "__main__":
                 stillWannaPlay = False
                 break
         pygame.display.update()
-
-

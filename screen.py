@@ -5,13 +5,16 @@ import os
 from lakeutils import hex2rgb
 
 class Screen(object):
-    def __init__(self, world, windowResolution):
+    def __init__(self, world, window_res, viewport_res):
         self.world = world
         
         pygame.init()
         self.background_color = hex2rgb("000000")
-        self.window = pygame.display.set_mode(windowResolution)
+        self.window = pygame.display.set_mode(window_res)
         self.window.fill(self.background_color)
+        
+        self.viewport_res = viewport_res
+        self.viewport_tiles = [None] * (viewport_res[0] * viewport_res[1])
         
         self.sprites = {}
         self.font_face = "monospace"
@@ -42,14 +45,17 @@ class Screen(object):
         
         return self.sprites[char], sprite_rect
     
-    def draw(self, topLeft, bottomRight):
-        width = bottomRight[0] - topLeft[0] + 1
-        height = bottomRight[1] - topLeft[1] + 1
+    def drawViewport(self):
+        width, height = self.viewport_res
         
-        visibleTiles = self.world.getTilesInArea(topLeft, bottomRight)
+        self.world.getTilesAroundPlayer((width, height), self.viewport_tiles)
         for y in xrange(0, height):
             for x in xrange(0, width):
-                sprite, sprite_rect = self.getSprite(visibleTiles[y * width + x], (x,y))
+                tile = self.viewport_tiles[y * width + x]
+                sprite, sprite_rect = self.getSprite(tile, (x,y))
                 self.window.blit(sprite, sprite_rect)
+    
+    def draw(self):
+        self.drawViewport()
         
         pygame.display.update()

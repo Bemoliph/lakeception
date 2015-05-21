@@ -13,15 +13,31 @@ class Game(object):
         self.screen = Screen(self.world, (300, 300), (10, 10))
         self.input = Input(self)
         
-        self.framerate = 60
+        self.fps = 60
         self.clock = pygame.time.Clock()
         
+        self.ANIMATE = pygame.USEREVENT+0
+        self.animation_rate = 1 * 1000
+        pygame.time.set_timer(self.ANIMATE, self.animation_rate)
+        
+        self.updated = True
         self.quitting = False
     
     def tick(self):
-        self.input.tick()
-        self.screen.draw()
-        self.clock.tick(self.framerate)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                self.input.handleKey(event)
+            elif event.type == self.ANIMATE:
+                self.screen.draw()
+                self.updated = False
+            elif event.type == pygame.QUIT:
+                self.quitting = True
+        
+        if self.updated:
+            self.screen.draw()
+            self.updated = False
+        
+        timeDelta = self.clock.tick(self.fps)
 
 if __name__ == "__main__":
     g = Game()

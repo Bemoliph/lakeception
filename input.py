@@ -5,7 +5,7 @@ class Input(object):
     def __init__(self, game):
         self.game = game
         
-        self.keyMapping = {
+        self.key_mapping = {
             pygame.K_UP     : self.moveUp,
             pygame.K_RIGHT  : self.moveRight,
             pygame.K_DOWN   : self.moveDown,
@@ -13,15 +13,11 @@ class Input(object):
             pygame.K_ESCAPE : self.quit,
         }
     
-    def tick(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                key = event.key
-                
-                if key in self.keyMapping:
-                    self.keyMapping[key]()
-            elif event.type == pygame.QUIT:
-                self.game.quitting = True
+    def handleKey(self, event):
+        key = event.key
+        
+        if key in self.key_mapping:
+            self.key_mapping[key]()
     
     def move(self, deltaX, deltaY):
         # Maybe get a direct reference to Player object in Input when there is one?
@@ -31,6 +27,7 @@ class Input(object):
         newY = currentY + deltaY
         
         self.game.world.player_pos = (newX, newY)
+        self.game.updated = True
     
     def moveUp(self):
         self.move(0, -1)

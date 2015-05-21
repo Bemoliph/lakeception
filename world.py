@@ -30,10 +30,11 @@ class World(object):
         #     ║456║    5x5 world
         #     ║789║
         #     ╚═══╝          (4,4)        
-        grid = u"╔═══╗║123║║456║║789║╚═══╝"
+        #grid = u"╔═══╗║123║║456║║789║╚═══╝"
+        grid = u"qwertasdfgzxcvbyuiophjkl;"
         tiles = []
         for char in grid:
-            t = Tile(char, char, char, "B23530")
+            t = Tile(char, char, char+char.upper(), "B23530")
             tiles.append(t)
         
         return tiles

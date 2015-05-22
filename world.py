@@ -77,7 +77,7 @@ class World(object):
         
         # Build a (wrapping) view, filling the supplied list
         index = 0
-        for y in xrange(y1, y2):
-            for x in xrange(x1, x2):
+        for y in xrange(y1, y2+1):
+            for x in xrange(x1, x2+1):
                 visible_tiles[index] = self.getTileAtPoint((x, y))
                 index += 1

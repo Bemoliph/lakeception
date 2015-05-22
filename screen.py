@@ -6,8 +6,8 @@ from lakeutils import hex2rgb
 class Screen(object):
     def __init__(self, world, window_res, viewport_res):
         self.world = world
-        
-        self.background_color = hex2rgb("000000")
+
+        self.background_color = hex2rgb("0E0E0E")
         self.window = pygame.display.set_mode(window_res)
         
         self.viewport_res = viewport_res
@@ -51,9 +51,15 @@ class Screen(object):
                 tile = self.viewport_tiles[y * width + x]
                 sprite, sprite_rect = self.getSprite(tile, (x,y))
                 self.window.blit(sprite, sprite_rect)
+
+    def drawPlayer(self):
+        player = self.world.player
+        sprite, sprite_rect = self.getSprite(player.tile, player.pos)
+        self.window.blit(sprite, sprite_rect)
     
     def draw(self):
         self.window.fill(self.background_color)
         self.drawViewport()
+        self.drawPlayer()
         
         pygame.display.update()

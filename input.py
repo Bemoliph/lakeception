@@ -4,6 +4,8 @@ import pygame
 class Input(object):
     def __init__(self, game):
         self.game = game
+        # Just a shorthand for the player; self.game.world.player is a bit verbose
+        self.player = self.game.world.player
         
         self.key_mapping = {
             pygame.K_UP     : self.moveUp,
@@ -21,12 +23,12 @@ class Input(object):
     
     def move(self, deltaX, deltaY):
         # Maybe get a direct reference to Player object in Input when there is one?
-        currentX, currentY = self.game.world.player_pos
+        currentX, currentY = self.player.pos
         
         newX = currentX + deltaX
         newY = currentY + deltaY
         
-        self.game.world.player_pos = (newX, newY)
+        self.player.pos = (newX, newY)
         self.game.updated = True
     
     def moveUp(self):

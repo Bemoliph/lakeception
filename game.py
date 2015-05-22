@@ -9,8 +9,8 @@ class Game(object):
     def __init__(self):
         pygame.init()
         
-        self.world = World("Test World", (5,5), debug=True)
-        self.screen = Screen(self.world, (300, 300), (10, 10))
+        self.world = World("Test World", (100,100), debug=True)
+        self.screen = Screen(self.world, (300, 300), (20, 20))
         self.input = Input(self)
         
         self.fps = 60
@@ -18,7 +18,9 @@ class Game(object):
         
         self.ANIMATE = pygame.USEREVENT+0
         self.animation_rate = 1 * 1000
-        pygame.time.set_timer(self.ANIMATE, self.animation_rate)
+        # Temporarily (?) disabled animations, because moving + animating was
+        # an INTENSE visual experience
+        # pygame.time.set_timer(self.ANIMATE, self.animation_rate)
         
         self.updated = True
         self.quitting = False

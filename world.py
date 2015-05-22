@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 from tiles import Tile
 
+class Player(object):
+    def __init__(self, pos, tileCharacter, tileColor):
+        self.pos = pos
+        self.tile = Tile("player", "you, the protagonist", "@", "B23530")
+
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         self.name = name
-        self.player_pos = (0,0) # TODO: Give player a proper representation
+        self.player = Player((0,0), "@", "B23530")
+        # self.player_pos = (0,0) # TODO: Give player a proper representation
         
         if debug:
             self.dimensions = (5,5) # Force debug world dimensions
@@ -14,7 +20,7 @@ class World(object):
             self.tiles = self.generateWorld()
     
     def generateWorld(self):
-        waterTile = Tile("water", "some water", "...........,~", "3035B2")
+        waterTile = Tile("water", "some water", "...........,~", "62707D")
         
         # Flood the world with water!
         # All elements are references to the same water tile to save memory.
@@ -62,7 +68,7 @@ class World(object):
     def getTilesAroundPlayer(self, size, visible_tiles):
         # Crunch some attributes of the requested area centered on the player
         width, height = size
-        playerX, playerY = self.player_pos
+        playerX, playerY = self.player.pos
         
         x1 = playerX - (width // 2)
         y1 = playerY - (height // 2)

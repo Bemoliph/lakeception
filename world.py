@@ -20,12 +20,14 @@ class World(object):
             self.tiles = self.generateWorld()
     
     def generateWorld(self):
-        waterTile = Tile("water", "some water", "           ..", "62707D")
+        # Pre-size the world array to avoid internal resizing
+        worldWidth, worldHeight = self.dimensions
+        tiles = [None] * (worldWidth * worldHeight)
         
         # Flood the world with water!
-        # All elements are references to the same water tile to save memory.
-        worldWidth, worldHeight = self.dimensions
-        tiles = [waterTile] * (worldWidth * worldHeight)
+        for y in xrange(0, worldHeight):
+            for x in xrange(0, worldWidth):
+                tiles[y*worldWidth + x] = Tile("water", "some water", " "*10+"."*2, "62707D")
         
         return tiles
     

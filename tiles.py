@@ -9,11 +9,8 @@ class Tile(object):
         self.description = description
         # A collection of characters representing the tile.
         # A random icon is chosen each frame draw for ~ambience~
-        self.icons = icons
+        self.icon = random.choice(icons)
         self.color = hex2rgb(color)
-    
-    def getIcon(self):
-        return random.choice(self.icons)
     
     def __unicode__(self):
         return self.getIcon()

@@ -36,7 +36,7 @@ class Screen(object):
         return pygame.Rect((x, y), (width, height))
     
     def getSprite(self, tile, coords):
-        char = tile.getIcon()
+        char = tile.icon
         
         if char not in self.sprites:
             self.sprites[char] = self._charToSprite(char, tile.color)

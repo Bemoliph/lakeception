@@ -20,7 +20,7 @@ class World(object):
             self.tiles = self.generateWorld()
     
     def generateWorld(self):
-        waterTile = Tile("water", "some water", "...........,~", "62707D")
+        waterTile = Tile("water", "some water", "           ..", "62707D")
         
         # Flood the world with water!
         # All elements are references to the same water tile to save memory.

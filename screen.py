@@ -11,11 +11,13 @@ class Screen(object):
         self.window = pygame.display.set_mode(window_res)
         
         self.viewport_res = viewport_res
+        # viewport_res has to be square & odd for viewport_center to be correct
+        self.viewport_center = (viewport_res[0] // 2, viewport_res[1] // 2)
         self.viewport_tiles = [None] * (viewport_res[0] * viewport_res[1])
         
         self.sprites = {}
         self.font_face = "monospace"
-        self.font_size = 24
+        self.font_size = window_res[0] / self.viewport_res[0]
         self.font = pygame.font.SysFont(self.font_face, self.font_size)
     
     def _charToSprite(self, char, color):
@@ -25,7 +27,8 @@ class Screen(object):
         # Scalars were experimentally determined so chars touched instead of
         # overlap/gap.  Seems to work for big and small font sizes.
         width, height = self.font.size(text)
-        height *= 0.9
+        height *= 0.85
+        width *= 1.75
         
         x = coords[0] * width
         y = coords[1] * height
@@ -54,7 +57,7 @@ class Screen(object):
 
     def drawPlayer(self):
         player = self.world.player
-        sprite, sprite_rect = self.getSprite(player.tile, player.pos)
+        sprite, sprite_rect = self.getSprite(player.tile, self.viewport_center)
         self.window.blit(sprite, sprite_rect)
     
     def draw(self):

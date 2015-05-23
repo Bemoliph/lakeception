@@ -9,8 +9,9 @@ class Game(object):
     def __init__(self):
         pygame.init()
         
-        self.world = World("Test World", (100,100), debug=True)
-        self.screen = Screen(self.world, (300, 300), (20, 20))
+        self.world = World("Test World", (100,100), debug=False)
+                                       # resolution, viewport
+        self.screen = Screen(self.world, (800, 300), (25, 11))
         self.input = Input(self)
         
         self.fps = 60

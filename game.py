@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
+import sys
 
 from world import World
 from screen import Screen
@@ -7,7 +8,9 @@ from input import Input
 
 class Game(object):
     def __init__(self):
+        pygame.mixer.pre_init(44100, 16, 2, 4096) # setup mixer to avoid sound lag
         pygame.init()
+        pygame.display.set_caption("lakeception")
         
         self.world = World("Test World", (100,100), debug=False)
                                        # resolution, viewport
@@ -25,7 +28,13 @@ class Game(object):
         
         self.updated = True
         self.quitting = False
-    
+
+        pygame.mixer.init()
+        # From https://www.freesound.org/people/juskiddink/sounds/60507/
+        # albeit a bit mixed to allow for looping
+        pygame.mixer.music.load(sys.path[0] + '/60507__juskiddink__waves2.ogg')
+        pygame.mixer.music.play(-1)
+ 
     def tick(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

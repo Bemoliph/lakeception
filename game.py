@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import sys
+import os
 
 from world import World
 from screen import Screen
@@ -28,11 +29,12 @@ class Game(object):
         
         self.updated = True
         self.quitting = False
+        self.muted = False
 
         pygame.mixer.init()
         # From https://www.freesound.org/people/juskiddink/sounds/60507/
         # albeit a bit mixed to allow for looping
-        pygame.mixer.music.load(sys.path[0] + '/60507__juskiddink__waves2.ogg')
+        pygame.mixer.music.load(os.path.join(sys.path[0], '60507__juskiddink__waves2.ogg'))
         pygame.mixer.music.play(-1)
  
     def tick(self):

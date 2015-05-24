@@ -13,6 +13,7 @@ class Input(object):
             pygame.K_DOWN   : self.moveDown,
             pygame.K_LEFT   : self.moveLeft,
             pygame.K_ESCAPE : self.quit,
+            pygame.K_m   : self.mute,
         }
     
     def handleKey(self, event):
@@ -45,3 +46,11 @@ class Input(object):
     
     def quit(self):
         self.game.quitting = True
+
+    def mute(self):
+        if not self.game.muted:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
+        self.game.muted = not self.game.muted
+

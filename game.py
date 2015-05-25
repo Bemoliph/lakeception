@@ -15,7 +15,7 @@ class Game(object):
         
         self.world = World("Test World", (100,100), debug=False)
                                        # resolution, viewport
-        self.screen = Screen(self.world, (800, 300), (25, 11))
+        self.screen = Screen(self.world, (800, 475), (25, 11))
         self.input = Input(self)
         
         self.fps = 60
@@ -36,6 +36,8 @@ class Game(object):
         # albeit a bit mixed to allow for looping
         pygame.mixer.music.load(os.path.join(sys.path[0], '60507__juskiddink__waves2.ogg'))
         pygame.mixer.music.play(-1)
+        # Set the volume to an unobtrusive level
+        pygame.mixer.music.set_volume(0.1)
  
     def tick(self):
         for event in pygame.event.get():

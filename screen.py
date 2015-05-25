@@ -19,6 +19,8 @@ class Screen(object):
         self.font_face = "monospace"
         self.font_size = window_res[0] / self.viewport_res[0]
         self.font = pygame.font.SysFont(self.font_face, self.font_size)
+
+        self.descriptionFont = pygame.font.SysFont("monospace", 15)
     
     def _charToSprite(self, char, color):
         return self.font.render(char, False, color, self.background_color)
@@ -59,10 +61,20 @@ class Screen(object):
         player = self.world.player
         sprite, sprite_rect = self.getSprite(player.tile, self.viewport_center)
         self.window.blit(sprite, sprite_rect)
+
+    def drawText(self):
+        # initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
+        # render text
+        for i, description in enumerate(self.world.descriptions):
+            label = self.descriptionFont.render(description[0], False, hex2rgb(description[1]))
+            # Magic numbers here, but no need to fix this until we decide to
+            # change the scalars in self.getFontRect()
+            self.window.blit(label, (10, 350 + 20 * i))
     
     def draw(self):
         self.window.fill(self.background_color)
         self.drawViewport()
         self.drawPlayer()
-        
+        self.drawText()
+
         pygame.display.update()

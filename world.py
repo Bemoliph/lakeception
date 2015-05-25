@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 from tiles import Tile
+
 class Player(object):
     def __init__(self, pos, tileCharacter, tileColor):
         self.pos = pos
@@ -17,6 +18,9 @@ class World(object):
         else:
             self.dimensions = dimensions
             self.tiles = self.generateWorld()
+        
+        self.descriptions = []
+        self.addDescription("it was a dark and stormy night...", "FFC22C")
 
     def generateIslands(self, tiles):
         def generateFromNoise(data):
@@ -117,3 +121,10 @@ class World(object):
             for x in xrange(x1, x2+1):
                 visible_tiles[index] = self.getTileAtPoint((x, y))
                 index += 1
+
+    def addDescription(self, text, color):
+        # The newest description is at the top of the list
+        self.descriptions.insert(0, (text, color))
+        # Drop the oldest message from the list
+        if len(self.descriptions) > 6:
+            self.descriptions.pop()

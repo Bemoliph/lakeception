@@ -8,8 +8,9 @@ from lakeutils import hex2rgb
 # Tile("unknown", "something unknown", "!", "B65555")
 
 class Tile(object):
-    def __init__(self, name, description, icons, color):
+    def __init__(self, name, description, icons, color, collidable=False):
         self.name = name
+        self.collidable = collidable
         self.description = description
         # A collection of characters representing the tile.
         # A random icon is chosen each frame draw for ~ambience~
@@ -18,7 +19,6 @@ class Tile(object):
     
     def __unicode__(self):
         return self.icon
-
     
     def __repr__(self):
         return self.__unicode__()

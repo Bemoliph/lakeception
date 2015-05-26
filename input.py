@@ -29,7 +29,9 @@ class Input(object):
         newX = currentX + deltaX
         newY = currentY + deltaY
         
-        self.player.pos = (newX, newY)
+        tile = self.game.world.getTileAtPoint((newX, newY))
+        if not tile.collidable:
+            self.player.pos = (newX, newY)
         self.game.updated = True
     
     def moveUp(self):

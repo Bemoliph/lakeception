@@ -40,7 +40,7 @@ class World(object):
                     # tiles[index] = Tile("unknown", "something unknown", "!", "B65555")
                 # Generate an island
                 elif value == 3:
-                    tiles[index] = Tile("island", "an exotic island", "#", "F0E68C")
+                    tiles[index] = Tile("island", "an exotic island", "#", "F0E68C", True)
 
         # 'iteration' keeps count of the loss stemming from repeated calls of
         # adjacentMin

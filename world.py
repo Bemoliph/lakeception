@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
+import noise as noiseLib
 from tiles import Tile
 
 class Player(object):
@@ -22,50 +23,28 @@ class World(object):
         self.descriptions = []
         self.addDescription("it was a dark and stormy night...", "FFC22C")
 
-    def generateIslands(self, tiles):
-        def generateFromNoise(data):
-            noiseMap, noiseIterations = data
-            # Fill in the tiles that we lost to the noise generation with Water
-            for i in xrange(noiseIterations):
-                tiles[len(tiles) - 1 - i] = Tile("water", "some water", ".", "62707D")
-
-            # Generate the world from the noise
-            for index, value in enumerate(noiseMap):
-                # Generate water
-                if value == 1:
-                    tiles[index] = Tile("water", "some water", ".", "62707D")
-                # Generate some more water, blank spots this time
-                elif value == 2:
-                    tiles[index] = Tile("water", "some water", " ", "62707D")
-                    # tiles[index] = Tile("unknown", "something unknown", "!", "B65555")
-                # Generate an island
-                elif value == 3:
-                    tiles[index] = Tile("island", "an exotic island", "#", "F0E68C", True)
-
-        # 'iteration' keeps count of the loss stemming from repeated calls of
-        # adjacentMin
-        def adjacentMin(data):
-            noise, iteration = data
-            iteration += 1
-            output = []
-            for i in range(len(noise) - 1):
-                output.append(min(noise[i], noise[i+1]))
-            return (output, iteration)
-
-        random.seed(0)
-        noise = [random.randint(1, 3) for i in range(self.dimensions[0] * self.dimensions[1])]
-        generateFromNoise(adjacentMin(adjacentMin(adjacentMin((noise, 0)))))
-    
     def generateWorld(self):
         # Pre-size the world array to avoid internal resizing
         worldWidth, worldHeight = self.dimensions
         tiles = [None] * (worldWidth * worldHeight)
-        
-        # # Flood the world with water!
-        # for y in xrange(0, worldHeight):
-        #     for x in xrange(0, worldWidth):
-        #         tiles[y*worldWidth + x] = Tile("water", "some water", " "*10+"."*2, "62707D")
-        self.generateIslands(tiles)
+        # Noise scale; tweak this to tweak the noise
+        scale = 0.1
+        # # Flood the world with CREATION!
+        for y in xrange(0, worldHeight):
+            for x in xrange(0, worldWidth):
+                index = y*worldWidth + x
+                noise = noiseLib.snoise2(x * scale, y * scale)
+                if noise < 0.5:
+                    tiles[index] = Tile("water", "some water", ".", "62707D")
+                # Generate some more water, blank spots this time
+                elif 0.5 <= noise < 0.75 :
+                    tiles[index] = Tile("water", "some water", " ", "62707D")
+                    # tiles[index] = Tile("unknown", "something unknown", "!", "B65555")
+                # Generate an island
+                elif 0.75 <= noise <= 1:
+                    tiles[index] = Tile("island", "an exotic island", "#", "F0E68C", True)
+
+        # self.generateIslands(tiles)
 
         return tiles
     

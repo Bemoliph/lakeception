@@ -7,6 +7,10 @@ class Input(object):
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.player
         
+        repeat_delay    = 250 # ms
+        repeat_interval = 500 # ms
+        pygame.key.set_repeat(repeat_delay, repeat_interval)
+        
         self.key_mapping = {
             pygame.K_UP     : self.moveUp,
             pygame.K_RIGHT  : self.moveRight,

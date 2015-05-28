@@ -7,8 +7,9 @@ class Input(object):
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.player
         
-        repeat_delay    = 250 # ms
-        repeat_interval = 500 # ms
+        # Both repeat values are in milliseconds
+        repeat_delay    = 35 # time between keypress and automatic motion
+        repeat_interval = 175 # time between automatic steps 
         pygame.key.set_repeat(repeat_delay, repeat_interval)
         
         self.key_mapping = {

@@ -2,6 +2,9 @@
 import pygame
 
 from lakeutils import hex2rgb
+from lakeutils import hex2rgba
+
+from tiles import Tile
 
 class Screen(object):
     def __init__(self, world, window_res, viewport_res):
@@ -19,6 +22,9 @@ class Screen(object):
         self.font_face = "monospace"
         self.font_size = window_res[0] / self.viewport_res[0]
         self.font = pygame.font.SysFont(self.font_face, self.font_size)
+        self.cursor = (0, 0)
+        self.cursor_surface = pygame.Surface((self.font_size, self.font_size), pygame.SRCALPHA, 32)
+        self.cursor_surface.fill(hex2rgba("F2F2F2", 50))
 
         self.descriptionFont = pygame.font.SysFont("monospace", 15)
     
@@ -62,6 +68,26 @@ class Screen(object):
         sprite, sprite_rect = self.getSprite(player.tile, self.viewport_center)
         self.window.blit(sprite, sprite_rect)
 
+    def drawInspectionCursor(self):
+        player_pos = self.world.player.pos
+        # world_pos = player position + cursor position
+        world_pos = (player_pos[0] + self.cursor[0], player_pos[1] + self.cursor[1])
+        # Screen position differs from world position, as we're drawing with
+        # respect to the viewport
+        screen_pos = (self.viewport_center[0] + self.cursor[0], self.viewport_center[1] + self.cursor[1])
+        screen_pos = self.getFontRect(screen_pos, "#")
+
+        # If the cursor is centered in the viewport => it's hovering above the player
+        if self.cursor == (0, 0):
+            # Get the player tile
+            tile = self.world.player.tile
+        else:
+            tile = self.world.getTileAtPoint(world_pos)
+        self.world.addDescription(tile.description)
+
+        # Magic numbers => center the cursor on the tile it's hovering over, kind of
+        self.window.blit(self.cursor_surface, (screen_pos[0]-6, screen_pos[1]+1))
+
     def drawText(self):
         # initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
         # render text
@@ -71,10 +97,12 @@ class Screen(object):
             # change the scalars in self.getFontRect()
             self.window.blit(label, (10, 350 + 20 * i))
     
-    def draw(self):
+    def draw(self, inspecting):
         self.window.fill(self.background_color)
         self.drawViewport()
         self.drawPlayer()
+        if inspecting:
+            self.drawInspectionCursor()
         self.drawText()
 
         pygame.display.update()

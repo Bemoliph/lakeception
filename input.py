@@ -4,6 +4,10 @@ import pygame
 class Input(object):
     def __init__(self, game):
         self.game = game
+        self.bounds = {
+                "x": self.game.screen.viewport_res[0] // 2,
+                "y": self.game.screen.viewport_res[1] // 2
+            }
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.player
         
@@ -19,6 +23,7 @@ class Input(object):
             pygame.K_LEFT   : self.moveLeft,
             pygame.K_ESCAPE : self.quit,
             pygame.K_m   : self.mute,
+            pygame.K_i   : self.toggleInspection,
         }
     
     def handleKey(self, event):
@@ -28,15 +33,25 @@ class Input(object):
             self.key_mapping[key]()
     
     def move(self, deltaX, deltaY):
-        # Maybe get a direct reference to Player object in Input when there is one?
-        currentX, currentY = self.player.pos
-        
-        newX = currentX + deltaX
-        newY = currentY + deltaY
-        
-        tile = self.game.world.getTileAtPoint((newX, newY))
-        if not tile.collidable:
-            self.player.pos = (newX, newY)
+        if self.game.inspecting:
+            currentX, currentY = self.game.screen.cursor
+
+            newX = currentX + deltaX
+            newY = currentY + deltaY
+            if abs(newX) <= self.bounds["x"] and abs(newY) <= self.bounds["y"]:
+                self.game.screen.cursor = (newX, newY)
+        else:
+            currentX, currentY = self.player.pos
+
+            newX = currentX + deltaX
+            newY = currentY + deltaY
+            # Small feel/usability tweak: 
+            # place the cursor in the direction the player was moving
+            self.game.screen.cursor  = (deltaX, deltaY)
+
+            tile = self.game.world.getTileAtPoint((newX, newY))
+            if not tile.collidable:
+                self.player.pos = (newX, newY)
         self.game.updated = True
     
     def moveUp(self):
@@ -53,6 +68,13 @@ class Input(object):
     
     def quit(self):
         self.game.quitting = True
+
+    def toggleInspection(self):
+        self.game.inspecting = not self.game.inspecting
+        if not self.game.inspecting:
+            # reset cursor position
+            self.game.screen.cursor = (0, 0)
+        self.game.updated = True
 
     def mute(self):
         if not self.game.muted:

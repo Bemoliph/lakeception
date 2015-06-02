@@ -6,7 +6,7 @@ from tiles import Tile
 class Player(object):
     def __init__(self, pos, tileCharacter, tileColor):
         self.pos = pos
-        self.tile = Tile("player", "you, the protagonist", "@", "B23530")
+        self.tile = Tile("player", "the boat", "@", "B23530")
 
 class World(object):
     def __init__(self, name, dimensions, debug=False):
@@ -101,9 +101,9 @@ class World(object):
                 visible_tiles[index] = self.getTileAtPoint((x, y))
                 index += 1
 
-    def addDescription(self, text, color):
+    def addDescription(self, text, color="F2F2F2"):
         # The newest description is at the top of the list
         self.descriptions.insert(0, (text, color))
         # Drop the oldest message from the list
-        if len(self.descriptions) > 6:
+        if len(self.descriptions) > 1:
             self.descriptions.pop()

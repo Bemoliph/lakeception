@@ -23,6 +23,16 @@ class World(object):
         self.descriptions = []
         self.addDescription("it was a dark and stormy night...", "FFC22C")
 
+        # THUNDARAS SUGGESTION AREA
+        # siren isle / sirens
+        # leper beach
+        # dragon roost
+        # science pirate named thundara
+
+        # Biomes that add flavor to the world
+        self.biomes = [("cursed", "D1748F"), ("swamp", "4FDEA7"), ("pirate", "EF443A")]
+
+
     def generateWorld(self):
         # Pre-size the world array to avoid internal resizing
         worldWidth, worldHeight = self.dimensions
@@ -40,8 +50,11 @@ class World(object):
                 elif 0.5 <= noise < 0.75 :
                     tiles[index] = Tile("water", "some water", " ", "62707D")
                     # tiles[index] = Tile("unknown", "something unknown", "!", "B65555")
+                # Generate a Bustling Port
+                elif 0.75 <= noise <= .755:
+                    tiles[index] = Tile("port", "a bustling port", "H", "B85A1C", True)
                 # Generate an island
-                elif 0.75 <= noise <= 1:
+                elif 0.755 < noise <= 1:
                     tiles[index] = Tile("island", "an exotic island", "#", "F0E68C", True)
 
         # self.generateIslands(tiles)

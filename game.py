@@ -16,6 +16,7 @@ class Game(object):
         self.world = World("Test World", (100,100), debug=False)
                                        # resolution, viewport
         self.screen = Screen(self.world, (800, 475), (25, 11))
+        # self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
         self.input = Input(self)
         
         self.fps = 60
@@ -35,10 +36,16 @@ class Game(object):
         pygame.mixer.init()
         # From https://www.freesound.org/people/juskiddink/sounds/60507/
         # albeit a bit mixed to allow for looping
-        pygame.mixer.music.load(os.path.join(sys.path[0], '60507__juskiddink__waves2.ogg'))
-        pygame.mixer.music.play(-1)
+        tracks = []
+        tracks.append(pygame.mixer.Sound(os.path.join(sys.path[0],'60507__juskiddink__waves2.ogg')))
+        tracks.append(pygame.mixer.Sound(os.path.join(sys.path[0],'sea-space.ogg')))
+        # Play & loop crashing waves in the background
         # Set the volume to an unobtrusive level
-        pygame.mixer.music.set_volume(0.1)
+        tracks[0].set_volume(0.1)
+        tracks[0].play(-1)
+        # Play the song at a slightly higher volume
+        # tracks[1].set_volume(0.4)
+        # tracks[1].play()
  
     def tick(self):
         for event in pygame.event.get():

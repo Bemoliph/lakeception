@@ -22,3 +22,10 @@ class Tile(object):
     
     def __repr__(self):
         return self.__unicode__()
+
+    def __hash__(self):
+        return hash((self.icon, self.color))
+
+    def __eq__(self, other):
+        return (self.icon, self.color) == (other.icon, other.color)
+

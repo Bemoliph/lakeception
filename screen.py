@@ -28,8 +28,8 @@ class Screen(object):
 
         self.descriptionFont = pygame.font.SysFont("monospace", 15)
     
-    def _charToSprite(self, char, color):
-        return self.font.render(char, False, color, self.background_color)
+    def _tileToSprite(self, tile):
+        return self.font.render(tile.icon, False, tile.color, self.background_color)
     
     def getFontRect(self, coords, text):
         # Scalars were experimentally determined so chars touched instead of
@@ -44,14 +44,11 @@ class Screen(object):
         return pygame.Rect((x, y), (width, height))
     
     def getSprite(self, tile, coords):
-        char = tile.icon
-        
-        if char not in self.sprites:
-            self.sprites[char] = self._charToSprite(char, tile.color)
-        
-        sprite_rect = self.getFontRect(coords, char)
-        
-        return self.sprites[char], sprite_rect
+        if tile not in self.sprites:
+            self.sprites[tile] = self._tileToSprite(tile)
+
+        sprite_rect = self.getFontRect(coords, tile.icon)
+        return self.sprites[tile], sprite_rect
     
     def drawViewport(self):
         width, height = self.viewport_res

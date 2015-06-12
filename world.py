@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
-import noise as noiseLib
+import noise
 from tiles import Tile
 
 class Player(object):
@@ -12,6 +12,19 @@ class World(object):
     def __init__(self, name, dimensions, debug=False):
         self.name = name
         self.player = Player((0,0), "@", "B23530")
+        self.noiseScale = 0.1
+        
+        self.descriptions = []
+        self.addDescription("it was a dark and stormy night...", "FFC22C")
+        
+        # THUNDARAS SUGGESTION AREA
+        # siren isle / sirens
+        # leper beach
+        # dragon roost
+        # science pirate named thundara
+        
+        # Biomes that add flavor to the world
+        self.biomes = [("cursed", "D1748F"), ("swamp", "4FDEA7"), ("pirate", "EF443A")]
         
         if debug:
             self.dimensions = (5,5) # Force debug world dimensions
@@ -19,43 +32,38 @@ class World(object):
         else:
             self.dimensions = dimensions
             self.tiles = self.generateWorld()
+    
+    def getElevationAtPoint(self, point):
+        x, y = point
+        noiseValue = noise.snoise2(x*self.noiseScale, y*self.noiseScale)
         
-        self.descriptions = []
-        self.addDescription("it was a dark and stormy night...", "FFC22C")
-
-        # THUNDARAS SUGGESTION AREA
-        # siren isle / sirens
-        # leper beach
-        # dragon roost
-        # science pirate named thundara
-
-        # Biomes that add flavor to the world
-        self.biomes = [("cursed", "D1748F"), ("swamp", "4FDEA7"), ("pirate", "EF443A")]
-
-
+        elevation = int(round((noiseValue + 1) * 10))
+        
+        return elevation
+    
     def generateWorld(self):
         # Pre-size the world array to avoid internal resizing
         worldWidth, worldHeight = self.dimensions
         tiles = [None] * (worldWidth * worldHeight)
-        # Noise scale; tweak this to tweak the noise
-        scale = 0.1
-        # # Flood the world with CREATION!
+        
+        # Flood the world with CREATION!
         for y in xrange(0, worldHeight):
             for x in xrange(0, worldWidth):
-                index = y*worldWidth + x
-                noise = noiseLib.snoise2(x * scale, y * scale)
-                if noise < 0.5:
-                    tiles[index] = Tile("water", "some water", ".", "62707D")
+                tileIndex = self._pointToIndex((x,y), worldWidth, worldHeight)
+                elevation = self.getElevationAtPoint((x,y))
+                
+                if elevation < 15:
+                    tiles[tileIndex] = Tile("water", "some water", ".", "62707D")
                 # Generate some more water, blank spots this time
-                elif 0.5 <= noise < 0.75 :
-                    tiles[index] = Tile("water", "some water", " ", "62707D")
-                    # tiles[index] = Tile("unknown", "something unknown", "!", "B65555")
+                elif 15 <= elevation < 18 :
+                    tiles[tileIndex] = Tile("water", "some water", " ", "62707D")
+                    # tiles[tileIndex] = Tile("unknown", "something unknown", "!", "B65555")
                 # Generate a Bustling Port
-                elif 0.75 <= noise <= .755:
-                    tiles[index] = Tile("port", "a bustling port", "H", "B85A1C", True)
+                elif elevation == 18:
+                    tiles[tileIndex] = Tile("port", "a bustling port", "H", "B85A1C", True)
                 # Generate an island
-                elif 0.755 < noise <= 1:
-                    tiles[index] = Tile("island", "an exotic island", "#", "F0E68C", True)
+                elif 18 < elevation <= 20:
+                    tiles[tileIndex] = Tile("island", "an exotic island", "#", "F0E68C", True)
 
         # self.generateIslands(tiles)
 
@@ -69,7 +77,7 @@ class World(object):
         #     ║789║
         #     ╚═══╝          (4,4)        
         #grid = u"╔═══╗║123║║456║║789║╚═══╝"
-        grid = u"qwertasdfgzxcvbyuiophjkl;"
+        grid = u"qwertnoiseScalefgzxcvbyuiophjkl;"
         tiles = []
         for char in grid:
             t = Tile(char, char, char+char.upper(), "B23530")

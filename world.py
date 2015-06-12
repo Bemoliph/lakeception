@@ -105,7 +105,7 @@ class World(object):
         
         return self.tiles[index]
     
-    def getTilesAroundPlayer(self, size, visible_tiles):
+    def getTilesAroundPlayer(self, size, visibleTiles):
         # Crunch some attributes of the requested area centered on the player
         width, height = size
         playerX, playerY = self.player.pos
@@ -119,7 +119,7 @@ class World(object):
         index = 0
         for y in xrange(y1, y2+1):
             for x in xrange(x1, x2+1):
-                visible_tiles[index] = self.getTileAtPoint((x, y))
+                visibleTiles[index] = self.getTileAtPoint((x, y))
                 index += 1
 
     def addDescription(self, text, color="F2F2F2"):

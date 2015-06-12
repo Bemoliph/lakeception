@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import struct
 
-def hex2rgb(hex_str):
-    return struct.unpack('BBB', hex_str.decode('hex'))
+def hex2rgb(hexStr):
+    return struct.unpack('BBB', hexStr.decode('hex'))
 
-def hex2rgba(hex_str, alpha):
-    return hex2rgb(hex_str) + (alpha,)
+def hex2rgba(hexStr, alpha):
+    return hex2rgb(hexStr) + (alpha,)

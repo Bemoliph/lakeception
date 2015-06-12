@@ -7,29 +7,29 @@ from lakeutils import hex2rgba
 from tiles import Tile
 
 class Screen(object):
-    def __init__(self, world, window_res, viewport_res):
+    def __init__(self, world, windowRes, viewportRes):
         self.world = world
 
-        self.background_color = hex2rgb("0E0E0E")
-        self.window = pygame.display.set_mode(window_res)
+        self.backgroundColor = hex2rgb("0E0E0E")
+        self.window = pygame.display.set_mode(windowRes)
         
-        self.viewport_res = viewport_res
-        # viewport_res has to be square & odd for viewport_center to be correct
-        self.viewport_center = (viewport_res[0] // 2, viewport_res[1] // 2)
-        self.viewport_tiles = [None] * (viewport_res[0] * viewport_res[1])
+        self.viewportRes = viewportRes
+        # viewportRes has to be square & odd for viewportCenter to be correct
+        self.viewportCenter = (viewportRes[0] // 2, viewportRes[1] // 2)
+        self.viewportTiles = [None] * (viewportRes[0] * viewportRes[1])
         
         self.sprites = {}
-        self.font_face = "monospace"
-        self.font_size = window_res[0] / self.viewport_res[0]
-        self.font = pygame.font.SysFont(self.font_face, self.font_size)
+        self.fontFace = "monospace"
+        self.fontSize = windowRes[0] / self.viewportRes[0]
+        self.font = pygame.font.SysFont(self.fontFace, self.fontSize)
         self.cursor = (0, 0)
-        self.cursor_surface = pygame.Surface((self.font_size, self.font_size), pygame.SRCALPHA, 32)
-        self.cursor_surface.fill(hex2rgba("F2F2F2", 50))
+        self.cursorSurface = pygame.Surface((self.fontSize, self.fontSize), pygame.SRCALPHA, 32)
+        self.cursorSurface.fill(hex2rgba("F2F2F2", 50))
 
         self.descriptionFont = pygame.font.SysFont("monospace", 15)
     
     def _tileToSprite(self, tile):
-        return self.font.render(tile.icon, False, tile.color, self.background_color)
+        return self.font.render(tile.icon, False, tile.color, self.backgroundColor)
     
     def getFontRect(self, coords, text):
         # Scalars were experimentally determined so chars touched instead of
@@ -47,43 +47,43 @@ class Screen(object):
         if tile not in self.sprites:
             self.sprites[tile] = self._tileToSprite(tile)
 
-        sprite_rect = self.getFontRect(coords, tile.icon)
-        return self.sprites[tile], sprite_rect
+        spriteRect = self.getFontRect(coords, tile.icon)
+        return self.sprites[tile], spriteRect
     
     def drawViewport(self):
-        width, height = self.viewport_res
+        width, height = self.viewportRes
         
-        self.world.getTilesAroundPlayer((width, height), self.viewport_tiles)
+        self.world.getTilesAroundPlayer((width, height), self.viewportTiles)
         for y in xrange(0, height):
             for x in xrange(0, width):
-                tile = self.viewport_tiles[y * width + x]
-                sprite, sprite_rect = self.getSprite(tile, (x,y))
-                self.window.blit(sprite, sprite_rect)
+                tile = self.viewportTiles[y * width + x]
+                sprite, spriteRect = self.getSprite(tile, (x,y))
+                self.window.blit(sprite, spriteRect)
 
     def drawPlayer(self):
         player = self.world.player
-        sprite, sprite_rect = self.getSprite(player.tile, self.viewport_center)
-        self.window.blit(sprite, sprite_rect)
+        sprite, spriteRect = self.getSprite(player.tile, self.viewportCenter)
+        self.window.blit(sprite, spriteRect)
 
     def drawInspectionCursor(self):
-        player_pos = self.world.player.pos
-        # world_pos = player position + cursor position
-        world_pos = (player_pos[0] + self.cursor[0], player_pos[1] + self.cursor[1])
+        playerPos = self.world.player.pos
+        # worldPos = player position + cursor position
+        worldPos = (playerPos[0] + self.cursor[0], playerPos[1] + self.cursor[1])
         # Screen position differs from world position, as we're drawing with
         # respect to the viewport
-        screen_pos = (self.viewport_center[0] + self.cursor[0], self.viewport_center[1] + self.cursor[1])
-        screen_pos = self.getFontRect(screen_pos, "#")
+        screenPos = (self.viewportCenter[0] + self.cursor[0], self.viewportCenter[1] + self.cursor[1])
+        screenPos = self.getFontRect(screenPos, "#")
 
         # If the cursor is centered in the viewport => it's hovering above the player
         if self.cursor == (0, 0):
             # Get the player tile
             tile = self.world.player.tile
         else:
-            tile = self.world.getTileAtPoint(world_pos)
+            tile = self.world.getTileAtPoint(worldPos)
         self.world.addDescription(tile.description)
 
         # Magic numbers => center the cursor on the tile it's hovering over, kind of
-        self.window.blit(self.cursor_surface, (screen_pos[0]-6, screen_pos[1]+1))
+        self.window.blit(self.cursorSurface, (screenPos[0]-6, screenPos[1]+1))
 
     def drawText(self):
         # initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
@@ -95,7 +95,7 @@ class Screen(object):
             self.window.blit(label, (10, 350 + 20 * i))
     
     def draw(self, inspecting):
-        self.window.fill(self.background_color)
+        self.window.fill(self.backgroundColor)
         self.drawViewport()
         self.drawPlayer()
         if inspecting:

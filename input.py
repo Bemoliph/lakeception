@@ -5,18 +5,18 @@ class Input(object):
     def __init__(self, game):
         self.game = game
         self.bounds = {
-                "x": self.game.screen.viewport_res[0] // 2,
-                "y": self.game.screen.viewport_res[1] // 2
+                "x": self.game.screen.viewportRes[0] // 2,
+                "y": self.game.screen.viewportRes[1] // 2
             }
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.player
         
         # Both repeat values are in milliseconds
-        repeat_delay    = 35 # time between keypress and automatic motion
-        repeat_interval = 175 # time between automatic steps 
-        pygame.key.set_repeat(repeat_delay, repeat_interval)
+        repeatDelay    = 35 # time between keypress and automatic motion
+        repeatInterval = 175 # time between automatic steps 
+        pygame.key.set_repeat(repeatDelay, repeatInterval)
         
-        self.key_mapping = {
+        self.keyMapping = {
             pygame.K_UP     : self.moveUp,
             pygame.K_RIGHT  : self.moveRight,
             pygame.K_DOWN   : self.moveDown,
@@ -29,8 +29,8 @@ class Input(object):
     def handleKey(self, event):
         key = event.key
         
-        if key in self.key_mapping:
-            self.key_mapping[key]()
+        if key in self.keyMapping:
+            self.keyMapping[key]()
     
     def move(self, deltaX, deltaY):
         if self.game.inspecting:

@@ -23,10 +23,10 @@ class Game(object):
         self.clock = pygame.time.Clock()
         
         self.ANIMATE = pygame.USEREVENT+0
-        self.animation_rate = 1 * 1000
+        self.animationRate = 1 * 1000
         # Temporarily (?) disabled animations, because moving + animating was
         # an INTENSE visual experience
-        # pygame.time.set_timer(self.ANIMATE, self.animation_rate)
+        # pygame.time.set_timer(self.ANIMATE, self.animationRate)
         
         self.updated = True
         self.quitting = False

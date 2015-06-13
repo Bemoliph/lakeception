@@ -22,8 +22,11 @@ class Input(object):
             pygame.K_DOWN   : self.moveDown,
             pygame.K_LEFT   : self.moveLeft,
             pygame.K_ESCAPE : self.quit,
-            pygame.K_m   : self.mute,
-            pygame.K_i   : self.toggleInspection,
+            pygame.K_m      : self.mute,
+            pygame.K_i      : self.toggleInspection,
+            pygame.K_F1     : self.drawNormal,
+            pygame.K_F2     : self.drawElevation,
+            pygame.K_F3     : self.drawBiomes,
         }
     
     def handleKey(self, event):
@@ -47,11 +50,12 @@ class Input(object):
             newY = currentY + deltaY
             # Small feel/usability tweak: 
             # place the cursor in the direction the player was moving
-            self.game.screen.cursor  = (deltaX, deltaY)
+            self.game.screen.cursor = (deltaX, deltaY)
 
             tile = self.game.world.getTileAtPoint((newX, newY))
             if not tile.collidable:
                 self.player.pos = (newX, newY)
+        
         self.game.updated = True
     
     def moveUp(self):
@@ -71,9 +75,11 @@ class Input(object):
 
     def toggleInspection(self):
         self.game.inspecting = not self.game.inspecting
+        
         if not self.game.inspecting:
-            # reset cursor position
-            self.game.screen.cursor = (0, 0)
+            self.game.screen.cursor = (0, 0)   # reset cursor position
+            self.game.world.addDescription("") # clear the message
+        
         self.game.updated = True
 
     def mute(self):
@@ -81,5 +87,21 @@ class Input(object):
             pygame.mixer.music.pause()
         else:
             pygame.mixer.music.unpause()
+        
         self.game.muted = not self.game.muted
-
+    
+    def setDrawMode(self, mode):
+        self.game.screen.currentDrawMode = mode
+        self.game.screen.draw(self.game.inspecting)
+    
+    def drawNormal(self):
+        self.game.world.addDescription("")
+        self.setDrawMode(self.game.screen.DRAWMODE_NORMAL)
+    
+    def drawElevation(self):
+        self.game.world.addDescription("[DEBUG] Now drawing tile elevations.")
+        self.setDrawMode(self.game.screen.DRAWMODE_ELEVATION)
+    
+    def drawBiomes(self):
+        self.game.world.addDescription("[DEBUG] Now drawing tile biome IDs.")
+        self.setDrawMode(self.game.screen.DRAWMODE_BIOMES)

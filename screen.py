@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 
-from lakeutils import hex2rgb
-from lakeutils import hex2rgba
-
+from lakeutils import hex2rgb, hex2rgba
 from tiles import Tile
 
 class Screen(object):
@@ -18,23 +16,28 @@ class Screen(object):
         self.viewportCenter = (viewportRes[0] // 2, viewportRes[1] // 2)
         self.viewportTiles = [None] * (viewportRes[0] * viewportRes[1])
         
+        self.DRAWMODE_NORMAL = 0
+        self.DRAWMODE_ELEVATION = 1
+        self.DRAWMODE_BIOMES = 2
+        self.currentDrawMode = self.DRAWMODE_NORMAL
+        
         self.sprites = {}
         self.fontFace = "monospace"
         self.fontSize = windowRes[0] / self.viewportRes[0]
         self.font = pygame.font.SysFont(self.fontFace, self.fontSize)
+        self.fontMini = pygame.font.SysFont(self.fontFace, self.fontSize/2)
+        self.fontDimensions = self.font.size("@")
+        
         self.cursor = (0, 0)
         self.cursorSurface = pygame.Surface((self.fontSize, self.fontSize), pygame.SRCALPHA, 32)
         self.cursorSurface.fill(hex2rgba("F2F2F2", 50))
-
+        
         self.descriptionFont = pygame.font.SysFont("monospace", 15)
     
-    def _tileToSprite(self, tile):
-        return self.font.render(tile.icon, False, tile.color, self.backgroundColor)
-    
     def getFontRect(self, coords, text):
-        # Scalars were experimentally determined so chars touched instead of
-        # overlap/gap.  Seems to work for big and small font sizes.
-        width, height = self.font.size(text)
+        # Scalars were experimentally determined so characters touch instead
+        # of overlap/gap.  Seems fontDimensions work for big and small font sizes.
+        width, height = self.fontDimensions
         height *= 0.85
         width *= 1.75
         
@@ -43,26 +46,46 @@ class Screen(object):
         
         return pygame.Rect((x, y), (width, height))
     
+    def _getTileGlyphForCurrentDrawMode(self, tile):
+        if self.currentDrawMode == self.DRAWMODE_NORMAL:
+            return (str(tile.glyph), tile.color)
+        elif self.currentDrawMode == self.DRAWMODE_ELEVATION:
+            return (str(tile.elevation), tile.color)
+        elif self.currentDrawMode == self.DRAWMODE_BIOMES:
+            return (str(tile.biomeID), tile.color)
+    
+    def _generateGlyphSprite(self, glyph, color):
+        if self.currentDrawMode == self.DRAWMODE_NORMAL:
+            self.sprites[(glyph, color)] = self.font.render(glyph, False, color, self.backgroundColor)
+        else:
+            self.sprites[(glyph, color)] = self.fontMini.render(glyph, False, color, self.backgroundColor)
+    
     def getSprite(self, tile, coords):
-        if tile not in self.sprites:
-            self.sprites[tile] = self._tileToSprite(tile)
+        coloredGlyph = self._getTileGlyphForCurrentDrawMode(tile)
+        
+        if coloredGlyph not in self.sprites:
+            self._generateGlyphSprite(*coloredGlyph)
 
-        spriteRect = self.getFontRect(coords, tile.icon)
-        return self.sprites[tile], spriteRect
+        spriteRect = self.getFontRect(coords, coloredGlyph[0])
+        
+        return self.sprites[coloredGlyph], spriteRect
     
     def drawViewport(self):
         width, height = self.viewportRes
         
         self.world.getTilesAroundPlayer((width, height), self.viewportTiles)
+        
         for y in xrange(0, height):
             for x in xrange(0, width):
                 tile = self.viewportTiles[y * width + x]
                 sprite, spriteRect = self.getSprite(tile, (x,y))
+                
                 self.window.blit(sprite, spriteRect)
 
     def drawPlayer(self):
         player = self.world.player
         sprite, spriteRect = self.getSprite(player.tile, self.viewportCenter)
+        
         self.window.blit(sprite, spriteRect)
 
     def drawInspectionCursor(self):

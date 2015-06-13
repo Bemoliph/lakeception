@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import random
 import noise
+
 from tiles import Tile
 
 class Player(object):
-    def __init__(self, pos, tileCharacter, tileColor):
+    def __init__(self, pos, glyph, tileColor):
         self.pos = pos
-        self.tile = Tile("player", "the boat", "@", "B23530")
+        self.tile = Tile("player", "the boat", glyph, tileColor)
+        self.tile.elevation = "@" # hack
+        self.tile.biomeID = "@" # hack
 
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         self.name = name
         self.player = Player((0,0), "@", "B23530")
-        self.noiseScale = 0.1
         
         self.descriptions = []
         self.addDescription("it was a dark and stormy night...", "FFC22C")
@@ -25,6 +27,7 @@ class World(object):
         
         # Biomes that add flavor to the world
         self.biomes = [("cursed", "D1748F"), ("swamp", "4FDEA7"), ("pirate", "EF443A")]
+        self.noiseScale = 0.1
         
         if debug:
             self.dimensions = (5,5) # Force debug world dimensions
@@ -37,6 +40,7 @@ class World(object):
         x, y = point
         noiseValue = noise.snoise2(x*self.noiseScale, y*self.noiseScale)
         
+        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
         elevation = int(round((noiseValue + 1) * 10))
         
         return elevation
@@ -51,6 +55,7 @@ class World(object):
             for x in xrange(0, worldWidth):
                 tileIndex = self._pointToIndex((x,y), worldWidth, worldHeight)
                 elevation = self.getElevationAtPoint((x,y))
+                biomeID = 1
                 
                 if elevation < 15:
                     tiles[tileIndex] = Tile("water", "some water", ".", "62707D")
@@ -64,6 +69,9 @@ class World(object):
                 # Generate an island
                 elif 18 < elevation <= 20:
                     tiles[tileIndex] = Tile("island", "an exotic island", "#", "F0E68C", True)
+                
+                tiles[tileIndex].elevation = elevation
+                tiles[tileIndex].biomeID = biomeID
 
         # self.generateIslands(tiles)
 
@@ -105,7 +113,7 @@ class World(object):
         
         return self.tiles[index]
     
-    def getTilesAroundPlayer(self, size, visibleTiles):
+    def getTilesAroundPlayer(self, size, visible_tiles):
         # Crunch some attributes of the requested area centered on the player
         width, height = size
         playerX, playerY = self.player.pos
@@ -119,7 +127,7 @@ class World(object):
         index = 0
         for y in xrange(y1, y2+1):
             for x in xrange(x1, x2+1):
-                visibleTiles[index] = self.getTileAtPoint((x, y))
+                visible_tiles[index] = self.getTileAtPoint((x, y))
                 index += 1
 
     def addDescription(self, text, color="F2F2F2"):

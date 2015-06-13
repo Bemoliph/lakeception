@@ -8,24 +8,25 @@ from lakeutils import hex2rgb
 # Tile("unknown", "something unknown", "!", "B65555")
 
 class Tile(object):
-    def __init__(self, name, description, icons, color, collidable=False):
+    def __init__(self, name, description, glyphs, color, collidable=False):
         self.name = name
-        self.collidable = collidable
         self.description = description
-        # A collection of characters representing the tile.
-        # A random icon is chosen each frame draw for ~ambience~
-        self.icon = random.choice(icons)
+        
+        self.glyph = random.choice(glyphs)
         self.color = hex2rgb(color)
+        
+        self.collidable = collidable
+        self.elevation = -1
+        self.biomeID = -1
     
     def __unicode__(self):
-        return self.icon
+        return self.glyph
     
     def __repr__(self):
         return self.__unicode__()
 
     def __hash__(self):
-        return hash((self.icon, self.color))
+        return hash((self.glyph, self.color, self.biome, self.elevation))
 
     def __eq__(self, other):
-        return (self.icon, self.color) == (other.icon, other.color)
-
+        return (self.glyph, self.color, self.biome, self.elevation) == (other.glyph, other.color, other.biome, other.elevation)

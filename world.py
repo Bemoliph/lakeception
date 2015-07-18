@@ -68,8 +68,9 @@ class World(object):
         # quantization is lower for biomes since we have fewer of them than
         # elevation levels
         elevation = int(round((noiseValue + 1) * 2))
+        elevation = 0 # Hack: remove this when we have more biomes
         
-        return elevation
+        return self.biomes[elevation]
 
     def getElevationAtPoint(self, point):
         x, y = point
@@ -91,10 +92,7 @@ class World(object):
                 point = (x, y)
                 tileIndex = self._pointToIndex(point, worldWidth, worldHeight)
                 elevation = self.getElevationAtPoint(point)
-                # Temporary biomeID hax, since we only have one legitimate biome
-                biomeID = 0
-                # biomeID = self.getBiomeAtPoint(point) # uncomment this when more biomes
-                biome = self.biomes[biomeID]
+                biome = self.getBiomeAtPoint(point)
                 tiles[tileIndex] = biome.getTileAtElevation(elevation)
 
         return tiles

@@ -3,6 +3,15 @@ import random
 import noise
 
 from tiles import Tile
+from biome import Biome
+from lakeutils import getBiomeFiles
+
+        # THUNDARAS SUGGESTION AREA
+        # siren isle / sirens
+        # leper beach
+        # dragon roost
+        # science pirate named thundara (ok this was mine)
+        
 
 class Player(object):
     def __init__(self, pos, glyph, tileColor):
@@ -14,20 +23,18 @@ class Player(object):
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         self.name = name
+        self.biomePath = "biomes"
+        self.loadBiomes()
+
         self.player = Player((0,0), "@", "B23530")
-        
+        # Seed the RNG so that we can debug this sucker
+        random.seed(42) 
         self.descriptions = []
         self.addDescription("it was a dark and stormy night...", "FFC22C")
         
-        # THUNDARAS SUGGESTION AREA
-        # siren isle / sirens
-        # leper beach
-        # dragon roost
-        # science pirate named thundara
-        
-        # Biomes that add flavor to the world
-        self.biomes = [("cursed", "D1748F"), ("swamp", "4FDEA7"), ("pirate", "EF443A")]
-        self.noiseScale = 0.1
+        # Smaller scale => larger homogenous areas
+        self.elevationScale = 0.1
+        self.biomeScale = 0.009
         
         if debug:
             self.dimensions = (5,5) # Force debug world dimensions
@@ -35,10 +42,38 @@ class World(object):
         else:
             self.dimensions = dimensions
             self.tiles = self.generateWorld()
-    
+
+    # Load all the .biome files located at self.biomePath
+    def loadBiomes(self):
+        files = getBiomeFiles(self.biomePath)
+        self.biomes = {}
+        for f in files:
+            b = Biome(f)
+            self.biomes[b.id] = b
+
     def getElevationAtPoint(self, point):
         x, y = point
-        noiseValue = noise.snoise2(x*self.noiseScale, y*self.noiseScale)
+        noiseValue = noise.snoise2(x*self.elevationScale, y*self.elevationScale)
+        
+        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
+        elevation = int(round((noiseValue + 1) * 10))
+        
+        return elevation
+
+    def getBiomeAtPoint(self, point):
+        x, y = point
+        noiseValue = noise.snoise2(x*self.biomeScale, y*self.biomeScale)
+        
+        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 3]
+        # quantization is lower for biomes since we have fewer of them than
+        # elevation levels
+        elevation = int(round((noiseValue + 1) * 2))
+        
+        return elevation
+
+    def getElevationAtPoint(self, point):
+        x, y = point
+        noiseValue = noise.snoise2(x*self.elevationScale, y*self.elevationScale)
         
         # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
         elevation = int(round((noiseValue + 1) * 10))
@@ -53,27 +88,14 @@ class World(object):
         # Flood the world with CREATION!
         for y in xrange(0, worldHeight):
             for x in xrange(0, worldWidth):
-                tileIndex = self._pointToIndex((x,y), worldWidth, worldHeight)
-                elevation = self.getElevationAtPoint((x,y))
-                biomeID = 1
-                
-                if elevation < 15:
-                    tiles[tileIndex] = Tile("water", "some water", ".", "62707D")
-                # Generate some more water, blank spots this time
-                elif 15 <= elevation < 18 :
-                    tiles[tileIndex] = Tile("water", "some water", " ", "62707D")
-                    # tiles[tileIndex] = Tile("unknown", "something unknown", "!", "B65555")
-                # Generate a Bustling Port
-                elif elevation == 18:
-                    tiles[tileIndex] = Tile("port", "a bustling port", "H", "B85A1C", True)
-                # Generate an island
-                elif 18 < elevation <= 20:
-                    tiles[tileIndex] = Tile("island", "an exotic island", "#", "F0E68C", True)
-                
-                tiles[tileIndex].elevation = elevation
-                tiles[tileIndex].biomeID = biomeID
-
-        # self.generateIslands(tiles)
+                point = (x, y)
+                tileIndex = self._pointToIndex(point, worldWidth, worldHeight)
+                elevation = self.getElevationAtPoint(point)
+                # Temporary biomeID hax, since we only have one legitimate biome
+                biomeID = 0
+                # biomeID = self.getBiomeAtPoint(point) # uncomment this when more biomes
+                biome = self.biomes[biomeID]
+                tiles[tileIndex] = biome.getTileAtElevation(elevation)
 
         return tiles
     

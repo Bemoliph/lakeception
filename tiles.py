@@ -13,6 +13,7 @@ class Tile(object):
         self.description = description
         
         self.glyph = random.choice(glyphs)
+        self.allGlyphs = glyphs
         self.color = hex2rgb(color)
         
         self.collidable = collidable
@@ -26,7 +27,7 @@ class Tile(object):
         return self.__unicode__()
 
     def __hash__(self):
-        return hash((self.glyph, self.color, self.biome, self.elevation))
+        return hash((self.glyph, self.color, self.biomeID, self.elevation))
 
     def __eq__(self, other):
-        return (self.glyph, self.color, self.biome, self.elevation) == (other.glyph, other.color, other.biome, other.elevation)
+        return (self.glyph, self.color, self.biomeID, self.elevation) == (other.glyph, other.color, other.biomeID, other.elevation)

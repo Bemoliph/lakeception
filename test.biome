@@ -1,0 +1,34 @@
+{
+    "name": "Test Biome",
+    "tiles": {
+        "tile1": {
+            "description": "The first test tile!",
+            "glyphs": "1Aa",
+            "color": "FF0000",
+            "collidable": true
+        },
+        "tile2": {
+            "description": "The second test tile!",
+            "glyphs": "2Bb",
+            "color": "00FF00",
+            "collidable": true
+        },
+        "tile3": {
+            "description": "The third test tile!",
+            "glyphs": "3Cc",
+            "color": "0000FF",
+            "collidable": false
+        }
+    },
+    "elevations": {
+        "defaultTiles": [["tile3", 1]],
+        "13": [["tile1", 1], ["tile2", 1], ["tile3", 5]],
+        "14": [["tile1", 2], ["tile2", 2], ["tile3", 5]],
+        "15": [["tile1", 2], ["tile2", 2], ["tile3", 4]],
+        "16": [["tile1", 3], ["tile2", 2], ["tile3", 3]],
+        "17": [["tile1", 3], ["tile2", 3], ["tile3", 2]],
+        "18": [["tile1", 5], ["tile2", 2], ["tile3", 1]],
+        "19": [["tile1", 6], ["tile2", 2]],
+        "20": [["tile1", 7], ["tile2", 1]]
+    }
+}

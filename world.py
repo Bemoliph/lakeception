@@ -47,9 +47,10 @@ class World(object):
     def loadBiomes(self):
         files = getBiomeFiles(self.biomePath)
         self.biomes = {}
-        for f in files:
-            b = Biome(f)
-            self.biomes[b.id] = b
+        for biomeID, f in enumerate(files):
+            print biomeID, f
+            b = Biome(f, biomeID)
+            self.biomes[biomeID] = b
 
     def getBiomeAtPoint(self, point):
         # Scale position and world dimensions according to biome scaling value

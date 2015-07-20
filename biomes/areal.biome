@@ -1,0 +1,48 @@
+{
+    "name": "Your First Biome",
+    "tiles": {
+        "water": {
+            "description": "some water",
+            "glyphs": ".",
+            "color": "62707D",
+            "adjacentTiles": [],
+            "collidable": false
+        },
+        "empty water": {
+            "description": "some water",
+            "glyphs": " ",
+            "color": "62707D",
+            "adjacentTiles": [],
+            "collidable": false
+        },
+        "port": {
+            "description": "a bustling port",
+            "glyphs": "H",
+            "color": "B85A1C",
+            "adjacentTiles": ["empty water", "island"],
+            "collidable": true
+        },
+        "island": {
+            "description": "an exotic island",
+            "glyphs": "#",
+            "color": "F0E68C",
+            "adjacentTiles": [],
+            "collidable": true
+        }
+    },
+    "elevations": {
+        "defaultTiles": [["water", 1]],
+        "9": [["empty water", 1]],
+        "10": [["empty water", 1]],
+        "11": [["empty water", 1]],
+        "12": [["island", 9], ["port", 3]],
+        "13": [["island", 6]],
+        "14": [["island", 6]],
+        "15": [["island", 6]],
+        "16": [["island", 7]],
+        "17": [["island", 7]],
+        "18": [["island", 7]],
+        "19": [["island", 7]],
+        "20": [["island", 7]]
+    }
+}

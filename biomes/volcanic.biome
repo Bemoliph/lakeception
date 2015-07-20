@@ -1,35 +1,39 @@
 {
     "name": "Volcanic Island Biome",
-    "id": 2,
     "tiles": {
         "water": {
             "description": "some water",
             "glyphs": ".",
             "color": "62707D",
+            "adjacentTiles": [],
             "collidable": false
         },
         "empty water": {
             "description": "some water",
             "glyphs": " ",
             "color": "62707D",
+            "adjacentTiles": [],
             "collidable": false
         },
         "volcanic ash": {
             "description": "a patch volcanic ash",
             "glyphs": "#",
             "color": "33231E",
+            "adjacentTiles": [],
             "collidable": false
         },
         "volcanic rock": {
             "description": "a piece of volcanic rock",
             "glyphs": "#",
             "color": "544C49",
+            "adjacentTiles": [],
             "collidable": true
         },
         "lava": {
             "description": "a pool of lava",
             "glyphs": "L",
             "color": "C95632",
+            "adjacentTiles": [],
             "collidable": true
         }
     },

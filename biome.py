@@ -8,13 +8,13 @@ from tiles import Tile
 
 
 class Biome(object):
-    def __init__(self, biomeFileName):
+    def __init__(self, biomeFileName, biomeID):
         biomeFile = json.load(open(biomeFileName, "r"))
         
         # Decorative name for biome
         self.name = biomeFile["name"]
         # Id which is used to reference biome in world.py
-        self.id = biomeFile["id"]
+        self.id = biomeID
         
         # Initialize tiles
         self.tiles = {}

@@ -1,5 +1,6 @@
 {
     "name": "Test Biome",
+    "id": 0,
     "tiles": {
         "tile1": {
             "description": "The first test tile!",

@@ -1,0 +1,51 @@
+{
+    "name": "Jungle Biome",
+    "id": 1,
+    "tiles": {
+        "water": {
+            "description": "some water",
+            "glyphs": ".",
+            "color": "62707D",
+            "collidable": false
+        },
+        "empty water": {
+            "description": "some water",
+            "glyphs": " ",
+            "color": "62707D",
+            "collidable": false
+        },
+        "vegetation": {
+            "description": "a patch of jungle vegetation",
+            "glyphs": "T",
+            "color": "438C15",
+            "collidable": true
+        },
+        "dark vegetation": {
+            "description": "a patch of jungle vegetation",
+            "glyphs": "T",
+            "color": "316610",
+            "collidable": true
+        },
+        "sand": {
+            "description": "a sandy beach",
+            "glyphs": "#",
+            "color": "FFF495",
+            "collidable": true
+        }
+    },
+    "elevations": {
+        "defaultTiles": [["water", 1]],
+        "9": [["empty water", 1]],
+        "10": [["empty water", 1]],
+        "11": [["empty water", 1]],
+        "12": [["sand", 7]],
+        "13": [["vegetation", 6], ["dark vegetation", 2]],
+        "14": [["vegetation", 6], ["dark vegetation", 2]],
+        "15": [["vegetation", 6], ["dark vegetation", 2]],
+        "16": [["vegetation", 7], ["dark vegetation", 2]],
+        "17": [["vegetation", 7], ["dark vegetation", 2]],
+        "18": [["dark vegetation", 2]],
+        "19": [["dark vegetation", 2]],
+        "20": [["vegetation", 7], ["dark vegetation", 2]]
+    }
+}

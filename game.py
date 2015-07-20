@@ -15,8 +15,8 @@ class Game(object):
         
         self.world = World("Test World", (100,100), debug=False)
                                        # resolution, viewport
-        #self.screen = Screen(self.world, (800, 475), (25, 11))
-        self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
+        self.screen = Screen(self.world, (800, 475), (25, 11))
+        #self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
         self.input = Input(self)
         
         self.fps = 60

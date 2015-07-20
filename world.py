@@ -53,7 +53,7 @@ class World(object):
 
     def getBiomeAtPoint(self, point):
         # Scale position and world dimensions according to biome scaling value
-        x, y, worldWidth, worldHeight = [e*self.elevationScale for e in point+self.dimensions]
+        x, y, worldWidth, worldHeight = [e*self.biomeScale for e in point+self.dimensions]
         noiseValue = noise.snoise2(x, y, repeatx=worldWidth, repeaty=worldHeight)
         
         # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over a

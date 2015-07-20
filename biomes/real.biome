@@ -29,11 +29,17 @@
     },
     "elevations": {
         "defaultTiles": [["water", 1]],
-        "15": [["empty water", 1]],
-        "16": [["empty water", 1]],
-        "17": [["empty water", 1]],
-        "18": [["island", 1], ["port", 11]],
-        "19": [["island", 6]],
+        "9": [["empty water", 1]],
+        "10": [["empty water", 1]],
+        "11": [["empty water", 1]],
+        "12": [["island", 9], ["port", 3]],
+        "13": [["island", 6]],
+        "14": [["island", 6]],
+        "15": [["island", 6]],
+        "16": [["island", 7]],
+        "17": [["island", 7]],
+        "18": [["island", 7]],
+        "19": [["island", 7]],
         "20": [["island", 7]]
     }
 }

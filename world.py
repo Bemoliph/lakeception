@@ -33,7 +33,7 @@ class World(object):
         self.addDescription("it was a dark and stormy night...", "FFC22C")
         
         # Smaller scale => larger homogenous areas
-        self.elevationScale = 0.1
+        self.elevationScale = 0.025
         self.biomeScale = 0.009
         
         if debug:
@@ -51,30 +51,22 @@ class World(object):
             b = Biome(f)
             self.biomes[b.id] = b
 
-    def getElevationAtPoint(self, point):
-        x, y = point
-        noiseValue = noise.snoise2(x*self.elevationScale, y*self.elevationScale)
-        
-        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
-        elevation = int(round((noiseValue + 1) * 10))
-        
-        return elevation
-
     def getBiomeAtPoint(self, point):
-        x, y = point
-        noiseValue = noise.snoise2(x*self.biomeScale, y*self.biomeScale)
+        # Scale position and world dimensions according to biome scaling value
+        x, y, worldWidth, worldHeight = [e*self.elevationScale for e in point+self.dimensions]
+        noiseValue = noise.snoise2(x, y, repeatx=worldWidth, repeaty=worldHeight)
         
-        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 3]
-        # quantization is lower for biomes since we have fewer of them than
-        # elevation levels
-        elevation = int(round((noiseValue + 1) * 2))
-        elevation = 0 # Hack: remove this when we have more biomes
+        # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over a
+        # range fitting the number of biomes currently loaded:
+        biomeCount = len(self.biomes)
+        biomeID = int(round((noiseValue + 1) * (biomeCount-1)/2))
         
-        return self.biomes[elevation]
+        return self.biomes[biomeID]
 
     def getElevationAtPoint(self, point):
-        x, y = point
-        noiseValue = noise.snoise2(x*self.elevationScale, y*self.elevationScale)
+        # Scale position and world dimensions according to elevation scaling value
+        x, y, worldWidth, worldHeight = [e*self.elevationScale for e in point+self.dimensions]
+        noiseValue = noise.snoise2(x, y, octaves=10, repeatx=worldWidth, repeaty=worldHeight)
         
         # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
         elevation = int(round((noiseValue + 1) * 10))

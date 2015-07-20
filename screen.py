@@ -48,11 +48,11 @@ class Screen(object):
     
     def _getTileGlyphForCurrentDrawMode(self, tile):
         if self.currentDrawMode == self.DRAWMODE_NORMAL:
-            return (str(tile.glyph), tile.color)
+            return (unicode(tile.glyph), tile.color)
         elif self.currentDrawMode == self.DRAWMODE_ELEVATION:
-            return (str(tile.elevation), tile.color)
+            return (unicode(tile.elevation), tile.color)
         elif self.currentDrawMode == self.DRAWMODE_BIOMES:
-            return (str(tile.biomeID), tile.color)
+            return (unicode(tile.biomeID), tile.color)
     
     def _generateGlyphSprite(self, glyph, color):
         if self.currentDrawMode == self.DRAWMODE_NORMAL:

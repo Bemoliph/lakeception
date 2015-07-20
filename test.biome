@@ -21,14 +21,12 @@
         }
     },
     "elevations": {
-        "defaultTiles": [["tile3", 1]],
-        "13": [["tile1", 1], ["tile2", 1], ["tile3", 5]],
-        "14": [["tile1", 2], ["tile2", 2], ["tile3", 5]],
-        "15": [["tile1", 2], ["tile2", 2], ["tile3", 4]],
-        "16": [["tile1", 3], ["tile2", 2], ["tile3", 3]],
-        "17": [["tile1", 3], ["tile2", 3], ["tile3", 2]],
-        "18": [["tile1", 5], ["tile2", 2], ["tile3", 1]],
-        "19": [["tile1", 6], ["tile2", 2]],
-        "20": [["tile1", 7], ["tile2", 1]]
+        "defaultTiles": [["water", 1]],
+        "15": [["sparkly water", 1]],
+        "16": [["sparkly water", 1]],
+        "17": [["sparkly water", 1]],
+        "18": [["port", 1]],
+        "19": [["island", 1]],
+        "20": [["island", 1]]
     }
 }

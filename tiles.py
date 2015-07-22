@@ -8,9 +8,10 @@ from lakeutils import hex2rgb
 # Tile("unknown", "something unknown", "!", "B65555")
 
 class Tile(object):
-    def __init__(self, name, description, glyphs, color, collidable=False):
+    def __init__(self, name, description, glyphs, color, adjacentTiles=None, collidable=False):
         self.name = name
         self.description = description
+        self.adjacentTiles = adjacentTiles
         
         self.glyph = random.choice(glyphs)
         self.allGlyphs = glyphs
@@ -25,6 +26,9 @@ class Tile(object):
     
     def __repr__(self):
         return self.__unicode__()
+
+    def hasAdjacencyRequirement(self):
+        return self.adjacentTiles and len(self.adjacentTiles) > 0
 
     def __hash__(self):
         return hash((self.glyph, self.color, self.biomeID, self.elevation))

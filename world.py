@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 import noise
+from collections import Counter
 
 from tiles import Tile
 from biome import Biome
@@ -78,17 +79,68 @@ class World(object):
         # Pre-size the world array to avoid internal resizing
         worldWidth, worldHeight = self.dimensions
         tiles = [None] * (worldWidth * worldHeight)
+
+        adjacencyDependentTiles = []
         
         # Flood the world with CREATION!
         for y in xrange(0, worldHeight):
             for x in xrange(0, worldWidth):
                 point = (x, y)
-                tileIndex = self._pointToIndex(point, worldWidth, worldHeight)
                 elevation = self.getElevationAtPoint(point)
                 biome = self.getBiomeAtPoint(point)
-                tiles[tileIndex] = biome.getTileAtElevation(elevation)
+                tile = biome.getTileAtElevation(elevation)
+                if tile.hasAdjacencyRequirement():
+                    adjacencyDependentTiles.append((tile, point))
+                else:
+                    tileIndex = self._pointToIndex(point, worldWidth, worldHeight)
+                    tiles[tileIndex] = tile
+
+        # Handle all the tiles with adjacency requirements
+        for tile, point in adjacencyDependentTiles:
+            tileX, tileY = point
+            requiredTiles = []
+            foundTiles = []
+
+            for y in xrange(tileY - 1, tileY + 1):
+                for x in xrange(tileX - 1, tileX + 1):
+                    # This is the tile whose neighbours we are looking at;
+                    # continue on to its neighbours
+                    if (x, y) == point:
+                        continue
+
+                    tileIndex = self._pointToIndex((x, y), worldWidth, worldHeight)
+                    adjacentTile = tiles[tileIndex]
+                    foundTiles.append(adjacentTile)
+
+                    # Check if the adjacent tile was generated (i.e. it didn't have an
+                    # adjacency requirement itself), 
+                    # and it is one of the tiles we require to be adjacent, 
+                    # and it isn't already saved
+                    if adjacentTile and adjacentTile in tile.adjacentTiles and \
+                    adjacentTile not in requiredTiles:
+                        requiredTiles.append(adjacentTile)
+
+            tileIndex = self._pointToIndex(point, worldWidth, worldHeight)
+            # Counter is from python's collections module; it checks if the
+            # contents of the two multisets, aka containers, are the same
+            if Counter(requiredTiles) == Counter(tile.adjacentTiles):
+                tiles[tileIndex] = tile
+            else:
+                mostCommonTile = self.getMostCommonElement(foundTiles)
+                if mostCommonTile:
+                    tiles[tileIndex] = mostCommonTile
+                else:
+                    # In the event that all of the surrounding tiles have adjacency
+                    # requirements, just generate the tile we're checking
+                    tiles[tileIndex] = tile
+
 
         return tiles
+
+    def getMostCommonElement(self, elements):
+        data = Counter(elements)
+        return data.most_common(1)[0][0]
+
     
     def generateDebugWorld(self):
         # Use cool pipe shapes to make positional debugging easier:

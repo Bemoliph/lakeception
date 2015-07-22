@@ -20,7 +20,16 @@ class Biome(object):
         self.tiles = {}
         for tileName, tileData in biomeFile["tiles"].iteritems():
             self.tiles[tileName] = Tile(tileName, **tileData)
-        
+
+        # For each initialized tile, update its list of adjacentTiles 
+        # so that it mirrors the now initialized tiles
+        for key, tile in self.tiles.iteritems():
+            if tile.adjacentTiles:
+                adjacentList = []
+                for tileName in tile.adjacentTiles:
+                    adjacentList.append(self.tiles[tileName])
+                tile.adjacentTiles = adjacentList
+            
         # Set up how tiles occur at different elevations
         self.elevations = {}
         for elevation, weightedTiles in biomeFile["elevations"].iteritems():

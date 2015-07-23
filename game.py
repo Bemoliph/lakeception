@@ -33,6 +33,7 @@ class Game(object):
         self.quitting = False
         self.muted = False
         self.inspecting = False
+        self.editing = False
 
         pygame.mixer.init()
         # From https://www.freesound.org/people/juskiddink/sounds/60507/
@@ -59,7 +60,7 @@ class Game(object):
                 self.quitting = True
         
         if self.updated:
-            self.screen.draw(self.inspecting)
+            self.screen.draw(self.inspecting, self.editing)
             self.updated = False
         
         timeDelta = self.clock.tick(self.fps)

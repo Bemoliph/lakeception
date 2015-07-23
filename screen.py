@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 
-from lakeutils import hex2rgb, hex2rgba
+from lakeutils import hex2rgb, hex2rgba, rgb2hex
 from tiles import Tile
 
 class Screen(object):
@@ -88,7 +88,7 @@ class Screen(object):
         
         self.window.blit(sprite, spriteRect)
 
-    def drawInspectionCursor(self):
+    def drawInspectionCursor(self, editing):
         playerPos = self.world.player.pos
         # worldPos = player position + cursor position
         worldPos = (playerPos[0] + self.cursor[0], playerPos[1] + self.cursor[1])
@@ -103,7 +103,12 @@ class Screen(object):
             tile = self.world.player.tile
         else:
             tile = self.world.getTileAtPoint(worldPos)
-        self.world.addDescription(tile.description)
+        if editing:
+            text = "[EDITING] {0}, {1}, {2}, #{3}".format(tile.glyph, tile.name,
+                    tile.getHSV(), rgb2hex(*tile.color))
+            self.world.addDescription(text)
+        else:
+            self.world.addDescription(tile.description)
 
         # Magic numbers => center the cursor on the tile it's hovering over, kind of
         self.window.blit(self.cursorSurface, (screenPos[0]-6, screenPos[1]+1))
@@ -117,12 +122,12 @@ class Screen(object):
             # change the scalars in self.getFontRect()
             self.window.blit(label, (10, 350 + 20 * i))
     
-    def draw(self, inspecting):
+    def draw(self, inspecting, editing):
         self.window.fill(self.backgroundColor)
         self.drawViewport()
         self.drawPlayer()
         if inspecting:
-            self.drawInspectionCursor()
+            self.drawInspectionCursor(editing)
         self.drawText()
 
         pygame.display.update()

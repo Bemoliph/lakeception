@@ -10,6 +10,9 @@ def hex2rgb(hexStr):
 def hex2rgba(hexStr, alpha):
     return hex2rgb(hexStr) + (alpha,)
 
+def rgb2hex(r, g, b):
+    return '{:02x}{:02x}{:02x}'.format(r, g, b)
+
 # See "Giving up the temporary list"
 # http://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python
 def getWeightedRandomChoice(orderedWeights):

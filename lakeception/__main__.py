@@ -1,8 +1,8 @@
 
 import sys
 
-from lakeception import game
+from lakeception import main
 
 
 if __name__ == "__main__":
-    game.main(sys.argv[1:])
+    main.main(sys.argv[1:])

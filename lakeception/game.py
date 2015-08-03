@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import argparse
 import logging
 import pygame
-import sys
 
 from lakeception.world import World
 from lakeception.screen import Screen
@@ -83,51 +81,3 @@ class Game(object):
             self.updated = False
 
         timeDelta = self.clock.tick(self.fps)
-
-
-def _parse_args(args):
-    """
-    Parses arguments from a argv format.
-
-    Parameters
-    ----------
-    args : list of str
-
-    Returns
-    -------
-    argparse.ArgumentParser
-    """
-    parser = argparse.ArgumentParser(
-        prog="lakeception",
-        description="Aww yeah, boats!",
-    )nt(
-        "-v", "--verbose",
-        action="store_true",
-        help="Increase verbosity of output.",
-    )
-    parser.add_argumet(
-        "--debug",
-        action="store_true",
-        help="Turn on debugging mode.",
-    )
-    parser.add_argument(
-        "--test",
-        action="store_true",
-        help="Test the client lauches without issue."
-    )
-    return parser.parse_args(args)
-
-
-def main(args):
-    args = _parse_args(args)
-    g = Game(debug=args.debug)
-
-    if args.test:
-        return
-
-    while not g.quitting:
-        g.tick()
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])

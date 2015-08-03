@@ -55,7 +55,7 @@ class Squid(NPC):
         super(Squid, self).__init__(pos, tile)
 
 
-    def on_collision(self):
+    def on_collision(self, other):
         # Play sound? Damage Player?
         pass
 
@@ -70,7 +70,7 @@ class WaterSpout(NPC):
         super(WaterSpout, self).__init__(pos, tile)
 
 
-    def on_collision(self):
+    def on_collision(self, other):
         # Play sound? Move the player?
         pass
 

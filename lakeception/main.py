@@ -21,6 +21,7 @@ def _parse_args(args):
     parser = argparse.ArgumentParser(
         prog="lakeception",
         description="Aww yeah, boats!",
+    )
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",

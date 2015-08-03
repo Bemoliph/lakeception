@@ -51,12 +51,23 @@ class NPC(Entity):
 
 class Squid(NPC):
     def __init__(self, pos):
-        tile = tile.Tile("Squidward", "squid", "S", "FF0000")
+        tile = tiles.Tile("Squidward", "squid", "¤", "FF0000")
         super(Squid, self).__init__(pos, tile)
 
 
     def on_collision(self):
         # Play sound? Damage Player?
+        pass
+
+
+class WaterSpout(NPC):
+    def __init__(self, pos):
+        tile = tiles.Tile("Spout", "spout", "҉", "0000FF")
+        super(WaterSpout, self).__init__(pos, tile)
+
+
+    def on_collision(self):
+        # Play sound? Move the player?
         pass
 
 

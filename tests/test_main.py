@@ -3,6 +3,6 @@ import unittest
 
 from lakeception import main
 
-class TestBiome(unittest.TestCase):
+class TestMain(unittest.TestCase):
     def test_main(self):
-        main(["--test"])
+        main.main(["--test"])

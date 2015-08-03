@@ -84,13 +84,13 @@ class Screen(object):
                 self.window.blit(sprite, spriteRect)
 
     def drawPlayer(self):
-        player = self.world.player
+        player = self.world.ent_man.player
         sprite, spriteRect = self.getSprite(player.tile, self.viewportCenter)
 
         self.window.blit(sprite, spriteRect)
 
     def drawInspectionCursor(self, editing):
-        playerPos = self.world.player.pos
+        playerPos = self.world.ent_man.player.pos
         # worldPos = player position + cursor position
         worldPos = (playerPos[0] + self.cursor[0], playerPos[1] + self.cursor[1])
         # Screen position differs from world position, as we're drawing with
@@ -101,7 +101,7 @@ class Screen(object):
         # If the cursor is centered in the viewport => it's hovering above the player
         if self.cursor == (0, 0):
             # Get the player tile
-            tile = self.world.player.tile
+            tile = self.world.ent_man.player.tile
         else:
             tile = self.world.getTileAtPoint(worldPos)
         if editing:

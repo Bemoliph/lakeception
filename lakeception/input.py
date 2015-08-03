@@ -16,7 +16,7 @@ class Input(object):
             "y": self.game.screen.viewportRes[1] // 2
         }
         # Just a shorthand for the player; self.game.world.player is a bit verbose
-        self.player = self.game.world.player
+        self.player = self.game.world.ent_man.player
         self.hsv = ""
         self.currentEditorMode = Editing.Glyph
 
@@ -98,17 +98,11 @@ class Input(object):
             if abs(newX) <= self.bounds["x"] and abs(newY) <= self.bounds["y"]:
                 self.game.screen.cursor = (newX, newY)
         else:
-            currentX, currentY = self.player.pos
+            self.game.world.move(self.player, (deltaX, deltaY))
 
-            newX = currentX + deltaX
-            newY = currentY + deltaY
             # Small feel/usability tweak:
             # place the cursor in the direction the player was moving
             self.game.screen.cursor = (deltaX, deltaY)
-
-            tile = self.game.world.getTileAtPoint((newX, newY))
-            if not tile.collidable:
-                self.player.pos = (newX, newY)
 
         self.game.updated = True
 

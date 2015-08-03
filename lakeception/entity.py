@@ -26,19 +26,6 @@ class Entity(object):
         self.is_ai_controlled = True
 
 
-    def move(vector):
-        """
-        Parameters
-        ----------
-        vector : tuple of int, int
-
-        Returns
-        -------
-        bool
-        """
-        pass
-
-
     def on_collision(self, other):
         """
         Defines what should happen when a collision happens, from the collidie's
@@ -56,6 +43,21 @@ class Entity(object):
         Defines what this entity does each time the AI runs.
         """
         raise NotImplementedError
+
+
+class NPC(Entity):
+    pass
+
+
+class Squid(NPC):
+    def __init__(self, pos):
+        tile = tile.Tile("Squidward", "squid", "S", "FF0000")
+        super(Squid, self).__init__(pos, tile)
+
+
+    def on_collision(self):
+        # Play sound? Damage Player?
+        pass
 
 
 class Player(Entity):

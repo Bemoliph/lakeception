@@ -6,7 +6,7 @@ import noise
 import random
 
 from lakeception.biome import Biome, get_biome_files
-from lakeception import entity
+from lakeception import entity, entity_manager
 from lakeception.tiles import Tile
 
         # THUNDARAS SUGGESTION AREA
@@ -18,6 +18,7 @@ from lakeception.tiles import Tile
 
 LOGGER = logging.getLogger("lakeception.world")
 
+
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         LOGGER.debug("Initialzing world")
@@ -25,7 +26,8 @@ class World(object):
         self.name = name
         self.loadBiomes()
 
-        self.player = entity.Player((0,0), "@", "B23530")
+        player = entity.Player((0,0), "@", "B23530")
+        self.ent_man = entity_manager.EntityManager(player, [])
 
         # Seed the RNG so that we can debug this sucker
         random.seed(42)
@@ -189,7 +191,7 @@ class World(object):
     def getTilesAroundPlayer(self, size, visibleTiles):
         # Crunch some attributes of the requested area centered on the player
         width, height = size
-        playerX, playerY = self.player.pos
+        playerX, playerY = self.ent_man.player.pos
 
         x1 = playerX - (width // 2)
         y1 = playerY - (height // 2)
@@ -210,3 +212,31 @@ class World(object):
         # Drop the oldest message from the list
         if len(self.descriptions) > 1:
             self.descriptions.pop()
+
+
+    def move(self, ent, vector):
+        """
+        Parameters
+        ----------
+        ent : lakeception.entity.Entity
+        vector : tuple of int, int
+
+        Returns
+        -------
+        bool
+        """
+        # Calculate the new position
+        new_pos = (ent.pos[0] + vector[0], ent.pos[1] + vector[1])
+
+        # Check for tiles, if one exists, don't move there
+        tile = self.getTileAtPoint(new_pos)
+        if tile.is_collidable:
+            return False
+
+        # Check for collisions
+        hit = self.ent_man.get_entity_at_position(new_pos)
+        if hit is not None:
+            hit.on_collision(ent)
+            return False
+
+        ent.pos = new_pos

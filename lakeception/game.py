@@ -2,7 +2,6 @@
 
 import logging
 import pygame
-import sys
 
 from lakeception.world import World
 from lakeception.screen import Screen
@@ -11,15 +10,18 @@ from lakeception import audio
 
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, debug=False):
         pygame.mixer.pre_init(44100, 16, 2, 4096) # setup mixer to avoid sound lag
         pygame.init()
         pygame.display.set_caption("lakeception")
 
-        self.world = World("Test World", (100,100), debug=False)
-                                       # resolution, viewport
-        self.screen = Screen(self.world, (800, 475), (25, 11))
-        self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
+        self.world = World("Test World", (100,100), debug=debug)
+
+        if not debug:
+                                           # resolution, viewport
+            self.screen = Screen(self.world, (800, 475), (25, 11))
+        else:
+            self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
 
         self.input = Input(self)
 
@@ -79,13 +81,3 @@ class Game(object):
             self.updated = False
 
         timeDelta = self.clock.tick(self.fps)
-
-
-def main(args):
-    g = Game()
-    while not g.quitting:
-        g.tick()
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])

@@ -20,7 +20,7 @@ $ pip install -r requirements.txt
 
 ## Run
 
-To start the game, either double-click on `lakeception/game.py` or run:
+To start the game, either double-click on `lakeception/main.py` or run:
 
 ```
 $ python -m lakeception

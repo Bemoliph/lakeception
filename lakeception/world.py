@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-import random
-import noise
+
 from collections import Counter
+import logging
+import noise
+import random
 
 from tiles import Tile
 from biome import Biome
@@ -12,7 +14,7 @@ from lakeutils import getBiomeFiles
         # leper beach
         # dragon roost
         # science pirate named thundara (ok this was mine)
-        
+
 
 class Player(object):
     def __init__(self, pos, glyph, tileColor):
@@ -23,20 +25,22 @@ class Player(object):
 
 class World(object):
     def __init__(self, name, dimensions, debug=False):
+        logging.DEBUG("Initialzing world")
+
         self.name = name
         self.biomePath = "biomes"
         self.loadBiomes()
 
         self.player = Player((0,0), "@", "B23530")
         # Seed the RNG so that we can debug this sucker
-        random.seed(42) 
+        random.seed(42)
         self.descriptions = []
         self.addDescription("it was a dark and stormy night...", "FFC22C")
-        
+
         # Smaller scale => larger homogenous areas
         self.elevationScale = 0.025
         self.biomeScale = 0.009
-        
+
         if debug:
             self.dimensions = (5,5) # Force debug world dimensions
             self.tiles = self.generateDebugWorld()
@@ -57,31 +61,31 @@ class World(object):
         # Scale position and world dimensions according to biome scaling value
         x, y, worldWidth, worldHeight = [e*self.biomeScale for e in point+self.dimensions]
         noiseValue = noise.snoise2(x, y, repeatx=worldWidth, repeaty=worldHeight)
-        
+
         # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over a
         # range fitting the number of biomes currently loaded:
         biomeCount = len(self.biomes)
         biomeID = int(round((noiseValue + 1) * (biomeCount-1)/2))
-        
+
         return self.biomes[biomeID]
 
     def getElevationAtPoint(self, point):
         # Scale position and world dimensions according to elevation scaling value
         x, y, worldWidth, worldHeight = [e*self.elevationScale for e in point+self.dimensions]
         noiseValue = noise.snoise2(x, y, octaves=10, repeatx=worldWidth, repeaty=worldHeight)
-        
+
         # noiseValue is [-1.0, +1.0], so let's rescale and quantize it over [0, 20]
         elevation = int(round((noiseValue + 1) * 10))
-        
+
         return elevation
-    
+
     def generateWorld(self):
         # Pre-size the world array to avoid internal resizing
         worldWidth, worldHeight = self.dimensions
         tiles = [None] * (worldWidth * worldHeight)
 
         adjacencyDependentTiles = []
-        
+
         # Flood the world with CREATION!
         for y in xrange(0, worldHeight):
             for x in xrange(0, worldWidth):
@@ -113,8 +117,8 @@ class World(object):
                     foundTiles.append(adjacentTile)
 
                     # Check if the adjacent tile was generated (i.e. it didn't have an
-                    # adjacency requirement itself), 
-                    # and it is one of the tiles we require to be adjacent, 
+                    # adjacency requirement itself),
+                    # and it is one of the tiles we require to be adjacent,
                     # and it isn't already saved
                     if adjacentTile and adjacentTile in tile.adjacentTiles and \
                     adjacentTile not in requiredTiles:
@@ -141,53 +145,53 @@ class World(object):
         data = Counter(elements)
         return data.most_common(1)[0][0]
 
-    
+
     def generateDebugWorld(self):
         # Use cool pipe shapes to make positional debugging easier:
         #     ╔═══╗   (0,0)
         #     ║123║
         #     ║456║    5x5 world
         #     ║789║
-        #     ╚═══╝          (4,4)        
+        #     ╚═══╝          (4,4)
         #grid = u"╔═══╗║123║║456║║789║╚═══╝"
         grid = u"qwertnoiseScalefgzxcvbyuiophjkl;"
         tiles = []
         for char in grid:
             t = Tile(char, char, char+char.upper(), "B23530")
             tiles.append(t)
-        
+
         return tiles
-    
+
     def _pointToIndex(self, point, width, height):
         x, y = point
-        
+
         index = (y % height) * width + (x % width)
-        
+
         return index
-    
+
     def _indexToPoint(self, index, width):
         x = index % width
         y = index // width
-        
+
         return (x, y)
-    
+
     def getTileAtPoint(self, point):
         worldWidth, worldHeight = self.dimensions
-        
+
         index = self._pointToIndex(point, worldWidth, worldHeight)
-        
+
         return self.tiles[index]
-    
+
     def getTilesAroundPlayer(self, size, visibleTiles):
         # Crunch some attributes of the requested area centered on the player
         width, height = size
         playerX, playerY = self.player.pos
-        
+
         x1 = playerX - (width // 2)
         y1 = playerY - (height // 2)
         x2 = playerX + (width // 2)
         y2 = playerY + (height // 2)
-        
+
         # Build a (wrapping) view, filling the supplied list
         index = 0
         for y in xrange(y1, y2+1):

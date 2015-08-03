@@ -11,6 +11,8 @@ from lakeception import audio
 
 class Game(object):
     def __init__(self, debug=False):
+        logging.DEBUG("Initializing game")
+
         pygame.mixer.pre_init(44100, 16, 2, 4096) # setup mixer to avoid sound lag
         pygame.init()
         pygame.display.set_caption("lakeception")
@@ -44,6 +46,7 @@ class Game(object):
 
 
     def init_audio(self):
+        logging.DEBUG("Initializing audio")
         try:
             pygame.mixer.init()
         except pygame.error:

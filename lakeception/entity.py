@@ -4,6 +4,14 @@ from lakeception import tiles
 
 
 class Entity(object):
+    """
+    Attributes
+    ----------
+    pos : tuple of int, int
+    tile : lakeception.tile.Tile
+    is_collidable : bool
+    is_ai_controlled : bool
+    """
     def __init__(self, pos, tile):
         """
         Parameters

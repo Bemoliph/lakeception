@@ -47,13 +47,16 @@ class Game(object):
 
         self.init_audio()
 
+        LOGGER.debug("Initialized game")
+
 
     def init_audio(self):
-        logging.DEBUG("Initializing audio")
+        LOGGER.debug("Initializing audio")
+
         try:
             pygame.mixer.init()
         except pygame.error:
-            logging.warning("Unable to initialize audio")
+            LOGGER.warning("Unable to initialize audio")
         else:
             # From https://www.freesound.org/people/juskiddink/sounds/60507/
             # albeit a bit mixed to allow for looping
@@ -70,6 +73,8 @@ class Game(object):
             # Play the song at a slightly higher volume
             # import pdb; pdb.set_trace()acks[1].set_volume(0.4)
             # tracks[1].play()
+
+        LOGGER.debug("Initialized audio")
 
 
     def tick(self):

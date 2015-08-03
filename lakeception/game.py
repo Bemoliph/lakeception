@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import pygame
 import sys
 
@@ -37,22 +38,30 @@ class Game(object):
         self.inspecting = False
         self.editing = False
 
-        pygame.mixer.init()
-        # From https://www.freesound.org/people/juskiddink/sounds/60507/
-        # albeit a bit mixed to allow for looping
-        tracks = [
-            pygame.mixer.Sound(path)
-            for path in audio.get_audio_files()
-        ]
+        self.init_audio()
 
-        # Play & loop crashing waves in the background
-        # Set the volume to an unobtrusive level
-        tracks[0].set_volume(0.1)
-        tracks[0].play(-1)
 
-        # Play the song at a slightly higher volume
-        # tracks[1].set_volume(0.4)
-        # tracks[1].play()
+    def init_audio(self):
+        try:
+            pygame.mixer.init()
+        except pygame.error:
+            logging.warning("Unable to initialize audio")
+        else:
+            # From https://www.freesound.org/people/juskiddink/sounds/60507/
+            # albeit a bit mixed to allow for looping
+            tracks = [
+                pygame.mixer.Sound(path)
+                for path in audio.get_audio_files()
+            ]
+
+            # Play & loop crashing waves in the background
+            # Set the volume to an unobtrusive level
+            tracks[0].set_volume(0.1)
+            tracks[0].play(-1)
+
+            # Play the song at a slightly higher volume
+            # import pdb; pdb.set_trace()acks[1].set_volume(0.4)
+            # tracks[1].play()
 
 
     def tick(self):

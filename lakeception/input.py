@@ -1,27 +1,30 @@
 # -*- coding: utf-8 -*-
+
 import pygame
- 
+
+
 # Enum-like class for keeping track of editor mode
 class Editing:
     Hue, Saturation, Brightness, Glyph = range(4)
+
 
 class Input(object):
     def __init__(self, game):
         self.game = game
         self.bounds = {
-                "x": self.game.screen.viewportRes[0] // 2,
-                "y": self.game.screen.viewportRes[1] // 2
-            }
+            "x": self.game.screen.viewportRes[0] // 2,
+            "y": self.game.screen.viewportRes[1] // 2
+        }
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.player
         self.hsv = ""
         self.currentEditorMode = Editing.Glyph
-        
+
         # Both repeat values are in milliseconds
         repeatDelay    = 35 # time between keypress and automatic motion
-        repeatInterval = 75 # time between automatic steps 
+        repeatInterval = 75 # time between automatic steps
         pygame.key.set_repeat(repeatDelay, repeatInterval)
-        
+
         self.keyMapping = {
             pygame.K_UP     : self.moveUp,
             pygame.K_RIGHT  : self.moveRight,
@@ -35,10 +38,10 @@ class Input(object):
             pygame.K_F3     : self.drawBiomes,
             pygame.K_F4     : self.toggleEditing,
         }
-    
+
     def handleKey(self, event):
         key = event.key
-        
+
         # Change editor mode
         if self.game.editing and pygame.key.get_mods() & pygame.KMOD_LCTRL:
             if key == pygame.K_h:
@@ -99,28 +102,28 @@ class Input(object):
 
             newX = currentX + deltaX
             newY = currentY + deltaY
-            # Small feel/usability tweak: 
+            # Small feel/usability tweak:
             # place the cursor in the direction the player was moving
             self.game.screen.cursor = (deltaX, deltaY)
 
             tile = self.game.world.getTileAtPoint((newX, newY))
             if not tile.collidable:
                 self.player.pos = (newX, newY)
-        
+
         self.game.updated = True
-    
+
     def moveUp(self):
         self.move(0, -1)
-    
+
     def moveRight(self):
         self.move(1, 0)
-    
+
     def moveDown(self):
         self.move(0, 1)
-    
+
     def moveLeft(self):
         self.move(-1, 0)
-    
+
     def quit(self):
         # Exit inspection mode
         if self.game.inspecting:
@@ -135,11 +138,11 @@ class Input(object):
         self.game.inspecting = not self.game.inspecting
         if self.game.editing:
             self.toggleEditing()
-        
+
         if not self.game.inspecting:
             self.game.screen.cursor = (0, 0)   # reset cursor position
             self.game.world.addDescription("") # clear the message
-        
+
         self.game.updated = True
 
     def toggleEditing(self):
@@ -158,21 +161,21 @@ class Input(object):
             pygame.mixer.music.pause()
         else:
             pygame.mixer.music.unpause()
-        
+
         self.game.muted = not self.game.muted
-    
+
     def setDrawMode(self, mode):
         self.game.screen.currentDrawMode = mode
         self.game.screen.draw(self.game.inspecting, self.game.editing)
-    
+
     def drawNormal(self):
         self.game.world.addDescription("")
         self.setDrawMode(self.game.screen.DRAWMODE_NORMAL)
-    
+
     def drawElevation(self):
         self.game.world.addDescription("[DEBUG] Now drawing tile elevations.")
         self.setDrawMode(self.game.screen.DRAWMODE_ELEVATION)
-    
+
     def drawBiomes(self):
         self.game.world.addDescription("[DEBUG] Now drawing tile biome IDs.")
         self.setDrawMode(self.game.screen.DRAWMODE_BIOMES)

@@ -16,6 +16,8 @@ from lakeutils import getBiomeFiles
         # science pirate named thundara (ok this was mine)
 
 
+LOGGER = logging.getLogger("lakeception.world")
+
 class Player(object):
     def __init__(self, pos, glyph, tileColor):
         self.pos = pos
@@ -25,7 +27,7 @@ class Player(object):
 
 class World(object):
     def __init__(self, name, dimensions, debug=False):
-        logging.DEBUG("Initialzing world")
+        LOGGER.debug("Initialzing world")
 
         self.name = name
         self.biomePath = "biomes"

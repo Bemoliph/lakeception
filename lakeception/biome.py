@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import json
 import operator
 
@@ -8,8 +9,13 @@ from lakeutils import getBiomeFiles
 from tiles import Tile
 
 
+LOGGER = logging.getLogger("lakeception.biome")
+
+
 class Biome(object):
     def __init__(self, biomeFileName, biomeID):
+        LOGGER.debug("Initializing biome: {} {}".format(biomeFileName, biomeID))
+
         biomeFile = json.load(open(biomeFileName, "r"))
 
         # Decorative name for biome

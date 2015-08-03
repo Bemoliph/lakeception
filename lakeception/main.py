@@ -6,6 +6,9 @@ import logging
 from lakeception import game
 
 
+LOGGER = logging.getLogger("lakeception.main")
+
+
 def _parse_args(args):
     """
     Parses arguments from a argv format.
@@ -57,6 +60,8 @@ def main(args):
 
     if args.test:
         return
+
+    LOGGER.debug("Beginning main tick loop")
 
     while not g.quitting:
         g.tick()

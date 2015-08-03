@@ -9,9 +9,12 @@ from lakeception.input import Input
 from lakeception import audio
 
 
+LOGGER = logging.getLogger("lakeception.game")
+
+
 class Game(object):
     def __init__(self, debug=False):
-        logging.DEBUG("Initializing game")
+        LOGGER.debug("Initializing game")
 
         pygame.mixer.pre_init(44100, 16, 2, 4096) # setup mixer to avoid sound lag
         pygame.init()

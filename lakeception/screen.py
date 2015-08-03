@@ -89,6 +89,45 @@ class Screen(object):
 
         self.window.blit(sprite, spriteRect)
 
+
+    def is_out_of_view(self, pos):
+        """
+        Checks if a position is out of view of the window, for culling far away
+        entities.
+
+        Parameters
+        ----------
+        pos : tuple of int, int
+
+        Returns
+        -------
+        bool
+        """
+        playerPos = self.world.ent_man.player.pos
+        return pos[0] < playerPos[0] - self.viewportRes[0] // 2 or \
+            pos[0] > playerPos[0] + self.viewportRes[0] // 2 or \
+            pos[1] < playerPos[1] - self.viewportRes[1] // 2 or \
+            pos[1] > playerPos[1] + self.viewportRes[1] // 2
+
+
+    def draw_ais(self):
+        ais = self.world.ent_man.ais
+
+        for ai in ais:
+            # Cull AIs out of view
+            if self.is_out_of_view(ai.pos):
+                continue
+
+            # Calculate relative position
+            playerPos = self.world.ent_man.player.pos
+            rel_pos = (
+                ai.pos[0] - playerPos[0] + self.viewportCenter[0],
+                ai.pos[1] - playerPos[1] + self.viewportCenter[1],
+            )
+            sprite, spriteRect = self.getSprite(ai.tile, rel_pos)
+            self.window.blit(sprite, spriteRect)
+
+
     def drawInspectionCursor(self, editing):
         playerPos = self.world.ent_man.player.pos
         # worldPos = player position + cursor position
@@ -127,6 +166,7 @@ class Screen(object):
         self.window.fill(self.backgroundColor)
         self.drawViewport()
         self.drawPlayer()
+        self.draw_ais()
         if inspecting:
             self.drawInspectionCursor(editing)
         self.drawText()

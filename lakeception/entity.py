@@ -51,7 +51,7 @@ class NPC(Entity):
 
 class Squid(NPC):
     def __init__(self, pos):
-        tile = tiles.Tile("Squidward", "squid", "¤", "FF0000")
+        tile = tiles.Tile("Squidward", "squid", u"¤", "FF0000")
         super(Squid, self).__init__(pos, tile)
 
 
@@ -66,7 +66,7 @@ class Squid(NPC):
 
 class WaterSpout(NPC):
     def __init__(self, pos):
-        tile = tiles.Tile("Spout", "spout", "҉", "0000FF")
+        tile = tiles.Tile("Spout", "spout", u"҉", "0000FF")
         super(WaterSpout, self).__init__(pos, tile)
 
 

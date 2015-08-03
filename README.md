@@ -22,3 +22,9 @@ To test that everything built and runs okay, enter:
 ```
 $ python setup.py test
 ```
+
+Or test multiple python environments with:
+
+```
+$ tox
+```

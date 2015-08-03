@@ -19,7 +19,7 @@ class Tile(object):
         self.allGlyphs = glyphs
         self.color = hex2rgb(color)
 
-        self.collidable = collidable
+        self.is_collidable = collidable
         self.elevation = -1
         self.biomeID = -1
 

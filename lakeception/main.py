@@ -42,6 +42,17 @@ def _parse_args(args):
 
 def main(args):
     args = _parse_args(args)
+
+    if verbose or debug:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
+    logging.basicConfig(
+        filename="lakeception.log",
+        level=level,
+    )
+
     g = game.Game(debug=args.debug)
 
     if args.test:

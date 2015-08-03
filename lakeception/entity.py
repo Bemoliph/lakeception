@@ -35,14 +35,14 @@ class Entity(object):
         ----------
         other : lakeception.entity.Entity
         """
-        return
+        pass
 
 
     def on_ai_tick(self):
         """
         Defines what this entity does each time the AI runs.
         """
-        raise NotImplementedError
+        pass
 
 
 class NPC(Entity):
@@ -60,6 +60,10 @@ class Squid(NPC):
         pass
 
 
+    def on_ai_tick(self):
+        pass
+
+
 class WaterSpout(NPC):
     def __init__(self, pos):
         tile = tiles.Tile("Spout", "spout", "҉", "0000FF")
@@ -70,6 +74,12 @@ class WaterSpout(NPC):
         # Play sound? Move the player?
         pass
 
+
+    def on_ai_tick(self):
+        pass
+
+
+NPC_TYPES = [Squid, WaterSpout]
 
 class Player(Entity):
     def __init__(self, pos, glyph, tileColor):

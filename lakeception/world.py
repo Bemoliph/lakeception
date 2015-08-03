@@ -5,8 +5,9 @@ import logging
 import noise
 import random
 
-from lakeception.tiles import Tile
 from lakeception.biome import Biome, get_biome_files
+from lakeception import entity
+from lakeception.tiles import Tile
 
         # THUNDARAS SUGGESTION AREA
         # siren isle / sirens
@@ -17,13 +18,6 @@ from lakeception.biome import Biome, get_biome_files
 
 LOGGER = logging.getLogger("lakeception.world")
 
-class Player(object):
-    def __init__(self, pos, glyph, tileColor):
-        self.pos = pos
-        self.tile = Tile("player", "the boat", glyph, tileColor)
-        self.tile.elevation = "@" # hack
-        self.tile.biomeID = "@" # hack
-
 class World(object):
     def __init__(self, name, dimensions, debug=False):
         LOGGER.debug("Initialzing world")
@@ -31,7 +25,8 @@ class World(object):
         self.name = name
         self.loadBiomes()
 
-        self.player = Player((0,0), "@", "B23530")
+        self.player = entity.Player((0,0), "@", "B23530")
+
         # Seed the RNG so that we can debug this sucker
         random.seed(42)
         self.descriptions = []
@@ -48,6 +43,7 @@ class World(object):
             self.dimensions = dimensions
             self.tiles = self.generateWorld()
 
+
     # Load all the .biome files located at self.biomePath
     def loadBiomes(self):
         files = get_biome_files()
@@ -56,6 +52,7 @@ class World(object):
             print biomeID, f
             b = Biome(f, biomeID)
             self.biomes[biomeID] = b
+
 
     def getBiomeAtPoint(self, point):
         # Scale position and world dimensions according to biome scaling value
@@ -69,6 +66,7 @@ class World(object):
 
         return self.biomes[biomeID]
 
+
     def getElevationAtPoint(self, point):
         # Scale position and world dimensions according to elevation scaling value
         x, y, worldWidth, worldHeight = [e*self.elevationScale for e in point+self.dimensions]
@@ -78,6 +76,7 @@ class World(object):
         elevation = int(round((noiseValue + 1) * 10))
 
         return elevation
+
 
     def generateWorld(self):
         # Pre-size the world array to avoid internal resizing
@@ -141,6 +140,7 @@ class World(object):
 
         return tiles
 
+
     def getMostCommonElement(self, elements):
         data = Counter(elements)
         return data.most_common(1)[0][0]
@@ -162,6 +162,7 @@ class World(object):
 
         return tiles
 
+
     def _pointToIndex(self, point, width, height):
         x, y = point
 
@@ -169,11 +170,13 @@ class World(object):
 
         return index
 
+
     def _indexToPoint(self, index, width):
         x = index % width
         y = index // width
 
         return (x, y)
+
 
     def getTileAtPoint(self, point):
         worldWidth, worldHeight = self.dimensions
@@ -181,6 +184,7 @@ class World(object):
         index = self._pointToIndex(point, worldWidth, worldHeight)
 
         return self.tiles[index]
+
 
     def getTilesAroundPlayer(self, size, visibleTiles):
         # Crunch some attributes of the requested area centered on the player
@@ -198,6 +202,7 @@ class World(object):
             for x in xrange(x1, x2+1):
                 visibleTiles[index] = self.getTileAtPoint((x, y))
                 index += 1
+
 
     def addDescription(self, text, color="F2F2F2"):
         # The newest description is at the top of the list

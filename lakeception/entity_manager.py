@@ -2,6 +2,7 @@
 
 from lakeception.lakeutils import dist
 
+
 class EntityManager(object):
     def __init__(self, player, ai):
         self.player = player

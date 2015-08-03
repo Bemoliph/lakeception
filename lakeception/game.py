@@ -33,11 +33,17 @@ class Game(object):
         self.fps = 60
         self.clock = pygame.time.Clock()
 
-        self.ANIMATE = pygame.USEREVENT+0
+        self.ANIMATE = pygame.USEREVENT + 0
+        self.AI_TICK = pygame.USEREVENT + 1
+
         self.animationRate = 1 * 1000
+        self.ai_tick_rate = 5 * 1000
+
         # Temporarily (?) disabled animations, because moving + animating was
         # an INTENSE visual experience
         # pygame.time.set_timer(self.ANIMATE, self.animationRate)
+
+        pygame.time.set_timer(self.AI_TICK, self.ai_tick_rate)
 
         self.updated = True
         self.quitting = False
@@ -84,6 +90,9 @@ class Game(object):
             elif event.type == self.ANIMATE:
                 self.screen.draw()
                 self.updated = False
+            elif event.type == self.AI_TICK:
+                self.world.ent_man.do_ai_ticks()
+                self.updated = True
             elif event.type == pygame.QUIT:
                 self.quitting = True
 

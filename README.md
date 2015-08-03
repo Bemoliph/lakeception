@@ -14,3 +14,11 @@ $ virtualenv .
 $ source bin/activate
 $ pip install -r requirements.txt
 ```
+
+## Testing
+
+To test that everything built and runs okay, enter:
+
+```
+$ python setup.py test
+```

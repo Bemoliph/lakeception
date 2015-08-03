@@ -1,0 +1,4 @@
+Pygame==1.9.1release
+noise==1.2.2
+tox
+coverage

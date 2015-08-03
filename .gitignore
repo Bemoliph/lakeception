@@ -11,3 +11,4 @@ include/
 *.egg
 .eggs/
 pip-selfcheck.json
+*.egg-info

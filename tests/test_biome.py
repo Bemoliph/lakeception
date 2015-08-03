@@ -22,7 +22,7 @@ class TestBiome(unittest.TestCase):
             for tile in b.tiles.values():
                 print "  <Tile: %s, \"%s\", \"%s\", %s, col=%s, \"%s\">" % (
                     tile.glyph, tile.name, tile.allGlyphs,
-                    tile.color, tile.collidable, tile.description,
+                    tile.color, tile.is_collidable, tile.description,
                 )
 
             print "Elevations:"

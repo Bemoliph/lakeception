@@ -20,6 +20,25 @@ class EntityManager(object):
             ent.on_ai_tick()
 
 
+    def get_entity_at_position(self, pos):
+        """
+        Gets an entity at a given position, if one exists.
+
+        Parameters
+        ----------
+        pos : tuple of int, int
+
+        Returns
+        -------
+        lakeception.entity.Entity or None
+        """
+        for ent in self.ais + [self.player]:
+            if ent.pos == pos:
+                return ent
+
+        return None
+
+
     def get_closest_entity(self, pos, entity_type=None):
         """
         Finds the closest entityt to a given position, optionally of some class

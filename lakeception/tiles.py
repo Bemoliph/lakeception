@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
+from colorsys import hsv_to_rgb, rgb_to_hsv
 import random
 
-from lakeutils import hex2rgb
-from colorsys import hsv_to_rgb, rgb_to_hsv
+from lakeception.lakeutils import hex2rgb
 
 # Nice Tile Graveyard (nice tiles you found but don't know what to do with)
 # Tile("?", "a mysterious secret", "0", "333333")
@@ -13,16 +14,17 @@ class Tile(object):
         self.name = name
         self.description = description
         self.adjacentTiles = adjacentTiles
-        
+
         self.glyph = random.choice(glyphs)
         self.allGlyphs = glyphs
         self.color = hex2rgb(color)
-        
+
         self.collidable = collidable
         self.elevation = -1
         self.biomeID = -1
 
         self._hsvComponents = {"hue": 0, "saturation": 1, "brightness": 2}
+
 
     def setColor(self, hsv):
         # Apply the lambda function to every element of hsv, yielding the new
@@ -31,6 +33,7 @@ class Tile(object):
         color = hsv_to_rgb(*normalizedHSV)
         color = tuple(map(lambda rgbElement: int(rgbElement * 255), color))
         self.color = color
+
 
     def getHSV(self):
         rgbColor = map(lambda rgbElement: rgbElement / 255.0, self.color)
@@ -43,18 +46,22 @@ class Tile(object):
         hsvColor[2] *= 100
         return map(int, hsvColor)
 
+
     # Also called 'value', thus HSV; but I think brightness is easier to understand
     def setBrightness(self, brightness):
         brightness /= 100.0
         self._setHSVComponent("brightness", brightness)
 
+
     def setHue(self, hue):
         hue /=  360.0
         self._setHSVComponent("hue", hue)
 
+
     def setSaturation(self, saturation):
         saturation /= 100.0
         self._setHSVComponent("saturation", saturation)
+
 
     def _setHSVComponent(self, component, componentValue):
         index = self._hsvComponents[component]
@@ -69,17 +76,23 @@ class Tile(object):
         # Set the tile's color
         self.color = rgbColor
 
+
     def __unicode__(self):
         return self.glyph
-    
+
+
     def __repr__(self):
         return self.__unicode__()
+
 
     def hasAdjacencyRequirement(self):
         return self.adjacentTiles and len(self.adjacentTiles) > 0
 
+
     def __hash__(self):
         return hash((self.glyph, self.color, self.biomeID, self.elevation))
 
+
     def __eq__(self, other):
-        return (self.glyph, self.color, self.biomeID, self.elevation) == (other.glyph, other.color, other.biomeID, other.elevation)
+        return (self.glyph, self.color, self.biomeID, self.elevation) == \
+            (other.glyph, other.color, other.biomeID, other.elevation)

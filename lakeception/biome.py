@@ -3,13 +3,16 @@
 import logging
 import json
 import operator
+import os
 
-from lakeutils import getWeightedRandomChoice
-from lakeutils import getBiomeFiles
-from tiles import Tile
+from lakeception.lakeutils import getWeightedRandomChoice
+from lakeception.tiles import Tile
 
 
 LOGGER = logging.getLogger("lakeception.biome")
+BIOMES_DIR = os.path.join(
+    os.path.dirname(__file__), "..", "biomes",
+)
 
 
 class Biome(object):
@@ -66,3 +69,20 @@ class Biome(object):
         tile.biomeID = self.id
 
         return tile
+
+
+# Thanks Stack Overflow!
+# http://stackoverflow.com/a/3207973
+def get_biome_files():
+    """
+    Returns
+    -------
+    generator of str
+    """
+
+    for filename in os.listdir(BIOMES_DIR):
+        path = os.path.abspath(os.path.join(BIOMES_DIR, filename))
+
+        # Yield file if: it is a file & its filename ends with .biome
+        if os.path.isfile(path) and path.endswith(".biome"):
+            yield path

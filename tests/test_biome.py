@@ -5,12 +5,12 @@ from lakeception import biome, lakeutils
 
 class TestBiome(unittest.TestCase):
     def test_main(self):
-        testBiomePath = "biomes"
-        files = lakeutils.getBiomeFiles(testBiomePath)
+        files = biome.get_biome_files()
         biomes = {}
-        for f in files:
+
+        for index, f in enumerate(files):
             print f
-            b = biome.Biome(f, f + "_id")
+            b = biome.Biome(f, index)
             biomes[b.id] = b
 
         for biomeID in biomes:

@@ -5,9 +5,8 @@ import logging
 import noise
 import random
 
-from tiles import Tile
-from biome import Biome
-from lakeutils import getBiomeFiles
+from lakeception.tiles import Tile
+from lakeception.biome import Biome, get_biome_files
 
         # THUNDARAS SUGGESTION AREA
         # siren isle / sirens
@@ -30,7 +29,6 @@ class World(object):
         LOGGER.debug("Initialzing world")
 
         self.name = name
-        self.biomePath = "biomes"
         self.loadBiomes()
 
         self.player = Player((0,0), "@", "B23530")
@@ -52,7 +50,7 @@ class World(object):
 
     # Load all the .biome files located at self.biomePath
     def loadBiomes(self):
-        files = getBiomeFiles(self.biomePath)
+        files = get_biome_files()
         self.biomes = {}
         for biomeID, f in enumerate(files):
             print biomeID, f

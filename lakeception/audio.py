@@ -14,6 +14,6 @@ def get_audio_files():
     generator of str
     """
     for filename in os.listdir(AUDIO_DIR):
-        path = os.path.join(AUDIO_DIR, filename)
+        path = os.path.abspath(os.path.join(AUDIO_DIR, filename))
         if filename.endswith(".ogg") and os.path.isfile(path):
             yield path

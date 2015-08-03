@@ -45,6 +45,8 @@ class World(object):
             self.dimensions = dimensions
             self.tiles = self.generateWorld()
 
+        self.generate_ais()
+
 
     # Load all the .biome files located at self.biomePath
     def loadBiomes(self):
@@ -78,6 +80,23 @@ class World(object):
         elevation = int(round((noiseValue + 1) * 10))
 
         return elevation
+
+
+    def generate_ais(self, number=100):
+        for num in xrange(number):
+            ai_type = random.choice(entity.NPC_TYPES)
+
+            # Get a point that is not on top of a colliable tile. Do this by
+            # randomly sampling repeatedly.
+            pos = None
+            while pos is None or self.getTileAtPoint(pos).is_collidable:
+                pos = (
+                    random.randint(0, self.dimensions[0]),
+                    random.randint(0, self.dimensions[1]),
+                )
+
+            ai = ai_type(pos)
+            self.ent_man.ais.append(ai)
 
 
     def generateWorld(self):
@@ -138,7 +157,6 @@ class World(object):
                     # In the event that all of the surrounding tiles have adjacency
                     # requirements, just generate the tile we're checking
                     tiles[tileIndex] = tile
-
 
         return tiles
 

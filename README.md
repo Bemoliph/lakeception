@@ -4,6 +4,9 @@ Aww yeah, boats!
 
 ## Installation
 
+First install [pygame](http://www.pygame.org/download.shtml), following the
+official instructions for your operation system of choice.
+
 ```
 # On CentOS
 $ sudo yum install SDL-devel libv4l-dev SDL_ttf SDL_ttf-devel
@@ -12,7 +15,7 @@ $ sudo ln -s ../libv4l1-videodev.h videodev.h
 
 $ virtualenv .
 $ source bin/activate
-$ pip install -r requirements.txt --allow-external Pygame --allow-unverified Pygame
+$ pip install -r requirements.txt
 ```
 
 ## Run

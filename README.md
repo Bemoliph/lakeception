@@ -12,7 +12,15 @@ $ sudo ln -s ../libv4l1-videodev.h videodev.h
 
 $ virtualenv .
 $ source bin/activate
-$ pip install -r requirements.txt
+$ pip install -r requirements.txt --allow-external Pygame --allow-unverified Pygame
+```
+
+## Run
+
+To start the game, either double-click on `lakeception/game.py` or run:
+
+```
+$ python -m lakeception
 ```
 
 ## Testing

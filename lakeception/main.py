@@ -43,7 +43,7 @@ def _parse_args(args):
 def main(args):
     args = _parse_args(args)
 
-    if verbose or debug:
+    if args.verbose or args.debug:
         level = logging.DEBUG
     else:
         level = logging.INFO

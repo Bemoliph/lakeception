@@ -98,7 +98,7 @@ class Input(object):
             if abs(newX) <= self.bounds["x"] and abs(newY) <= self.bounds["y"]:
                 self.game.screen.cursor = (newX, newY)
         else:
-            self.game.world.move(self.player, (deltaX, deltaY))
+            self.player.move((deltaX, deltaY))
 
             # Small feel/usability tweak:
             # place the cursor in the direction the player was moving

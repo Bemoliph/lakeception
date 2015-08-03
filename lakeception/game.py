@@ -7,6 +7,7 @@ from lakeception.world import World
 from lakeception.screen import Screen
 from lakeception.input import Input
 from lakeception import audio
+from lakeception.entity import Entity
 
 
 LOGGER = logging.getLogger("lakeception.game")
@@ -21,6 +22,7 @@ class Game(object):
         pygame.display.set_caption("lakeception")
 
         self.world = World("Test World", (100,100), debug=debug)
+        Entity.world = self.world # class level reference to world for AI
 
         if not debug:
                                            # resolution, viewport

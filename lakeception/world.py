@@ -81,19 +81,25 @@ class World(object):
 
         return elevation
 
+    def get_random_open_tile_position(self):
+        # Get a point that is not on top of a colliable tile. Do this by
+        # randomly sampling repeatedly.
+        pos = None
+        open_tile = False
+        while pos is None or not open_tile:
+            pos = (
+                random.randint(0, self.dimensions[0]),
+                random.randint(0, self.dimensions[1]),
+            )
+            open_tile = not self.getTileAtPoint(pos).is_collidable and \
+                self.ent_man.get_entity_at_position(pos) is None
+
+        return pos
 
     def generate_ais(self, number=100):
         for num in xrange(number):
             ai_type = random.choice(entity.NPC_TYPES)
-
-            # Get a point that is not on top of a colliable tile. Do this by
-            # randomly sampling repeatedly.
-            pos = None
-            while pos is None or self.getTileAtPoint(pos).is_collidable:
-                pos = (
-                    random.randint(0, self.dimensions[0]),
-                    random.randint(0, self.dimensions[1]),
-                )
+            pos = self.get_random_open_tile_position()
 
             ai = ai_type(pos)
             self.ent_man.ais.append(ai)
@@ -229,32 +235,4 @@ class World(object):
         self.descriptions.insert(0, (text, color))
         # Drop the oldest message from the list
         if len(self.descriptions) > 1:
-            self.descriptions.pop()
-
-
-    def move(self, ent, vector):
-        """
-        Parameters
-        ----------
-        ent : lakeception.entity.Entity
-        vector : tuple of int, int
-
-        Returns
-        -------
-        bool
-        """
-        # Calculate the new position
-        new_pos = (ent.pos[0] + vector[0], ent.pos[1] + vector[1])
-
-        # Check for tiles, if one exists, don't move there
-        tile = self.getTileAtPoint(new_pos)
-        if tile.is_collidable:
-            return False
-
-        # Check for collisions
-        hit = self.ent_man.get_entity_at_position(new_pos)
-        if hit is not None:
-            hit.on_collision(ent)
-            return False
-
-        ent.pos = new_pos
+                self.descriptions.pop()

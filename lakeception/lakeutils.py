@@ -25,8 +25,20 @@ def getWeightedRandomChoice(orderedWeights):
 # Thanks Stack Overflow!
 # http://stackoverflow.com/a/3207973
 def getBiomeFiles(biomePath):
+    """
+    Parameters
+    ----------
+    biomePath : str
+
+    Returns
+    -------
+    list of str
+    """
     directory = dirname(__file__)
-    biomePath = join(directory, biomePath)
-    # Add file to list if: it is a file & its filename ends with .biome 
-    return [join(biomePath, biomeFile) for biomeFile in listdir(biomePath) if
-            isfile(join(biomePath, biomeFile)) and biomeFile.endswith(".biome")]
+    biomePath = join(directory, "..", biomePath)
+    # Add file to list if: it is a file & its filename ends with .biome
+    return [
+        join(biomePath, biomeFile)
+        for biomeFile in listdir(biomePath)
+        if isfile(join(biomePath, biomeFile)) and biomeFile.endswith(".biome")
+    ]

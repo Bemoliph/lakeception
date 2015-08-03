@@ -41,7 +41,7 @@ class EntityManager(object):
             ents = [
                 ent
                 for ent in ents
-                if isinstance(ent, entityt_type)
+                if isinstance(ent, entity_type)
             ]
 
             # Return None if no entities exist of the given type

@@ -8,3 +8,6 @@ lib/
 lib64
 share/
 include/
+*.egg
+.eggs/
+pip-selfcheck.json

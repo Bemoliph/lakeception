@@ -8,7 +8,7 @@ class Entity(object):
     Attributes
     ----------
     pos : tuple of int, int
-    tile : lakeception.tile.Tile
+    tile : lakeception.tiles.Tile
     is_collidable : bool
     is_ai_controlled : bool
     """
@@ -17,7 +17,7 @@ class Entity(object):
         Parameters
         ----------
         pos : tuple of int, int
-        tile: lakeception.tile.Tile
+        tile: lakeception.tiles.Tile
         """
         self.pos = pos
         self.tile = tile
@@ -61,6 +61,11 @@ class Entity(object):
 class Player(Entity):
     def __init__(self, pos, glyph, tileColor):
         """
+        Parameters
+        ----------
+        pos : tuple if int, int
+        glyph : str
+        tileColor : str
         """
         tile = tiles.Tile("player", "the boat", glyph, tileColor)
         tile.elevation = "@" # hack

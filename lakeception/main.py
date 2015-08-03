@@ -21,12 +21,12 @@ def _parse_args(args):
     parser = argparse.ArgumentParser(
         prog="lakeception",
         description="Aww yeah, boats!",
-    )nt(
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Increase verbosity of output.",
     )
-    parser.add_argumet(
+    parser.add_argument(
         "--debug",
         action="store_true",
         help="Turn on debugging mode.",

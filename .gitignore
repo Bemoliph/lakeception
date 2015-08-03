@@ -3,3 +3,8 @@
 *.swp
 *.flac
 build/
+bin/
+lib/
+lib64
+share/
+include/

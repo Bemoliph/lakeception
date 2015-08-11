@@ -142,7 +142,11 @@ class Screen(object):
             # Get the player tile
             tile = self.world.ent_man.player.tile
         else:
-            tile = self.world.getTileAtPoint(worldPos)
+            potentialEntity = self.world.ent_man.get_entity_at_position(worldPos)
+            if potentialEntity == None:
+                tile = self.world.getTileAtPoint(worldPos)
+            else:
+                tile = potentialEntity.tile
         if editing:
             text = "[EDITING] {0}, {1}, {2}, #{3}".format(tile.glyph, tile.name,
                     tile.getHSV(), rgb2hex(*tile.color))

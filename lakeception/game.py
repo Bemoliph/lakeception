@@ -39,7 +39,7 @@ class Game(object):
         self.AI_TICK = pygame.USEREVENT + 1
 
         self.animationRate = 1 * 1000
-        self.ai_tick_rate = 5 * 1000
+        self.ai_tick_rate = 410 # ms, go fast motherfs
 
         # Temporarily (?) disabled animations, because moving + animating was
         # an INTENSE visual experience

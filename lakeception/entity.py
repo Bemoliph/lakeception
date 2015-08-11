@@ -8,7 +8,6 @@ from lakeception import tiles
 class Entity(object):
     """
     Attributes
-    ----------
     pos : tuple of int, int
     tile : lakeception.tiles.Tile
     is_collidable : bool
@@ -19,26 +18,31 @@ class Entity(object):
     def __init__(self, pos, tile):
         """
         Parameters
-        ----------
         pos : tuple of int, int
         tile: lakeception.tiles.Tile
         """
         self.pos = pos
         self.tile = tile
 
+        # Set a random direction for the entity to move in
+        # Currently, entities move in that direction until they can't anymore - 
+        # in which case they choose a new direction and continue on their
+        # journey
+        self.direction = (random.randint(-1, 1), random.randint(-1, 1))
+
         self.is_collidable = True
         self.is_ai_controlled = True
 
+    def setNewDirection(self):
+        self.direction = (random.randint(-1, 1), random.randint(-1, 1))
 
     def move(self, vector):
         """
         Parameters
-        ----------
         vector : tuple of int, int
 
         Returns
-        -------
-        bool
+        boolean
         """
         # Don't bother moving if we're not going anywhere
         if vector == (0, 0):
@@ -69,7 +73,6 @@ class Entity(object):
         perspective.
 
         Parameters
-        ----------
         other : lakeception.entity.Entity
         """
         pass
@@ -88,7 +91,7 @@ class NPC(Entity):
 
 class Squid(NPC):
     def __init__(self, pos):
-        tile = tiles.Tile("Squidward", "squid", u"¤", "FF0000")
+        tile = tiles.Tile("squid", "Squidward #"+str(random.randint(0, 99)), u"¤", "DE605A")
         super(Squid, self).__init__(pos, tile)
 
 
@@ -97,14 +100,19 @@ class Squid(NPC):
 
 
     def on_ai_tick(self):
-        # Try to randomly move one cell over
-        vector = (random.randint(0, 1), random.randint(0, 1))
-        self.move(vector)
+        # 55 % chance per tick that the squid will move
+        if random.random() < 0.55:
+            vector = self.direction
+            # Sometimes we just move... in another direction
+            if random.random() < 0.17:
+                vector = (random.randint(-1, 1), random.randint(-1, 1))
+            if not self.move(vector):
+                self.setNewDirection()
 
 
 class WaterSpout(NPC):
     def __init__(self, pos):
-        tile = tiles.Tile("Spout", "spout", u"҉", "0080FF")
+        tile = tiles.Tile("spout", "John the Spout", u"҉", "0080FF")
         super(WaterSpout, self).__init__(pos, tile)
 
 
@@ -119,7 +127,14 @@ class WaterSpout(NPC):
 
 
     def on_ai_tick(self):
-        pass
+        # We only move a certain percentage of every tick
+        if random.random() < 0.41:
+            vector = self.direction
+            # Sometimes we just move... in another direction
+            if random.random() < 0.10:
+                vector = (random.randint(-1, 1), random.randint(-1, 1))
+            if not self.move(vector):
+                self.setNewDirection()
 
 
 NPC_TYPES = [Squid, WaterSpout]

@@ -15,14 +15,16 @@ class Entity(object):
     """
     world = None
 
-    def __init__(self, pos, tile):
+    def __init__(self, tile, size, pos):
         """
         Parameters
-        pos : tuple of int, int
         tile: lakeception.tiles.Tile
+        size: tuple of int, int
+        pos : tuple of int, int
         """
-        self.pos = pos
         self.tile = tile
+        self.size = size
+        self.pos = pos
 
         # Set a random direction for the entity to move in
         # Currently, entities move in that direction until they can't anymore - 
@@ -33,7 +35,7 @@ class Entity(object):
         self.is_collidable = True
         self.is_ai_controlled = True
 
-    def setNewDirection(self):
+    def set_new_direction(self):
         self.direction = (random.randint(-1, 1), random.randint(-1, 1))
 
     def move(self, vector):
@@ -51,32 +53,36 @@ class Entity(object):
         # Calculate the new position
         new_pos = (self.pos[0] + vector[0], self.pos[1] + vector[1])
 
-        # Check for tiles, if one exists, don't move there
-        tile = self.world.getTileAtPoint(new_pos)
-        if tile.is_collidable:
-            return False
+        # Do collision checks accounting for full entity size
+        width, height = self.size
+        for x in xrange(0, width):
+            for y in xrange(0, height):
+                check_pos = (new_pos[0] + x, new_pos[1] + y)
 
-        # Do entity collision checks
-        hit = self.world.ent_man.get_entity_at_position(new_pos)
-        if hit is not None:
-            hit.on_collision(self)
-            return False
+                # Check for collidable tiles
+                tile = self.world.getTileAtPoint(check_pos)
+                if tile.is_collidable:
+                    return False
+
+                # Check for collidable entities
+                entity = self.world.ent_man.get_entity_at_position(check_pos)
+                if entity is not None and entity is not self:
+                    entity.on_collision(self)
+                    return False
 
         # No collisions, move the entity
         self.pos = new_pos
         return True
 
-
     def on_collision(self, other):
         """
-        Defines what should happen when a collision happens, from the collidie's
+        Defines what should happen when a collision happens, from the collidee's
         perspective.
 
         Parameters
         other : lakeception.entity.Entity
         """
         pass
-
 
     def on_ai_tick(self):
         """
@@ -92,12 +98,12 @@ class NPC(Entity):
 class Squid(NPC):
     def __init__(self, pos):
         tile = tiles.Tile("squid", "Squidward #"+str(random.randint(0, 99)), u"¤", "DE605A")
-        super(Squid, self).__init__(pos, tile)
+        size = (1, 1)
 
+        super(Squid, self).__init__(tile, size, pos)
 
     def on_collision(self, other):
-        print other, "->", self
-
+        pass
 
     def on_ai_tick(self):
         # 55 % chance per tick that the squid will move
@@ -107,24 +113,47 @@ class Squid(NPC):
             if random.random() < 0.17:
                 vector = (random.randint(-1, 1), random.randint(-1, 1))
             if not self.move(vector):
-                self.setNewDirection()
+                self.set_new_direction()
 
 
 class WaterSpout(NPC):
     def __init__(self, pos):
         tile = tiles.Tile("spout", "John the Spout", u"҉", "0080FF")
-        super(WaterSpout, self).__init__(pos, tile)
+        size = (1, 1)
 
+        super(WaterSpout, self).__init__(tile, size, pos)
 
-    def on_collision(self, other):
-        # Send the collider to a random place in the world!
-        new_pos = self.world.get_random_open_tile_position()
-        other.pos = new_pos
+    def absorb(self, other_spout):
+        # IT'S TIME TO GROW!  Combine the water spouts by size
+        new_size = (self.size[0] + other_spout.size[0], self.size[1] + other_spout.size[1])
+
+        # Debug
+        self.tile.color = (255, 0, 0)
+        print (other_spout, other_spout.size, other_spout.pos), "->", (self, self.size, self.pos), "=", (self, new_size, self.pos)
+
+        self.size = new_size
+        self.world.ent_man.ais.remove(other_spout)
+
         self.world.addDescription(
-            "a water spout launches you into the air, you land far away",
+            "the winds seem stronger somehow...",
             color="0080FF",
         )
 
+    def launch(self, other):
+        # Send the collider to a random place in the world!
+        other.pos = self.world.get_random_open_tile_position()
+
+        if isinstance(other, Player):
+            self.world.addDescription(
+                "the water spout launches you through the air!",
+                color="0080FF",
+            )
+
+    def on_collision(self, other):
+        if isinstance(other, WaterSpout):
+            self.absorb(other)
+        else:
+            self.launch(other)
 
     def on_ai_tick(self):
         # We only move a certain percentage of every tick
@@ -134,13 +163,14 @@ class WaterSpout(NPC):
             if random.random() < 0.10:
                 vector = (random.randint(-1, 1), random.randint(-1, 1))
             if not self.move(vector):
-                self.setNewDirection()
+                self.set_new_direction()
 
 
 NPC_TYPES = [Squid, WaterSpout]
 
+
 class Player(Entity):
-    def __init__(self, pos, glyph, tileColor):
+    def __init__(self, pos, glyph, tile_color):
         """
         Parameters
         ----------
@@ -148,10 +178,12 @@ class Player(Entity):
         glyph : str
         tileColor : str
         """
-        tile = tiles.Tile("player", "the boat", glyph, tileColor)
-        tile.elevation = "@" # hack
-        tile.biomeID = "@" # hack
+        tile = tiles.Tile("player", "the boat", glyph, tile_color)
+        tile.elevation = "@"  # hack
+        tile.biomeID = "@"    # hack
 
-        super(Player, self).__init__(pos, tile)
+        size = (1, 1)
+
+        super(Player, self).__init__(tile, size, pos)
 
         self.is_ai_controlled = False

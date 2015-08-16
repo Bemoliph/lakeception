@@ -127,10 +127,6 @@ class WaterSpout(NPC):
         # IT'S TIME TO GROW!  Combine the water spouts by size
         new_size = (self.size[0] + other_spout.size[0], self.size[1] + other_spout.size[1])
 
-        # Debug
-        self.tile.color = (255, 0, 0)
-        print (other_spout, other_spout.size, other_spout.pos), "->", (self, self.size, self.pos), "=", (self, new_size, self.pos)
-
         self.size = new_size
         self.world.ent_man.ais.remove(other_spout)
 

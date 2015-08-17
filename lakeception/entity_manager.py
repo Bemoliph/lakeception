@@ -25,11 +25,9 @@ class EntityManager(object):
         Gets an entity at a given position, if one exists.
 
         Parameters
-        ----------
         pos : tuple of int, int
 
         Returns
-        -------
         lakeception.entity.Entity or None
         """
         for ent in self.ais + [self.player]:
@@ -41,34 +39,25 @@ class EntityManager(object):
 
     def get_closest_entity(self, pos, entity_type=None):
         """
-        Finds the closest entityt to a given position, optionally of some class
+        Finds the closest entity to a given position, optionally of some class
         type.
 
         Parameters
-        ----------
         pos : tuple of int, int
         entity_type : lakeception.entity.Entity
 
         Returns
-        -------
         lakeception.entity.Entity or None
         """
         ents = self.ais + [self.player]
 
         # Filter the list of entities if a type was specified
         if entity_type is not None:
-            ents = [
-                ent
-                for ent in ents
-                if isinstance(ent, entity_type)
-            ]
+            ents = [ent for ent in ents if isinstance(ent, entity_type)]
 
             # Return None if no entities exist of the given type
             if not ents:
                 return None
 
         # Calculate the closest entity
-        return min(
-            ents,
-            key=lambda ent: dist(ent.pos, pos)
-        )
+        return min(ents, key=lambda ent: dist(ent.pos, pos))

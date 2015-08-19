@@ -15,7 +15,7 @@ $ sudo ln -s ../libv4l1-videodev.h videodev.h
 
 $ virtualenv .
 $ source bin/activate
-$ pip install -r requirements.txt
+$ yes | pip install -r requirements.txt
 ```
 
 ## Run

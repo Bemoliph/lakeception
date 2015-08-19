@@ -4,6 +4,7 @@
 *.flac
 *~
 .#*
+src/
 build/
 bin/
 dist/

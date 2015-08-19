@@ -1,3 +1,2 @@
 noise==1.2.2
-tox
-coverage
+-e hg+https://bitbucket.org/pygame/pygame#egg=pygame-dev

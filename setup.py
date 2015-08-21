@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 from pip.req import parse_requirements
+from pip.download import PipSession
 import os
 
 REQUIREMENTS_PATH = os.path.abspath(
@@ -18,7 +19,14 @@ setup(
     packages=find_packages(),
     install_requires=[
         str(i.req)
-        for i in parse_requirements(REQUIREMENTS_PATH, session=False)
+        for i in parse_requirements(REQUIREMENTS_PATH, session=PipSession())
+    ],
+    dependency_links=[
+        "hg+https://bitbucket.org/pygame/pygame#egg=pygame-dev",
+    ],
+    tests_require=[
+        "tox",
+        "coverage",
     ],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",

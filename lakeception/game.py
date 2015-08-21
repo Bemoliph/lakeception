@@ -17,18 +17,18 @@ class Game(object):
     def __init__(self, debug=False):
         LOGGER.debug("Initializing game")
 
-        pygame.mixer.pre_init(44100, 16, 2, 4096) # setup mixer to avoid sound lag
+        pygame.mixer.pre_init(44100, 16, 2, 4096)  # setup mixer to avoid sound lag
         pygame.init()
         pygame.display.set_caption("lakeception")
 
-        self.world = World("Test World", (100,100), debug=debug)
-        Entity.world = self.world # class level reference to world for AI
+        self.world = World("Test World", (100, 100), debug=debug)
+        Entity.world = self.world  # class level reference to world for AI
 
         if not debug:
-                                           # resolution, viewport
+                                            # resolution, viewport
             self.screen = Screen(self.world, (800, 475), (25, 11))
         else:
-            self.screen = Screen(self.world, (800, 475), (99, 99)) # debug res
+            self.screen = Screen(self.world, (800, 475), (99, 99))  # debug res
 
         self.input = Input(self)
 
@@ -39,7 +39,7 @@ class Game(object):
         self.AI_TICK = pygame.USEREVENT + 1
 
         self.animationRate = 1 * 1000
-        self.ai_tick_rate = 410 # ms, go fast motherfs
+        self.ai_tick_rate = 410  # ms, go fast motherfs
 
         # Temporarily (?) disabled animations, because moving + animating was
         # an INTENSE visual experience
@@ -56,7 +56,6 @@ class Game(object):
         self.init_audio()
 
         LOGGER.debug("Initialized game")
-
 
     def init_audio(self):
         LOGGER.debug("Initializing audio")

@@ -12,8 +12,8 @@ class Input(object):
     def __init__(self, game):
         self.game = game
         self.bounds = {
-            "x": self.game.screen.viewportRes[0] // 2,
-            "y": self.game.screen.viewportRes[1] // 2
+            "x": self.game.screen.viewport_res[0] // 2,
+            "y": self.game.screen.viewport_res[1] // 2
         }
         # Just a shorthand for the player; self.game.world.player is a bit verbose
         self.player = self.game.world.ent_man.player

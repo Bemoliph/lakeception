@@ -16,9 +16,9 @@
             "collidable": false
         },
         "volcanic ash": {
-            "description": "a patch volcanic ash",
+            "description": "a volcanic island",
             "glyphs": "#",
-            "color": "33231E",
+            "color": "3f5427",
             "adjacentTiles": [],
             "collidable": false
         },

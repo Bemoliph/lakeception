@@ -8,7 +8,6 @@ class EntityManager(object):
         self.player = player
         self.ais = ai
 
-
     def do_ai_ticks(self):
         """
         Runs AI ticks for all NPCs.
@@ -19,23 +18,30 @@ class EntityManager(object):
 
             ent.on_ai_tick()
 
-
-    def get_entity_at_position(self, pos):
+    def get_entity_at_position(self, point):
         """
         Gets an entity at a given position, if one exists.
 
         Parameters
-        pos : tuple of int, int
+        point : tuple of int, int
 
         Returns
         lakeception.entity.Entity or None
         """
-        for ent in self.ais + [self.player]:
-            if ent.pos == pos:
-                return ent
+        point_x, point_y = point
+
+        for entity in self.ais + [self.player]:
+            # Calculate collision based on entity's position AND size
+            entity_x, entity_y = entity.pos
+            width, height = entity.size
+
+            dist_x = point_x - entity_x
+            dist_y = point_y - entity_y
+
+            if 0 <= dist_x < width and 0 <= dist_y < height:
+                return entity
 
         return None
-
 
     def get_closest_entity(self, pos, entity_type=None):
         """

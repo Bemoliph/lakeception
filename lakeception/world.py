@@ -9,11 +9,11 @@ from lakeception.biome import Biome, get_biome_files
 from lakeception import entity, entity_manager
 from lakeception.tiles import Tile
 
-        # THUNDARAS SUGGESTION AREA
-        # siren isle / sirens
-        # leper beach
-        # dragon roost
-        # science pirate named thundara (ok this was mine)
+# THUNDARA'S SUGGESTION AREA
+# siren isle / sirens
+# leper beach
+# dragon roost
+# science pirate named thundara (ok this was mine)
 
 
 LOGGER = logging.getLogger("lakeception.world")
@@ -47,16 +47,13 @@ class World(object):
 
         self.generate_ais()
 
-
     # Load all the .biome files located at self.biomePath
     def loadBiomes(self):
         files = get_biome_files()
         self.biomes = {}
         for biomeID, f in enumerate(files):
-            print biomeID, f
             b = Biome(f, biomeID)
             self.biomes[biomeID] = b
-
 
     def getBiomeAtPoint(self, point):
         # Scale position and world dimensions according to biome scaling value
@@ -69,7 +66,6 @@ class World(object):
         biomeID = int(round((noiseValue + 1) * (biomeCount-1)/2))
 
         return self.biomes[biomeID]
-
 
     def getElevationAtPoint(self, point):
         # Scale position and world dimensions according to elevation scaling value
@@ -179,7 +175,7 @@ class World(object):
         #     ║456║    5x5 world
         #     ║789║
         #     ╚═══╝          (4,4)
-        #grid = u"╔═══╗║123║║456║║789║╚═══╝"
+        # grid = u"╔═══╗║123║║456║║789║╚═══╝"
         grid = u"qwertnoiseScalefgzxcvbyuiophjkl;"
         tiles = []
         for char in grid:
@@ -188,7 +184,6 @@ class World(object):
 
         return tiles
 
-
     def _pointToIndex(self, point, width, height):
         x, y = point
 
@@ -196,13 +191,11 @@ class World(object):
 
         return index
 
-
     def _indexToPoint(self, index, width):
         x = index % width
         y = index // width
 
         return (x, y)
-
 
     def getTileAtPoint(self, point):
         worldWidth, worldHeight = self.dimensions
@@ -210,7 +203,6 @@ class World(object):
         index = self._pointToIndex(point, worldWidth, worldHeight)
 
         return self.tiles[index]
-
 
     def getTilesAroundPlayer(self, size, visibleTiles):
         # Crunch some attributes of the requested area centered on the player
@@ -228,7 +220,6 @@ class World(object):
             for x in xrange(x1, x2+1):
                 visibleTiles[index] = self.getTileAtPoint((x, y))
                 index += 1
-
 
     def addDescription(self, text, color="F2F2F2"):
         # The newest description is at the top of the list

@@ -18,7 +18,7 @@
         "port": {
             "description": "a bustling port",
             "glyphs": "H",
-            "color": "B85A1C",
+            "color": "b85a1c",
             "adjacentTiles": ["empty water", "island"],
             "collidable": true
         },
@@ -28,6 +28,27 @@
             "color": "F0E68C",
             "adjacentTiles": [],
             "collidable": true
+        },
+        "grasslands": {
+            "description": "an exotic island",
+            "glyphs": "#",
+            "color": "70B347",
+            "adjacentTiles": [],
+            "collidable": true
+        },
+        "house": {
+            "description": "a small house",
+            "glyphs": "⌂",
+            "color": "5B6266",
+            "adjacentTiles": [],
+            "collidable": true
+        },
+        "clustered house": {
+            "description": "a small town",
+            "glyphs": "⌂",
+            "color": "5B6266",
+            "adjacentTiles": ["house"],
+            "collidable": true
         }
     },
     "elevations": {
@@ -35,14 +56,14 @@
         "9": [["empty water", 1]],
         "10": [["empty water", 9]],
         "11": [["island", 5], ["port", 2]],
-        "12": [["island", 3]],
-        "13": [["island", 6]],
-        "14": [["island", 6]],
-        "15": [["island", 6]],
-        "16": [["island", 7]],
-        "17": [["island", 7]],
-        "18": [["island", 7]],
-        "19": [["island", 7]],
-        "20": [["island", 7]]
+        "12": [["grasslands", 15], ["house", 1], ["clustered house", 10]],
+        "13": [["grasslands", 6]],
+        "14": [["grasslands", 6]],
+        "15": [["grasslands", 6]],
+        "16": [["grasslands", 7]],
+        "17": [["grasslands", 7]],
+        "18": [["grasslands", 7]],
+        "19": [["grasslands", 7]],
+        "20": [["grasslands", 7]]
     }
 }

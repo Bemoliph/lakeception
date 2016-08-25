@@ -26,7 +26,7 @@ class Game(object):
 
         if not debug:
                                             # resolution, viewport
-            self.screen = Screen(self.world, (800, 475), (25, 11))
+            self.screen = Screen(self.world, (800, 475), (99, 99))
         else:
             self.screen = Screen(self.world, (800, 475), (99, 99))  # debug res
 

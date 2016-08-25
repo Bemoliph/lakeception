@@ -129,6 +129,40 @@ class Squid(NPC):
             # decrement the speed boost
             self.speedBoost -= 0.01
 
+class Jellyfish(NPC):
+    def __init__(self, pos):
+        self.names = ["Edward", ":3", "Jules", "Mircin", "Nattie", "Bento", "J", "Jarl", "Jinnie", "Jahn", "Jari", "Jurles", "Jamse", "James"]
+        tile = tiles.Tile("jelly", "{} the Jellyfish".format(random.choice(self.names)), u"B", "FFA0A0")
+        size = (2, 2)
+        self.speedBoost = 0
+
+        super(Jellyfish, self).__init__(tile, size, pos)
+
+    def on_collision(self, other):
+        if isinstance(other, Player):
+            self.speedBoost = 0.10
+            self.set_new_direction()
+            self.move(self.direction)
+
+    def on_ai_tick(self):
+        # % chance per tick that the jellyfish will choose a new direction
+        if random.random() < 0.45:
+            self.set_new_direction()
+        # % chance per tick that the squid will move
+        if random.random() < (0.15 + self.speedBoost):
+            vector = self.direction
+            # Sometimes we just move... in another direction
+            if random.random() < 0.17:
+                vector = (random.randint(-1, 1), random.randint(-1, 1))
+                # we don't want the randomized direction to be backtracking
+                if vector[0] == -self.direction[0] and \
+                vector[1] == -self.direction[1]:
+                    vector = self.direction
+            if not self.move(vector):
+                self.set_new_direction()
+        if self.speedBoost:
+            # decrement the speed boost
+            self.speedBoost -= 0.01
 
 class WaterSpout(NPC):
     def __init__(self, pos):
@@ -177,7 +211,7 @@ class WaterSpout(NPC):
                 self.set_new_direction()
 
 
-NPC_TYPES = [Squid, WaterSpout]
+NPC_TYPES = [Squid, WaterSpout, Jellyfish]
 
 
 class Player(Entity):

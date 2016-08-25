@@ -1,5 +1,6 @@
 # lakeception
 ![http://i.imgur.com/CHjSPCG.gif](http://i.imgur.com/CHjSPCG.gif)
+
 Aww yeah, boats!
 
 ## Installation

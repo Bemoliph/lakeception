@@ -4,6 +4,8 @@
 *.flac
 *~
 .#*
+env/
+venv/
 src/
 build/
 bin/

@@ -11,9 +11,9 @@ build_script:
     - "pyinstaller lakeception.spec"
 
 artifacts:
-    - path: "dist\\lakeception.exe"
-    - name: lakeception
-    - type: zip
+    - path: dist\lakeception.exe
+      name: lakeception
+      type: zip
 
 deploy:
     provider: GitHub

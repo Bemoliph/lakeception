@@ -58,18 +58,17 @@ class Screen(object):
             return unicode(tile.biomeID), tile.color, size
 
     def _generate_glyph_sprite(self, glyph, color, size):
-        if self.currentDrawMode != self.DRAWMODE_NORMAL:
-            size = (0.5, 0.5)
-
         if size not in self.fonts:
             self.fonts[size] = pygame.font.SysFont(self.font_face, self.font_size * size[0])
 
         self.sprites[(glyph, color, size)] = self.fonts[size].render(glyph, False, color, self.backgroundColor)
+        print "Added glyph: {}".format((glyph, color, size))
 
     def get_sprite(self, tile, coords, size=(1,1)):
         colored_glyph = self._get_tile_glyph_for_current_draw_mode(tile, size)
 
         if colored_glyph not in self.sprites:
+            print "Missing glyph: {}".format(colored_glyph)
             self._generate_glyph_sprite(*colored_glyph)
 
         sprite_rect = self.get_font_rect(coords)

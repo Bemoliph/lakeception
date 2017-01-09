@@ -3,11 +3,11 @@
 import argparse
 import logging
 import sys
+
 from lakeception import game
 
 
 LOGGER = logging.getLogger("lakeception.main")
-
 
 def _parse_args(args):
     """
@@ -68,4 +68,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    try:
+        main(sys.argv[1:])
+    except Exception as e:
+        LOGGER.error("Lakeception has crashed!", exc_info=True)

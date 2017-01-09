@@ -1,2 +1,2 @@
 noise==1.2.2
--e hg+https://bitbucket.org/pygame/pygame#egg=pygame-dev
+pygame==1.9.2

@@ -13,16 +13,14 @@ build_script:
 artifacts:
     - path: dist\lakeception.exe
       name: lakeception
-      type: zip
 
 deploy:
-    provider: GitHub
-    description: "Build {build}"
-    artifact: lakeception
-    draft: false
-    prerelease: false
-    on:
-        branch: master
-        appveyor_repo_tag: false
-    auth_token:
+    - provider: GitHub
+      description: ""
+      artifact: lakeception
+      draft: false
+      prerelease: false
+      on:
+        appveyor_repo_tag: true
+      auth_token:
         secure: gC9PCTALEryiNW7gtwWeabnCH8P/NReiNlL6zU7jkzHZDWiLa/SEd/HECwYOxXof

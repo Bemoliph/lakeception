@@ -2,11 +2,13 @@
 
 import argparse
 import logging
+import os
 import sys
 
 import const
+import game
 
-LOGGER = logging.getLogger('{}.main'.format(const.PROJECT.NAME))
+LOGGER = logging.getLogger(u'{}.main'.format(const.PROJECT.NAME))
 
 def _parse_args(args):
     '''
@@ -84,17 +86,20 @@ def run(args):
     )
     
     LOGGER.info(u'Starting %s %s!', const.PROJECT.NAME, const.PROJECT.VERSION)
-    #g = game.Game(debug=args.debug)
+    g = game.Game()
     
     if args.test:
         LOGGER.info(u'Stopping: Start-up test completed successfully.')
         return
     else:
         LOGGER.debug(u'Beginning main game loop.')
-        #while not g.quitting:
-        #    g.tick()
+        g.start()
         
         LOGGER.info(u'Stopping: User requested to quit.')
 
 if __name__ == u'__main__':
+    # Fix current working directory so assets aren't "missing" when main.py
+    # is run directly from arbitrary working directories.
+    os.chdir(os.path.join(os.path.dirname(__file__), u'..'))
+    
     run(sys.argv[1:])

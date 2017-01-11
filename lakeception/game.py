@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+
+import logging
+import pygame
+
+import const
+
+from audio import Audio
+from const import EVENTS
+#from input import Input
+from screen import Screen
+#from world import World
+
+LOGGER = logging.getLogger(u'{}.game'.format(const.PROJECT.NAME))
+
+
+class Game(object):
+    def __init__(self):
+        LOGGER.debug(u'Initializing Game.')
+        
+        # When True, the game will close. Set via pygame.QUIT
+        self.is_quitting = False
+        # When True, the screen will redraw. Set via const.EVENTS.GAME_UPDATED
+        self.is_updated = True
+        
+        # Set up audio BEFORE initializing pygame.
+        Audio.pre_init()
+        
+        pygame.init()
+        
+        self.audio = Audio()
+        #self.input = Input()
+        self.screen = Screen()
+        #self.world = World()
+        
+        self.event_router = {
+            pygame.QUIT: self.quit,
+            
+        }
+        
+    
+    def start(self):
+        LOGGER.debug(u'Starting main game loop.')
+        # Set a generic, repeating event to represent "time" passing in-world.
+        pygame.time.set_timer(
+            EVENTS.WORLD_TICK,
+            EVENTS.WORLD_TICK_RATE
+        )
+        
+        # Main game loop!
+        while not self.is_quitting:
+            self.tick()
+        
+        LOGGER.debug(u'Exiting main game loop.')
+        # Fall-through here ends the program naturally
+    
+    def tick(self):
+        LOGGER.debug(u'Starting game tick.')
+        # Process any events sent since last tick.
+        for event in pygame.event.get():
+            if event.type in self.event_router:
+                # Call the function associated with this event type,
+                # passing the event details.
+                func = self.event_router[event.type]
+                func(event)
+        
+        if self.is_updated:
+            self.screen.draw()
+            self.is_updated = False
+        
+        LOGGER.debug(u'Exiting game tick.')
+    
+    def quit(self, event):
+        LOGGER.debug(u'Quit requested by user.')
+        # TODO: Save game state, other tear-down.
+        
+        # Signal to main loop that it should end.
+        self.is_quitting = True

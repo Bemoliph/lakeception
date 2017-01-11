@@ -21,16 +21,12 @@ setup(
         str(i.req)
         for i in parse_requirements(REQUIREMENTS_PATH, session=PipSession())
     ],
-    dependency_links=[
-        "hg+https://bitbucket.org/pygame/pygame#egg=pygame-dev",
-    ],
     tests_require=[
         "tox",
         "coverage",
     ],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
-        "Environment :: Console :: Curses",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
         "Topic :: Games/Entertainment :: Arcade",

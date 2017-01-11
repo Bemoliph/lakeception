@@ -3,11 +3,10 @@
 import logging
 import pygame
 
-import const
-
+from const import DISPLAY, PROJECT
 from lakeutils import hex_to_rgb, hex_to_rgba
 
-LOGGER = logging.getLogger(u'{}.screen'.format(const.PROJECT.NAME))
+LOGGER = logging.getLogger(u'{}.screen'.format(PROJECT.NAME))
 
 
 class Screen(object):
@@ -15,17 +14,17 @@ class Screen(object):
         LOGGER.debug(u'Initializing Screen at res=%s', resolution)
         
         # Set Window Title and Icon
-        pygame.display.set_caption(const.PROJECT.NAME)
-        pygame.display.set_icon(pygame.image.load(const.DISPLAY.ICON))
+        pygame.display.set_caption(PROJECT.NAME)
+        pygame.display.set_icon(pygame.image.load(DISPLAY.ICON))
         
         # Set Window Size
         self.window = pygame.display.set_mode(resolution)
         
         # Set up framerate limiter
         self.clock = pygame.time.Clock()
-        self.fps = const.DISPLAY.FPS
+        self.fps = DISPLAY.FPS
         
-        self.background_color = hex_to_rgb(const.DISPLAY.BACKGROUND_COLOR)
+        self.background_color = hex_to_rgb(DISPLAY.BACKGROUND_COLOR)
         
         # TODO: Extract to texture loader/surface generator
         self.font = pygame.font.SysFont(u'monospace', 32)

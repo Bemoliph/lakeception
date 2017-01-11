@@ -5,10 +5,11 @@ import logging
 import os
 import sys
 
-import const
 import game
 
-LOGGER = logging.getLogger(u'{}.main'.format(const.PROJECT.NAME))
+from const import PROJECT
+
+LOGGER = logging.getLogger()
 
 def _parse_args(args):
     '''
@@ -23,11 +24,11 @@ def _parse_args(args):
     argparse.ArgumentParser
     '''
     parser = argparse.ArgumentParser(
-        prog=const.PROJECT.NAME.lower(),
+        prog=PROJECT.NAME.lower(),
         description=u'{} {} - {}'.format(
-            const.PROJECT.NAME,
-            const.PROJECT.VERSION,
-            const.PROJECT.DESC,
+            PROJECT.NAME,
+            PROJECT.VERSION,
+            PROJECT.DESC,
         ),
     )
     
@@ -60,8 +61,8 @@ def log_unhandled_exceptions(func):
         try:
             func(*args, **kwargs)
         except Exception as e:
-            LOGGER = logging.getLogger('{}.main'.format(const.PROJECT.NAME))
-            LOGGER.exception(u'%s has crashed from an Unhandled Exception!', const.PROJECT.NAME)
+            LOGGER = logging.getLogger('{}.main'.format(PROJECT.NAME))
+            LOGGER.exception(u'%s has crashed from an Unhandled Exception!', PROJECT.NAME)
     
     return wrapper
 
@@ -79,13 +80,13 @@ def run(args):
         log_level = logging.INFO
     
     logging.basicConfig(
-        filename=u'{}.log'.format(const.PROJECT.NAME),
-        format=u'%(asctime)s - %(levelname)8s - %(name)s - %(message)s',
+        filename=u'{}.log'.format(PROJECT.NAME),
+        format=u'%(asctime)s - %(levelname)8s - %(pathname)s:%(lineno)d - %(message)s',
 		datefmt=u'%Y-%m-%d %H:%M:%S',
         level=log_level,
     )
     
-    LOGGER.info(u'Starting %s %s!', const.PROJECT.NAME, const.PROJECT.VERSION)
+    LOGGER.info(u'Starting %s %s!', PROJECT.NAME, PROJECT.VERSION)
     g = game.Game()
     
     if args.test:

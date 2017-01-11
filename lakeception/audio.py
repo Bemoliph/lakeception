@@ -3,11 +3,9 @@
 import logging
 import pygame
 
-import const
-
 from lakeutils import asset_exists, get_file_path
 
-LOGGER = logging.getLogger(u'{}.audio'.format(const.PROJECT.NAME))
+LOGGER = logging.getLogger()
 
 
 class Audio(object):

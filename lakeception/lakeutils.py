@@ -3,9 +3,7 @@
 import logging
 import os
 
-import const
-
-LOGGER = logging.getLogger(u'{}.utils'.format(const.PROJECT.NAME))
+LOGGER = logging.getLogger()
 
 def get_file_path(asset_path):
     '''Resolves a relative asset path to an absolute path.'''

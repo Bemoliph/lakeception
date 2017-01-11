@@ -3,15 +3,13 @@
 import logging
 import pygame
 
-import const
-
 from audio import Audio
 from const import EVENTS
 #from input import Input
 from screen import Screen
 #from world import World
 
-LOGGER = logging.getLogger(u'{}.game'.format(const.PROJECT.NAME))
+LOGGER = logging.getLogger()
 
 
 class Game(object):

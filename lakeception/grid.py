@@ -6,7 +6,7 @@ LOGGER = logging.getLogger()
 
 
 class Grid(object):
-    def __init__(self, size, tiles=None, fill=None):
+    def __init__(self, size, tiles=None, fill=None): 
         LOGGER.debug(u'Initializing Grid of size=%s', size)
         
         self.size = None
@@ -47,9 +47,15 @@ class Grid(object):
         width = self.size[0]
         
         x = index % width
-        y = index // width
+        y = index // width % 5
         
         return (x, y)
+    
+    def is_equivalent_point(self, p1, p2):
+        i1 = self._point_to_index(p1)
+        i2 = self._point_to_index(p2)
+        
+        return i1 == i2
     
     def get_tile_at_point(self, point):
         return self.tiles[self._point_to_index(point)]
@@ -63,10 +69,10 @@ class Grid(object):
         width, height = out_grid.size
         
         # Fill out_grid with tiles from self
-        for y in xrange(b, b+height):
-            for x in xrange(a, a+width):
+        for y in xrange(b, b + height):
+            for x in xrange(a, a + width):
                 tile = self.get_tile_at_point((x, y))
-                out_grid.set_tile_at_point((x-a, y-b), tile)
+                out_grid.set_tile_at_point((x - a, y - b), tile)
     
     def set_tiles_in_rect(self, top_left, in_grid):
         # Get target area within self
@@ -77,7 +83,7 @@ class Grid(object):
         for y in xrange(0, height):
             for x in xrange(0, width):
                 tile = in_grid.get_tile_at_point((x, y))
-                self.set_tile_at_point((a+x, b+y), tile)
+                self.set_tile_at_point((a + x, b + y), tile)
     
     def set_tiles(self, tiles, size):
         width, height = size

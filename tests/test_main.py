@@ -4,6 +4,7 @@ import unittest
 
 from lakeception import main
 
+
 class TestMain(unittest.TestCase):
-    def test_main(self):
+    def test_run(self):
         main.run([u'--test'])

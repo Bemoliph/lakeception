@@ -1,25 +1,30 @@
-*.pyc
-*.pyw
+*.py[cowd]
+*.log
 *.swp
 *.flac
 *~
 .#*
+
+# virtualenv
 env/
 venv/
-src/
+pyvenv.cfg
+
+# pyinstaller
 build/
-bin/
 dist/
+
+# automated testing
+.coverage
+.tox
+
+src/
 include/
 lib/
 lib64
 share/
-pyvenv.cfg
 *.egg
 .eggs/
 *.egg-info
 pip-selfcheck.json
-.coverage
-.tox
-*.log
 flycheck_*

@@ -13,6 +13,7 @@ class PROJECT(object):
 class DISPLAY(object):
     FPS = 60
     ICON = os.path.join(u'assets', u'icon.png')
+    BACKGROUND_COLOR = 0x000000
 
 
 class EVENTS(object):

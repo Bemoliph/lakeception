@@ -28,10 +28,10 @@ class Game(object):
         
         pygame.init()
         
+        #self.world = World()
         self.audio = Audio()
         #self.input = Input()
         self.screen = Screen()
-        #self.world = World()
         
         self.event_router = {
             pygame.QUIT: self.quit,

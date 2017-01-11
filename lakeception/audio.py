@@ -4,7 +4,8 @@ import logging
 import pygame
 
 import const
-import utils
+
+from lakeutils import asset_exists, get_file_path
 
 LOGGER = logging.getLogger(u'{}.audio'.format(const.PROJECT.NAME))
 
@@ -21,6 +22,7 @@ class Audio(object):
             # pygame's music.get_busy() only considers if the music is actually
             # stopped, so pauses need to be tracked manually.
             self.is_music_paused = False
+            self.current_music = None
     
     @staticmethod
     def pre_init():
@@ -35,23 +37,25 @@ class Audio(object):
         )
     
     def play_sound(self, asset_path):
-        if pygame.mixer.get_init() and utils.asset_exists(asset_path):
+        if pygame.mixer.get_init() and asset_exists(asset_path):
             LOGGER.debug(u'Playing sound: %s', asset_path)
-            sound = pygame.mixer.Sound(utils.get_file_path(asset_path))
+            sound = pygame.mixer.Sound(get_file_path(asset_path))
             channel = sound.play()
             
             return sound, channel
     
     def play_music(self, asset_path, fadeout_time=1000):
-        if pygame.mixer.get_init() and utils.asset_exists(asset_path):
+        if pygame.mixer.get_init() and asset_exists(asset_path):
             if self.is_playing_music() and fadeout_time:
                 LOGGER.debug(u'Fading out music over %sms', fadeout_time)
                 pygame.mixer.music.fadeout(fadeout_time)
             
             LOGGER.debug(u'Playing music: %s', asset_path)
-            pygame.mixer.music.load(utils.get_file_path(asset_path))
+            pygame.mixer.music.load(get_file_path(asset_path))
             pygame.mixer.music.play(loops=-1)
+            
             self.is_music_paused = False
+            self.current_music = asset_path
     
     def stop_music(self):
         LOGGER.debug(u'Stopping music.')

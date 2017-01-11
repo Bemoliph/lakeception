@@ -7,6 +7,7 @@ import pygame
 class PROJECT(object):
     NAME = u'Lakeception'
     DESC = u'Aww yeah, boats!'
+    URL="https://github.com/bemoliph/lakeception"
     VERSION = u'v0.0.0'
 
 

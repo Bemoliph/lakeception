@@ -1,6 +1,10 @@
 future==0.16.0
 noise==1.2.2
 pefile==2016.3.28
+pluggy==0.4.0
+py==1.4.32
 pygame==1.9.2
 PyInstaller==3.2
 pypiwin32==219
+tox==2.5.0
+virtualenv==15.1.0

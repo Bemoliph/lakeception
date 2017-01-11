@@ -54,7 +54,7 @@ class Grid(object):
     def get_tile_at_point(self, point):
         return self.tiles[self._point_to_index(point)]
     
-    def set_tile_at_point(self, point, tile)
+    def set_tile_at_point(self, point, tile):
         self.tiles[self._point_to_index(point)] = tile
     
     def get_tiles_in_rect(self, top_left, out_grid):

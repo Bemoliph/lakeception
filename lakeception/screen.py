@@ -5,7 +5,6 @@ import pygame
 
 from const import DISPLAY, PROJECT
 from grid import Grid
-from lakeutils import hex_to_rgb, hex_to_rgba
 
 LOGGER = logging.getLogger()
 
@@ -25,8 +24,7 @@ class Screen(object):
         self.clock = pygame.time.Clock()
         self.fps = DISPLAY.FPS
         
-        self.background_color = pygame.Color(0xFF0000FF)
-        #self.background_color = DISPLAY.BACKGROUND_COLOR
+        self.background_color = DISPLAY.BACKGROUND_COLOR
         
         self.world = world
         self.viewport_size = viewport_size
@@ -44,7 +42,7 @@ class Screen(object):
             for x in xrange(0, view_width):
                 tile = self.world.terrain.get_tile_at_point((a + x, b + y))
                 tile_width, tile_height = tile.get_size()
-                pos = (x * tile_width + x, y * tile_height + y)
+                pos = (x * tile_width, y * tile_height)
                 
                 self.window.blit(tile, pos)
         

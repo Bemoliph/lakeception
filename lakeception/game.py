@@ -5,7 +5,7 @@ import pygame
 
 from audio import Audio
 from const import EVENTS
-#from input import Input
+from input import Input
 from screen import Screen
 from texture_factory import TextureFactory
 from world import World
@@ -26,16 +26,19 @@ class Game(object):
         Audio.pre_init()
         
         pygame.init()
+        
+        # Set up TextureFactory AFTER initializing pygame.
         TextureFactory.init()
         
         self.world = World()
         self.audio = Audio()
-        #self.input = Input()
+        self.input = Input()
         self.screen = Screen(self.world)
         
         self.event_router = {
-            pygame.QUIT: self.quit,
-            
+            pygame.QUIT    : self.on_quit,
+            pygame.KEYUP   : self.input.on_key,
+            pygame.KEYDOWN : self.input.on_key,
         }
         
     
@@ -55,7 +58,7 @@ class Game(object):
         # Fall-through here ends the program naturally
     
     def tick(self):
-        LOGGER.debug(u'Starting game tick.')
+        #LOGGER.debug(u'Starting game tick.')
         # Process any events sent since last tick.
         for event in pygame.event.get():
             if event.type in self.event_router:
@@ -68,9 +71,9 @@ class Game(object):
             self.screen.draw()
             self.is_updated = False
         
-        LOGGER.debug(u'Exiting game tick.')
+        #LOGGER.debug(u'Exiting game tick.')
     
-    def quit(self, event):
+    def on_quit(self, event):
         LOGGER.debug(u'Quit requested by user.')
         # TODO: Save game state, other tear-down.
         

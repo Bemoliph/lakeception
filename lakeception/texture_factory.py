@@ -21,6 +21,7 @@ class TextureFactory(object):
         key = (text, color.normalize())
         
         if key not in cls.surface_cache:
+            LOGGER.debug(u'Generating texture for %s', key)
             # Render and crop text surface
             text_surface = cls.tile_font.render(text, True, color)
             cropped = text_surface.subsurface(text_surface.get_bounding_rect())

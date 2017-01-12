@@ -10,6 +10,7 @@ LOGGER = logging.getLogger()
 
 class World(object):
     def __init__(self):
+        LOGGER.debug(u'Initializing World.')
         size = (5, 5)
         tiles = [
             TextureFactory.get_text_tile_surface(x)

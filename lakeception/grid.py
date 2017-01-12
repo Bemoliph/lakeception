@@ -12,10 +12,10 @@ class Grid(object):
         self.size = None
         self.tiles = None
         
-        if not tiles:
-            tiles = [fill] * (size[0] * size[1])
-        
-        self.set_tiles(tiles, size)
+        if tiles:
+            self.set_tiles(tiles, size)
+        else:
+            self.set_size(size)
     
     def __getitem__(self, key):
         return self.tiles.__getitem__(key)
@@ -85,15 +85,27 @@ class Grid(object):
                 tile = in_grid.get_tile_at_point((x, y))
                 self.set_tile_at_point((a + x, b + y), tile)
     
+    def is_valid_size(self, size):
+        if not all(type(x) == int for x in size):
+            raise TypeError(u'Grid dimensions must be of type int, gave ({}, {})'.format(*map(type, size)))
+        else:
+            return True
+    
+    def set_size(self, size):
+        if self.size != size and self.is_valid_size(size):
+            tiles = [None] * (size[0] * size[1])
+            self.set_tiles(tiles, size)
+    
     def set_tiles(self, tiles, size):
-        width, height = size
-        expected_count = width * height
-        actual_count = len(tiles)
-        
-        if expected_count != actual_count:
-            raise ValueError(u'Tile count does not match dimensions: {}x{}={} but got {} tiles.'.format(
-                width, height, expected_count, actual_count,
-            ))
-        
-        self.size = size
-        self.tiles = tiles
+        if self.is_valid_size(size):
+            width, height = size
+            expected_count = width * height
+            actual_count = len(tiles)
+            
+            if expected_count != actual_count:
+                raise ValueError(u'Tile count does not match dimensions: {}x{}={} but got {} tiles.'.format(
+                    width, height, expected_count, actual_count,
+                ))
+            
+            self.size = size
+            self.tiles = tiles

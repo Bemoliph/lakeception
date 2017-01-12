@@ -2,8 +2,18 @@
 
 import logging
 
+from grid import Grid
+from texture_factory import TextureFactory
+
 LOGGER = logging.getLogger()
 
 
 class World(object):
-    pass
+    def __init__(self):
+        size = (5, 5)
+        tiles = [
+            TextureFactory.get_text_tile_surface(x)
+            for x in u'╔═══╗║123║║456║║789║╚═══╝'
+        ]
+        
+        self.terrain = Grid(size, tiles=tiles)

@@ -22,8 +22,8 @@ class Audio(object):
             self.is_music_paused = False
             self.current_music = None
     
-    @staticmethod
-    def pre_init():
+    @classmethod
+    def pre_init(cls):
         LOGGER.debug(u'Pre-Initializing Audio.')
         
         # TODO: Load audio settings from config file; detect frequency?

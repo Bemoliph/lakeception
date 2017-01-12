@@ -61,7 +61,7 @@ def log_unhandled_exceptions(func):
         try:
             func(*args, **kwargs)
         except Exception as e:
-            LOGGER = logging.getLogger('{}.main'.format(PROJECT.NAME))
+            LOGGER = logging.getLogger()
             LOGGER.exception(u'%s has crashed from an Unhandled Exception!', PROJECT.NAME)
     
     return wrapper

@@ -7,7 +7,8 @@ from audio import Audio
 from const import EVENTS
 #from input import Input
 from screen import Screen
-#from world import World
+from texture_factory import TextureFactory
+from world import World
 
 LOGGER = logging.getLogger()
 
@@ -25,11 +26,12 @@ class Game(object):
         Audio.pre_init()
         
         pygame.init()
+        TextureFactory.init()
         
-        #self.world = World()
+        self.world = World()
         self.audio = Audio()
         #self.input = Input()
-        self.screen = Screen()
+        self.screen = Screen(self.world)
         
         self.event_router = {
             pygame.QUIT: self.quit,

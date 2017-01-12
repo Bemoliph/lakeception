@@ -14,7 +14,11 @@ class PROJECT(object):
 class DISPLAY(object):
     FPS = 60
     ICON = os.path.join(u'assets', u'icon.png')
-    BACKGROUND_COLOR = 0x000000
+    BACKGROUND_COLOR = pygame.Color(0x000000FF)
+    TILE_PIXEL_SIZE = (32, 32)
+    TILE_FONT_SIZE = 32
+    TILE_FONT_COLOR = pygame.Color(0xFFFFFFFF)
+    FONT = u'Courier New'
 
 
 class EVENTS(object):

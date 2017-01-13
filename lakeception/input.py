@@ -31,6 +31,10 @@ class Input(object):
         
         self.keybinds = {
             pygame.K_ESCAPE: self.quit,
+            pygame.K_UP:     self.move,
+            pygame.K_DOWN:   self.move,
+            pygame.K_LEFT:   self.move,
+            pygame.K_RIGHT:  self.move,
         }
     
     def on_key(self, event):
@@ -38,6 +42,20 @@ class Input(object):
         LOGGER.debug(u'on_key(%s)', event)
         if event.key in self.keybinds:
             self.keybinds[event.key](event)
+
+    def move(self, event):
+        u"""Moves the player in the chosen direction."""
+        if event.type == pygame.KEYDOWN:
+            moves = {
+                pygame.K_UP: (0, -1),   # Grid expands from top left to bottom right,
+                pygame.K_DOWN: (0, 1),  # so going up and down are "reversed".
+                pygame.K_LEFT: (-1, 0),
+                pygame.K_RIGHT: (1, 0),
+            }
+
+            EventHandler.publish(EventHandler.UI_EVENT, {u'move': moves[event.key]})
+
+            return True
     
     def quit(self, event):
         u"""Closes the game."""

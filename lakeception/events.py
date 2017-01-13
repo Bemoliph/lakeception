@@ -22,18 +22,17 @@ class EventHandler(object):
 
     To unsubscribe from an event, pass the original Subscription object to EventHandler.unsubscribe().
     """
-    # PyGame's version of SDL exposes only 9 user-defined events, listed here
+    # PyGame's version of SDL exposes only 8 user-defined events, listed here
     # for convenience.  Rename and use free event IDs as needed.
     WORLD_TICK = pygame.USEREVENT + 0
     WORLD_TICK_RATE = 1000
     GAME_UPDATED = pygame.USEREVENT + 1
-    USEREVENT_3 = pygame.USEREVENT + 2
+    UI_EVENT = pygame.USEREVENT + 2
     USEREVENT_4 = pygame.USEREVENT + 3
     USEREVENT_5 = pygame.USEREVENT + 4
     USEREVENT_6 = pygame.USEREVENT + 5
     USEREVENT_7 = pygame.USEREVENT + 6
     USEREVENT_8 = pygame.USEREVENT + 7
-    USEREVENT_9 = pygame.USEREVENT + 8
 
     SUBSCRIPTIONS = {}
 

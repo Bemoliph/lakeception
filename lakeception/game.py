@@ -37,6 +37,12 @@ class Game(object):
         self.input = Input()
         self.screen = Screen(self.world)
 
+        # Listen for changes to game or UI state so we know when to draw
+        EventHandler.subscribe(Subscription(
+            EventHandler.UI_EVENT, self.on_updated,
+            priority=0, is_permanent=True,
+        ))
+
         # Listen for quits to handle them gracefully
         EventHandler.subscribe(Subscription(
             pygame.QUIT, self.on_quit,
@@ -72,6 +78,12 @@ class Game(object):
         if self.is_updated:
             self.screen.draw()
             self.is_updated = False
+
+    def on_updated(self, event):
+        if hasattr(event, 'is_updated'):
+            self.is_updated = event.is_updated
+
+            return True
     
     def on_quit(self, event):
         LOGGER.debug(u'Quit requested by user.')

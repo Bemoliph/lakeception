@@ -4,6 +4,7 @@ import logging
 import pygame
 
 from const import PROJECT
+from events import EventHandler, Subscription
 from lakeutils import get_abs_asset_path
 
 LOGGER = logging.getLogger()
@@ -37,6 +38,24 @@ class Screen(object):
         self.world = world
         self.viewport_size = viewport_size
         self.viewport_pos = (0, 0)
+
+        # TODO TEMP: Set up keys to move camera
+        EventHandler.subscribe(Subscription(
+            EventHandler.UI_EVENT, self.on_move,
+            priority=0, is_permanent=True,
+        ))
+
+    def on_move(self, event):
+        if hasattr(event, 'move'):
+            LOGGER.debug(u'on_move(%s)', event)
+            self.move_viewport((
+                self.viewport_pos[0] + event.move[0],
+                self.viewport_pos[1] + event.move[1]
+            ))
+
+            EventHandler.publish(EventHandler.UI_EVENT, {u'is_updated': True})
+
+            return True
     
     def move_viewport(self, top_left):
         u"""

@@ -3,7 +3,7 @@
 import logging
 import pygame
 
-from texture_factory import TextureFactory
+from surface_factory import SurfaceFactory
 
 LOGGER = logging.getLogger()
 
@@ -52,4 +52,4 @@ class Tile(object):
         self.color = color
         self.desc = desc if desc else glyph
 
-        self.surface = TextureFactory.get_glyph_surface(glyph, color)
+        self.surface = SurfaceFactory.get_glyph_surface(glyph, color)

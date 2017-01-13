@@ -7,7 +7,7 @@ from audio import Audio
 from const import EVENTS
 from input import Input
 from screen import Screen
-from texture_factory import TextureFactory
+from surface_factory import SurfaceFactory
 from world import World
 
 LOGGER = logging.getLogger()
@@ -30,7 +30,7 @@ class Game(object):
         pygame.init()
         
         # Set up TextureFactory AFTER initializing pygame.
-        TextureFactory.init()
+        SurfaceFactory.init()
         
         self.world = World()
         self.audio = Audio()

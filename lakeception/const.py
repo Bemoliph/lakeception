@@ -13,17 +13,6 @@ class PROJECT(object):
     ASSETS_FOLDER = u'assets'
 
 
-class DISPLAY(object):
-    FPS = 60
-    BACKGROUND_COLOR = pygame.Color(u'black')
-
-    FONT = u'Courier New'
-
-    TILE_PIXEL_SIZE = (32, 32)
-    TILE_FONT_SIZE = 32
-    TILE_FONT_COLOR = pygame.Color(u'white')
-
-
 class EVENTS(object):
     # PyGame's version of SDL exposes only 9 user-defined events, listed here
     # for convenience.  Rename and use free event IDs as needed.

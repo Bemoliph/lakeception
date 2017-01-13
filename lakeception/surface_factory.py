@@ -3,19 +3,19 @@
 import logging
 import pygame
 
-from const import DISPLAY
+from screen import Screen
 
 LOGGER = logging.getLogger()
 
 
-class TextureFactory(object):
+class SurfaceFactory(object):
     u"""Handles generating and caching textures (pygame.Surface) used throughout the game."""
 
     surface_cache = {}
     tile_font = None
     
     @classmethod
-    def get_glyph_surface(cls, glyph, color=DISPLAY.TILE_FONT_COLOR, need_unique=False):
+    def get_glyph_surface(cls, glyph, color=Screen.TILE_FONT_COLOR, need_unique=False):
         u"""
         Generates a square Surface containing the given glyph, centered and colored.
 
@@ -41,8 +41,8 @@ class TextureFactory(object):
             cropped = text_surface.subsurface(text_surface.get_bounding_rect())
             
             # Center text in standard size square tile_font
-            tile = pygame.Surface(DISPLAY.TILE_PIXEL_SIZE)
-            tile.fill(DISPLAY.BACKGROUND_COLOR)
+            tile = pygame.Surface(Screen.TILE_PIXEL_SIZE)
+            tile.fill(Screen.BACKGROUND_COLOR)
             
             tile_width, tile_height = tile.get_size()
             cropped_width, cropped_height = cropped.get_size()
@@ -63,4 +63,4 @@ class TextureFactory(object):
     @classmethod
     def init(cls):
         u"""Configures the texture factory.  Must be called after pygame.init()"""
-        cls.tile_font = pygame.font.SysFont(DISPLAY.FONT, DISPLAY.TILE_FONT_SIZE)
+        cls.tile_font = pygame.font.SysFont(Screen.FONT, Screen.TILE_FONT_SIZE)

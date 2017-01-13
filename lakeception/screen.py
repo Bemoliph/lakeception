@@ -3,7 +3,7 @@
 import logging
 import pygame
 
-from const import DISPLAY, PROJECT
+from const import PROJECT
 from lakeutils import get_abs_asset_path
 
 LOGGER = logging.getLogger()
@@ -11,6 +11,15 @@ LOGGER = logging.getLogger()
 
 class Screen(object):
     u"""Handles display setup and draw calls."""
+
+    FPS = 60
+    BACKGROUND_COLOR = pygame.Color(u'black')
+
+    FONT = u'Courier New'
+
+    TILE_PIXEL_SIZE = (32, 32)
+    TILE_FONT_SIZE = 32
+    TILE_FONT_COLOR = pygame.Color(u'white')
 
     def __init__(self, world, resolution=(640, 480), viewport_size=(20, 15)):
         LOGGER.debug(u'Initializing Screen at res=%s', resolution)
@@ -24,9 +33,6 @@ class Screen(object):
         
         # Set up frame rate limiter
         self.clock = pygame.time.Clock()
-        self.fps = DISPLAY.FPS
-        
-        self.background_color = DISPLAY.BACKGROUND_COLOR
         
         self.world = world
         self.viewport_size = viewport_size
@@ -60,11 +66,11 @@ class Screen(object):
         u"""Main draw call that draws the entire screen, inclusive of all steps."""
         LOGGER.debug(u'Redrawing screen.')
         
-        self.window.fill(self.background_color)
+        self.window.fill(self.BACKGROUND_COLOR)
         
         self.draw_viewport()
         
         pygame.display.update()
         
         # Waste any remaining time to achieve desired frame rate.
-        time_delta = self.clock.tick(self.fps)
+        time_delta = self.clock.tick(self.FPS)

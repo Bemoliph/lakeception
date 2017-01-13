@@ -77,7 +77,7 @@ class TestGrid(unittest.TestCase):
         
         point = (1, 3)
         expected_tile = u'7'
-        actual_tile = g.get_item_at_point(point)
+        actual_tile = g.get_at_point(point)
         
         self.assertEqual(
             expected_tile, actual_tile,
@@ -91,7 +91,7 @@ class TestGrid(unittest.TestCase):
         
         point = (8, 7)
         expected_tile = u'6'
-        actual_tile = g.get_item_at_point(point)
+        actual_tile = g.get_at_point(point)
         
         self.assertEqual(
             expected_tile, actual_tile,
@@ -219,7 +219,7 @@ class TestGrid(unittest.TestCase):
         point = (1, 2) # u'4'
         index = 11
         
-        g.set_item_at_point(point, expected_tile)
+        g.set_at_point(point, expected_tile)
         actual_tile = g[index]
         
         self.assertEqual(
@@ -236,7 +236,7 @@ class TestGrid(unittest.TestCase):
         point = (13, 7) # u'6'
         index = 13
         
-        g.set_item_at_point(point, expected_tile)
+        g.set_at_point(point, expected_tile)
         actual_tile = g[index]
         
         self.assertEqual(
@@ -252,7 +252,7 @@ class TestGrid(unittest.TestCase):
         x = Grid(size=(3, 3))
         top_left = (1, 1)
         
-        g.get_items_in_area(top_left, x)
+        g.get_in_area(top_left, x)
         
         expected_tiles = list(u'123456789')
         actual_tiles = x.items
@@ -270,7 +270,7 @@ class TestGrid(unittest.TestCase):
         x = Grid(size=(3, 3))
         top_left = (3, 3)
         
-        g.get_items_in_area(top_left, x)
+        g.get_in_area(top_left, x)
         
         expected_tiles = list(u'9║║═╝╚═╗╔')
         actual_tiles = x.items
@@ -288,7 +288,7 @@ class TestGrid(unittest.TestCase):
         x = Grid(size=(3, 3), fill=u'x')
         top_left = (1, 1)
         
-        g.set_items_from_grid(top_left, x)
+        g.set_from_grid(top_left, x)
         
         expected_tiles = list(u'╔═══╗║xxx║║xxx║║xxx║╚═══╝')
         actual_tiles = g.items
@@ -306,7 +306,7 @@ class TestGrid(unittest.TestCase):
         x = Grid(size=(3, 3), fill=u'x')
         top_left = (3, 3)
         
-        g.set_items_from_grid(top_left, x)
+        g.set_from_grid(top_left, x)
         
         expected_tiles = list(u'x══xx║123║║456║x78xxx══xx')
         actual_tiles = g.items

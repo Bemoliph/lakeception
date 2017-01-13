@@ -6,7 +6,7 @@ LOGGER = logging.getLogger()
 
 
 class Grid(object):
-    u"""A rectangular grid that can store any mixture of types.  Supports coordinate-based access."""
+    u"""A 2D rectangular grid that can store any mixture of types.  Supports coordinate-based access."""
     def __init__(self, size, items=None):
         LOGGER.debug(u'Initializing Grid of size=%s', size)
         
@@ -14,7 +14,7 @@ class Grid(object):
         self.items = None
         
         if items:
-            self.set_items(items, size)
+            self.set_contents(items, size)
         else:
             self.set_size(size)
     
@@ -31,7 +31,7 @@ class Grid(object):
         return unicode(self.__str__())
     
     def __str__(self):
-        return u'<{}.{} object at 0x{:X}, size={}>'.format(
+        return '<{}.{} object at 0x{:X}, size={}>'.format(
             self.__class__.__module__,
             self.__class__.__name__,
             id(self),
@@ -65,7 +65,7 @@ class Grid(object):
         
         return i1 == i2
     
-    def get_item_at_point(self, point):
+    def get_at_point(self, point):
         u"""
         Retrieves the object stored at the given point.
 
@@ -74,7 +74,7 @@ class Grid(object):
         """
         return self.items[self._point_to_index(point)]
     
-    def set_item_at_point(self, point, item):
+    def set_at_point(self, point, item):
         u"""
         Stores the object at the given coordinate.
 
@@ -83,7 +83,7 @@ class Grid(object):
         """
         self.items[self._point_to_index(point)] = item
     
-    def get_items_in_area(self, top_left, out_grid):
+    def get_in_area(self, top_left, out_grid):
         u"""
         Fills another grid with the contents of this grid, based on target grid's size and starting from top_left.
 
@@ -97,10 +97,10 @@ class Grid(object):
         # Fill out_grid with items from self
         for y in xrange(b, b + height):
             for x in xrange(a, a + width):
-                item = self.get_item_at_point((x, y))
-                out_grid.set_item_at_point((x - a, y - b), item)
+                item = self.get_at_point((x, y))
+                out_grid.set_at_point((x - a, y - b), item)
     
-    def set_items_from_grid(self, top_left, in_grid):
+    def set_from_grid(self, top_left, in_grid):
         u"""
         Copies the contents of another grid to this grid, pasting it starting at top_left.
 
@@ -114,8 +114,8 @@ class Grid(object):
         # Fill self with items from in_grid
         for y in xrange(0, height):
             for x in xrange(0, width):
-                item = in_grid.get_item_at_point((x, y))
-                self.set_item_at_point((a + x, b + y), item)
+                item = in_grid.get_at_point((x, y))
+                self.set_at_point((a + x, b + y), item)
     
     def is_valid_size(self, size):
         if not all(type(x) == int for x in size):
@@ -132,13 +132,13 @@ class Grid(object):
         """
         if self.size != size and self.is_valid_size(size):
             items = [None] * (size[0] * size[1])
-            self.set_items(items, size)
+            self.set_contents(items, size)
 
             return True
         else:
             return False
     
-    def set_items(self, items, size):
+    def set_contents(self, items, size):
         u"""
         Replaces the grid's items with the given items.
 

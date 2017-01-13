@@ -37,7 +37,6 @@ class Screen(object):
         Moves the view of the game world to a new location, starting top left and ending bottom right.
 
         :param top_left: (x, y) coordinate
-        :return:
         """
         self.viewport_pos = top_left
     
@@ -49,7 +48,7 @@ class Screen(object):
         # Layer 0: Draw Terrain Tiles
         for y in xrange(0, view_height):
             for x in xrange(0, view_width):
-                surface = self.world.terrain.get_item_at_point((a + x, b + y)).surface
+                surface = self.world.terrain.get_at_point((a + x, b + y)).surface
                 surface_width, surface_height = surface.get_size()
                 pos = (x * surface_width, y * surface_height)
                 

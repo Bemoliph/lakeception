@@ -14,6 +14,7 @@ LOGGER = logging.getLogger()
 
 
 class Game(object):
+    u"""Central point for initializing all other game components and host of main game loop."""
     def __init__(self):
         LOGGER.debug(u'Initializing Game.')
         
@@ -21,6 +22,7 @@ class Game(object):
         self.is_quitting = False
         # When True, the screen will redraw. Set via const.EVENTS.GAME_UPDATED
         self.is_updated = True
+        self.is_running = False
         
         # Set up audio BEFORE initializing pygame.
         Audio.pre_init()
@@ -36,42 +38,43 @@ class Game(object):
         self.screen = Screen(self.world)
         
         self.event_router = {
-            pygame.QUIT    : self.on_quit,
-            pygame.KEYUP   : self.input.on_key,
-            pygame.KEYDOWN : self.input.on_key,
+            pygame.QUIT: self.on_quit,
+            pygame.KEYUP: self.input.on_key,
+            pygame.KEYDOWN: self.input.on_key,
         }
-        
     
     def start(self):
-        LOGGER.debug(u'Starting main game loop.')
-        # Set a generic, repeating event to represent "time" passing in-world.
-        pygame.time.set_timer(
-            EVENTS.WORLD_TICK,
-            EVENTS.WORLD_TICK_RATE
-        )
-        
-        # Main game loop!
-        while not self.is_quitting:
-            self.tick()
-        
-        LOGGER.debug(u'Exiting main game loop.')
-        # Fall-through here ends the program naturally
+        u"""Initiates the main game loop, starting the game."""
+        if not self.is_running:
+            LOGGER.debug(u'Starting main game loop.')
+            self.is_running = True
+
+            # Set a generic, repeating event to represent "time" passing in-world.
+            pygame.time.set_timer(
+                EVENTS.WORLD_TICK,
+                EVENTS.WORLD_TICK_RATE
+            )
+
+            # Main game loop!
+            while not self.is_quitting:
+                self.tick()
+
+            LOGGER.debug(u'Exiting main game loop.')
+            self.is_running = False
+            # Fall-through here ends the game naturally
     
     def tick(self):
-        #LOGGER.debug(u'Starting game tick.')
-        # Process any events sent since last tick.
+        u"""Main game loop logic.  Called once per iteration of main game loop."""
+        # Process any events sent since last tick:
         for event in pygame.event.get():
             if event.type in self.event_router:
-                # Call the function associated with this event type,
-                # passing the event details.
-                func = self.event_router[event.type]
-                func(event)
-        
+                # Call the function associated with this event type
+                self.event_router[event.type](event)
+
+        # Redraw the screen as necessary:
         if self.is_updated:
             self.screen.draw()
             self.is_updated = False
-        
-        #LOGGER.debug(u'Exiting game tick.')
     
     def on_quit(self, event):
         LOGGER.debug(u'Quit requested by user.')

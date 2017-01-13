@@ -24,7 +24,7 @@ class TestGrid(unittest.TestCase):
         g = Grid(size=(width, height), fill=fill_tile)
         
         self.assertTrue(
-            all(x == fill_tile for x in g.tiles),
+            all(x == fill_tile for x in g.items),
             u'g should be empty, but at least one element is not.'
         )
     
@@ -35,7 +35,7 @@ class TestGrid(unittest.TestCase):
         g = Grid(size=(width, height), fill=fill_tile)
         
         self.assertTrue(
-            all(x == fill_tile for x in g.tiles),
+            all(x == fill_tile for x in g.items),
             u'g should be filled with {}, but at least one element is not.'.format(
                 fill_tile
             )
@@ -47,7 +47,7 @@ class TestGrid(unittest.TestCase):
         g = Grid(size=(width, height))
         
         expected_count = width * height
-        actual_count = len(g.tiles)
+        actual_count = len(g.items)
         
         self.assertEqual(
             expected_count, actual_count,
@@ -57,15 +57,15 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_set_tiles_contents(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         self.assertEqual(
-            g.tiles, self.pipe_tiles,
+            g.items, self.pipe_tiles,
             u'Tile contents didn\'t match input contents.'
         )
     
     def test_set_tiles_size(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         self.assertEqual(
             g.size, self.pipe_size,
@@ -73,11 +73,11 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_get_tile_at_point(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (1, 3)
         expected_tile = u'7'
-        actual_tile = g.get_tile_at_point(point)
+        actual_tile = g.get_item_at_point(point)
         
         self.assertEqual(
             expected_tile, actual_tile,
@@ -87,11 +87,11 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_get_tile_at_point_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (8, 7)
         expected_tile = u'6'
-        actual_tile = g.get_tile_at_point(point)
+        actual_tile = g.get_item_at_point(point)
         
         self.assertEqual(
             expected_tile, actual_tile,
@@ -101,7 +101,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_point_to_index(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (3, 1) # u'3'
         expected_index = 8
@@ -115,7 +115,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_point_to_index_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (11, 12) # u'4'
         expected_index = 11
@@ -129,7 +129,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_point_to_index_negative(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (-2, -3) # u'6'
         expected_index = 13
@@ -143,7 +143,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_point_to_index_negative_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         point = (-12, -2) # u'9'
         expected_index = 18
@@ -157,7 +157,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_index_to_point(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         index = 17 # u'8'
         expected_point = (2, 3)
@@ -171,7 +171,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_index_to_point_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         index = 32 # u'2'
         expected_point = (2, 1)
@@ -185,7 +185,7 @@ class TestGrid(unittest.TestCase):
         )
         
     def test_index_to_point_negative(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         index = -8 # u'8'
         expected_point = (2, 3)
@@ -199,7 +199,7 @@ class TestGrid(unittest.TestCase):
         )
         
     def test_index_to_point_negative_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         index = -67 # u'3'
         expected_point = (3, 1)
@@ -213,13 +213,13 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_set_tile_at_point(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         expected_tile = u'x'
         point = (1, 2) # u'4'
         index = 11
         
-        g.set_tile_at_point(point, expected_tile)
+        g.set_item_at_point(point, expected_tile)
         actual_tile = g[index]
         
         self.assertEqual(
@@ -230,13 +230,13 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_set_tile_at_point_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         expected_tile = u'x'
         point = (13, 7) # u'6'
         index = 13
         
-        g.set_tile_at_point(point, expected_tile)
+        g.set_item_at_point(point, expected_tile)
         actual_tile = g[index]
         
         self.assertEqual(
@@ -247,15 +247,15 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_get_tiles_in_rect(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         x = Grid(size=(3, 3))
         top_left = (1, 1)
         
-        g.get_tiles_in_rect(top_left, x)
+        g.get_items_in_area(top_left, x)
         
         expected_tiles = list(u'123456789')
-        actual_tiles = x.tiles
+        actual_tiles = x.items
         
         self.assertEqual(
             expected_tiles, actual_tiles,
@@ -265,15 +265,15 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_get_tiles_in_rect_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         x = Grid(size=(3, 3))
         top_left = (3, 3)
         
-        g.get_tiles_in_rect(top_left, x)
+        g.get_items_in_area(top_left, x)
         
         expected_tiles = list(u'9║║═╝╚═╗╔')
-        actual_tiles = x.tiles
+        actual_tiles = x.items
         
         self.assertEqual(
             expected_tiles, actual_tiles,
@@ -283,15 +283,15 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_set_tiles_in_rect(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         x = Grid(size=(3, 3), fill=u'x')
         top_left = (1, 1)
         
-        g.set_tiles_in_rect(top_left, x)
+        g.set_items_from_grid(top_left, x)
         
         expected_tiles = list(u'╔═══╗║xxx║║xxx║║xxx║╚═══╝')
-        actual_tiles = g.tiles
+        actual_tiles = g.items
         
         self.assertEqual(
             expected_tiles, actual_tiles,
@@ -301,15 +301,15 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_set_tiles_in_rect_wrap(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         x = Grid(size=(3, 3), fill=u'x')
         top_left = (3, 3)
         
-        g.set_tiles_in_rect(top_left, x)
+        g.set_items_from_grid(top_left, x)
         
         expected_tiles = list(u'x══xx║123║║456║x78xxx══xx')
-        actual_tiles = g.tiles
+        actual_tiles = g.items
         
         self.assertEqual(
             expected_tiles, actual_tiles,
@@ -319,7 +319,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_is_equivalent_point(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         p1 = (-8, -2) # u'8'
         p2 = ( 2,  3) # u'8'
@@ -332,7 +332,7 @@ class TestGrid(unittest.TestCase):
         )
     
     def test_is_not_equivalent_point(self):
-        g = Grid(size=self.pipe_size, tiles=self.pipe_tiles)
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
         p1 = (-8, -2) # u'8'
         p2 = ( 1,  3) # u'7'

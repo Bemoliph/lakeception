@@ -11,18 +11,14 @@ from const import PROJECT
 
 LOGGER = logging.getLogger()
 
+
 def _parse_args(args):
-    '''
-    Parses arguments from a argv format.
+    u"""
+    Parses arguments from an argv format.
 
-    Parameters
-    ----------
-    args : list of str
-
-    Returns
-    -------
-    argparse.ArgumentParser
-    '''
+    :param args: list of str
+    :return: argparse.ArgumentParser
+    """
     parser = argparse.ArgumentParser(
         prog=PROJECT.NAME.lower(),
         description=u'{} {} - {}'.format(
@@ -52,26 +48,25 @@ def _parse_args(args):
     
     return parser.parse_args(args)
 
+
 def log_unhandled_exceptions(func):
-    '''
-    Catches unhandled exceptions to make sure they get logged.
-    '''
-    
+    u"""Catches unhandled exceptions to make sure they get logged."""
     def wrapper(*args, **kwargs):
         try:
             func(*args, **kwargs)
-        except Exception as e:
-            LOGGER = logging.getLogger()
+        except Exception:
             LOGGER.exception(u'%s has crashed from an Unhandled Exception!', PROJECT.NAME)
     
     return wrapper
 
+
 # Use wrapper for crash logging so it happens regardless of how the game is run.
-# Without this, we'd have to duplicate the try/except in __main__.py to cover
+# Without this, we'd have to duplicate the try/except in `__main__.py` to cover
 # `python -m lakeception` vs `python lakeception/main.py` vs `bin/lakeception`.
 @log_unhandled_exceptions
-def run(args):
-    args = _parse_args(args)
+def run(raw_args):
+    u"""Launches the game.  Entry point to all code."""
+    args = _parse_args(raw_args)
     
     # Configure logging
     if args.verbose or args.debug:
@@ -82,7 +77,7 @@ def run(args):
     logging.basicConfig(
         filename=u'{}.log'.format(PROJECT.NAME),
         format=u'%(asctime)s - %(levelname)8s - %(pathname)s:%(lineno)d - %(message)s',
-		datefmt=u'%Y-%m-%d %H:%M:%S',
+        datefmt=u'%Y-%m-%d %H:%M:%S',
         level=log_level,
     )
     
@@ -103,4 +98,4 @@ if __name__ == u'__main__':
     # is run directly from arbitrary working directories.
     os.chdir(os.path.join(os.path.dirname(__file__), u'..'))
     
-    run(sys.argv[1:])
+    run(sys.argv)

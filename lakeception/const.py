@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
 import pygame
 
 
 class PROJECT(object):
     NAME = u'Lakeception'
     DESC = u'Aww yeah, boats!'
-    URL="https://github.com/bemoliph/lakeception"
+    URL = u'https://github.com/bemoliph/lakeception'
     VERSION = u'0.0.0'
+    ASSETS_FOLDER = u'assets'
 
 
 class DISPLAY(object):
     FPS = 60
-    ICON = u'assets/icon.png'
+    ICON = u'icon.png'
     BACKGROUND_COLOR = pygame.Color(0x000000FF)
     TILE_PIXEL_SIZE = (32, 32)
     TILE_FONT_SIZE = 32

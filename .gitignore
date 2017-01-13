@@ -10,6 +10,9 @@ env/
 venv/
 pyvenv.cfg
 
+# IDEs
+.idea/
+
 # pyinstaller
 build/
 dist/

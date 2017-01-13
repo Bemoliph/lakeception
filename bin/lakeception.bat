@@ -3,5 +3,5 @@
 set CURPATH=%cd%
 set BINPATH=%~dp0
 cd "%BINPATH%\.."
-python -m lakeception %*
+start pythonw -m lakeception %*
 cd "%CURPATH%"

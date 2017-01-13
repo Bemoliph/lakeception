@@ -1,4 +1,4 @@
-# lakeception
+# lakeception [![Build status](https://ci.appveyor.com/api/projects/status/q6lm2fh9qojx6vsw/branch/master?svg=true)](https://ci.appveyor.com/project/Bemoliph/lakeception/branch/master)
 ![http://i.imgur.com/CHjSPCG.gif](http://i.imgur.com/CHjSPCG.gif)
 
 Aww yeah, boats!

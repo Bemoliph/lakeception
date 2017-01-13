@@ -21,7 +21,7 @@ def _parse_args(args):
     """
     parser = argparse.ArgumentParser(
         prog=PROJECT.NAME.lower(),
-        description=u'{} {} - {}'.format(
+        description=u'{} v{} - {}'.format(
             PROJECT.NAME,
             PROJECT.VERSION,
             PROJECT.DESC,

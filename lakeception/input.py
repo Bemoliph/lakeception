@@ -3,7 +3,7 @@
 import logging
 import pygame
 
-from const import EVENTS
+from events import EventHandler, Subscription
 
 LOGGER = logging.getLogger()
 
@@ -18,6 +18,16 @@ class Input(object):
         repeat_delay = 35      # time between first press and start of repeats
         repeat_interval = 75   # time between each repeat
         pygame.key.set_repeat(repeat_delay, repeat_interval)
+
+        # Listen for KEYUP and KEYDOWN events
+        EventHandler.subscribe(Subscription(
+            pygame.KEYUP, self.on_key,
+            priority=0, is_permanent=True
+        ))
+        EventHandler.subscribe(Subscription(
+            pygame.KEYDOWN, self.on_key,
+            priority=0, is_permanent=True
+        ))
         
         self.keybinds = {
             pygame.K_ESCAPE: self.quit,
@@ -32,4 +42,4 @@ class Input(object):
     def quit(self, event):
         u"""Closes the game."""
         if event.type == pygame.KEYDOWN:
-            pygame.event.post(pygame.event.Event(pygame.QUIT, {}))
+            EventHandler.publish(pygame.QUIT)

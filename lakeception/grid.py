@@ -27,9 +27,6 @@ class Grid(object):
     def __delitem__(self, key):
         self.items.__delitem__(key)
     
-    def __unicode__(self):
-        return unicode(self.__str__())
-    
     def __str__(self):
         return '<{}.{} object at 0x{:X}, size={}>'.format(
             self.__class__.__module__,
@@ -37,6 +34,9 @@ class Grid(object):
             id(self),
             self.size
         )
+
+    def __unicode__(self):
+        return unicode(self.__str__())
     
     def _point_to_index(self, point):
         x, y = point

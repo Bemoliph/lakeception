@@ -4,7 +4,7 @@ import logging
 import pygame
 
 from audio import Audio
-from const import EVENTS
+from events import EventHandler, Subscription
 from input import Input
 from screen import Screen
 from surface_factory import SurfaceFactory
@@ -36,12 +36,12 @@ class Game(object):
         self.audio = Audio()
         self.input = Input()
         self.screen = Screen(self.world)
-        
-        self.event_router = {
-            pygame.QUIT: self.on_quit,
-            pygame.KEYUP: self.input.on_key,
-            pygame.KEYDOWN: self.input.on_key,
-        }
+
+        # Listen for quits to handle them gracefully
+        EventHandler.subscribe(Subscription(
+            pygame.QUIT, self.on_quit,
+            priority=0, is_permanent=True,
+        ))
     
     def start(self):
         u"""Initiates the main game loop, starting the game."""
@@ -51,8 +51,8 @@ class Game(object):
 
             # Set a generic, repeating event to represent "time" passing in-world.
             pygame.time.set_timer(
-                EVENTS.WORLD_TICK,
-                EVENTS.WORLD_TICK_RATE
+                EventHandler.WORLD_TICK,
+                EventHandler.WORLD_TICK_RATE
             )
 
             # Main game loop!
@@ -66,10 +66,7 @@ class Game(object):
     def tick(self):
         u"""Main game loop logic.  Called once per iteration of main game loop."""
         # Process any events sent since last tick:
-        for event in pygame.event.get():
-            if event.type in self.event_router:
-                # Call the function associated with this event type
-                self.event_router[event.type](event)
+        EventHandler.pump()
 
         # Redraw the screen as necessary:
         if self.is_updated:

@@ -17,7 +17,7 @@ class Screen(object):
         
         # Set Window Title and Icon
         pygame.display.set_caption(PROJECT.NAME)
-        pygame.display.set_icon(pygame.image.load(get_abs_asset_path(DISPLAY.ICON)))
+        pygame.display.set_icon(pygame.image.load(get_abs_asset_path(PROJECT.ICON)))
         
         # Set Window Size
         self.window = pygame.display.set_mode(resolution)

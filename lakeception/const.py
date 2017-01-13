@@ -8,17 +8,20 @@ class PROJECT(object):
     DESC = u'Aww yeah, boats!'
     URL = u'https://github.com/bemoliph/lakeception'
     VERSION = u'0.0.0'
+    ICON = u'icon.png'
+
     ASSETS_FOLDER = u'assets'
 
 
 class DISPLAY(object):
     FPS = 60
-    ICON = u'icon.png'
-    BACKGROUND_COLOR = pygame.Color(0x000000FF)
+    BACKGROUND_COLOR = pygame.Color(u'black')
+
+    FONT = u'Courier New'
+
     TILE_PIXEL_SIZE = (32, 32)
     TILE_FONT_SIZE = 32
-    TILE_FONT_COLOR = pygame.Color(0xFFFFFFFF)
-    FONT = u'Courier New'
+    TILE_FONT_COLOR = pygame.Color(u'white')
 
 
 class EVENTS(object):

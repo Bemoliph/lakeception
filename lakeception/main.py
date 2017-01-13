@@ -98,4 +98,4 @@ if __name__ == u'__main__':
     # is run directly from arbitrary working directories.
     os.chdir(os.path.join(os.path.dirname(__file__), u'..'))
     
-    run(sys.argv)
+    run(sys.argv[1:])

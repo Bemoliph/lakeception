@@ -46,14 +46,14 @@ class Screen(object):
         a, b = self.viewport_pos
         view_width, view_height = self.viewport_size
         
-        # Layer 0: Draw Terrain
+        # Layer 0: Draw Terrain Tiles
         for y in xrange(0, view_height):
             for x in xrange(0, view_width):
-                tile = self.world.terrain.get_item_at_point((a + x, b + y))
-                tile_width, tile_height = tile.get_size()
-                pos = (x * tile_width, y * tile_height)
+                surface = self.world.terrain.get_item_at_point((a + x, b + y)).surface
+                surface_width, surface_height = surface.get_size()
+                pos = (x * surface_width, y * surface_height)
                 
-                self.window.blit(tile, pos)
+                self.window.blit(surface, pos)
         
         # Layer 1: Draw Entities
     

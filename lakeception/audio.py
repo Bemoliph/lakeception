@@ -21,6 +21,8 @@ class Audio(object):
             # stopped, so pauses need to be tracked manually.
             self.is_music_paused = False
             self.current_music = None
+            
+            self.play_music(u'assets/audio/60507__juskiddink__waves2.ogg')
     
     @classmethod
     def pre_init(cls):

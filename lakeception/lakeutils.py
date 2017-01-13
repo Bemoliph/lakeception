@@ -10,7 +10,7 @@ def get_file_path(asset_path):
     if os.path.isabs(asset_path):
         return asset_path
     else:
-        return os.path.join(os.path.abspath("."), asset_path)
+        return os.path.normpath(os.path.join(os.path.abspath("."), asset_path))
 
 def asset_exists(asset_path):
     '''Determines if asset exists at given path.'''

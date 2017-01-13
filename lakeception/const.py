@@ -13,7 +13,7 @@ class PROJECT(object):
 
 class DISPLAY(object):
     FPS = 60
-    ICON = os.path.join(u'assets', u'icon.png')
+    ICON = u'assets/icon.png'
     BACKGROUND_COLOR = pygame.Color(0x000000FF)
     TILE_PIXEL_SIZE = (32, 32)
     TILE_FONT_SIZE = 32

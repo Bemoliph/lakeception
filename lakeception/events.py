@@ -7,9 +7,20 @@ LOGGER = logging.getLogger()
 
 
 class EventHandler(object):
-    """
+    u"""
     Event handler that combines PyGame/SDL events and pub-sub.
 
+    The event queue should be processed once per main game loop tick via EventHandler.pump().
+
+    To publish an event, call EventHandler.publish() (e.g., publish(pygame.QUIT) to signal a quit).
+
+    To subscribe to an event, pass a Subscription object to EventHandler.subscribe().  If is_permanent=False, the
+    subscription will be automatically unsubscribed after the callback is executed.
+
+    Callbacks are functions that take one argument in the form of function_name(event_object).  Optionally, a callback
+    may return True to indicate the event it just processed should not propagate further to other subscribers.
+
+    To unsubscribe from an event, pass the original Subscription object to EventHandler.unsubscribe().
     """
     # PyGame's version of SDL exposes only 9 user-defined events, listed here
     # for convenience.  Rename and use free event IDs as needed.
@@ -28,10 +39,11 @@ class EventHandler(object):
 
     @classmethod
     def pump(cls):
+        u"""Processes all events in the queue.  Should be called once per main game loop tick."""
         for event in pygame.event.get():
-            if cls.event_has_subscriptions(event.type):
+            if cls.event_has_subscribers(event.type):
                 # Execute the callbacks subscribed to this event type
-                for subscription in cls.SUBSCRIPTIONS[event.type]:
+                for subscription in sorted(cls.SUBSCRIPTIONS[event.type], key=lambda x: x.priority):
                     stop_propagation = subscription.callback(event)
 
                     # Remove one-time subscribers
@@ -44,10 +56,22 @@ class EventHandler(object):
 
     @classmethod
     def publish(cls, event_type, payload={}):
+        u"""
+        Sends an event to all subscribers of that event type.
+
+        :param event_type: See events.EventHandler and pygame.event for available event types.
+        :param payload: Optional dict containing extra data.
+        """
         pygame.event.post(pygame.event.Event(event_type, payload))
 
     @classmethod
     def subscribe(cls, subscription):
+        u"""
+        Subscribes to all events of the specified type, which trigger the given callback.
+
+        :param subscription: The events.Subscription object to subscribe.
+        :return: The same events.Subscription object passed in for easy chaining.
+        """
         event_type = subscription.event_type
 
         if event_type not in cls.SUBSCRIPTIONS:
@@ -55,25 +79,54 @@ class EventHandler(object):
 
         cls.SUBSCRIPTIONS[event_type].add(subscription)
 
+        return subscription
+
     @classmethod
     def unsubscribe(cls, subscription):
+        u"""
+        Unsubscribe from the specified event type.
+
+        :param subscription: The events.Subscription object to unsubscribe.
+        """
         event_type = subscription.event_type
 
         if cls.is_subscribed(subscription):
             cls.SUBSCRIPTIONS[event_type].remove(subscription)
 
     @classmethod
-    def event_has_subscriptions(cls, event_type):
+    def event_has_subscribers(cls, event_type):
+        u"""
+        Determines if the given event type has any subscribers.
+
+        :param event_type: See events.EventHandler and pygame.event for available event types.
+        :return: True if event_type has subscribers, else False.
+        """
         return event_type in cls.SUBSCRIPTIONS and len(cls.SUBSCRIPTIONS[event_type])
 
     @classmethod
     def is_subscribed(cls, subscription):
+        u"""
+        Determines if the Subscription is active.
+
+        :param subscription: The events.Subscription object to check on.
+        :return: True if Subscription is active, else False.
+        """
         event_type = subscription.event_type
         return event_type in cls.SUBSCRIPTIONS and subscription in cls.SUBSCRIPTIONS[event_type]
 
 
 class Subscription(object):
-    def __init__(self, event_type, callback, priority, is_permanent=False):
+    u"""A simple container to give subscription details nice names."""
+    def __init__(self, event_type, callback, priority=3, is_permanent=False):
+        u"""
+        Creates a new Subscription object, which must still be registered with EventHandler.subscribe().
+
+        :param event_type: See events.EventHandler and pygame.event for available event types.
+        :param callback: Reference to a function of the form function_name(event_object).  If the callback returns True,
+        the event just processed will not propagate further to other subscribers.
+        :param priority: Int that influences subscriber processing order.  Lower is more likely to see the event first.
+        :param is_permanent:
+        """
         self.event_type = event_type
         self.callback = callback
         self.priority = priority

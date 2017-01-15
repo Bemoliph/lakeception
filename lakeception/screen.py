@@ -4,7 +4,7 @@ import logging
 import pygame
 
 from const import PROJECT
-from events import EventHandler, Subscription
+from events import EventHandler, Subscription, EVENTS, SUBEVENTS
 from lakeutils import get_abs_asset_path
 
 LOGGER = logging.getLogger()
@@ -19,8 +19,9 @@ class Screen(object):
     FONT = u'Courier New'
 
     TILE_PIXEL_SIZE = (32, 32)
-    TILE_FONT_SIZE = 32
-    TILE_FONT_COLOR = pygame.Color(u'white')
+    # Font size is in pixels, so match font height to tile height
+    TILE_FONT_SIZE = TILE_PIXEL_SIZE[1]
+    TILE_FONT_DEFAULT_COLOR = pygame.Color(u'white')
 
     def __init__(self, world, resolution=(640, 480), viewport_size=(20, 15)):
         LOGGER.debug(u'Initializing Screen at res=%s', resolution)
@@ -36,51 +37,65 @@ class Screen(object):
         self.clock = pygame.time.Clock()
         
         self.world = world
-        self.viewport_size = viewport_size
-        self.viewport_pos = (0, 0)
 
-        # TODO TEMP: Set up keys to move camera
+        self.viewport_size = viewport_size
+        self.viewport_topleft = (0, 0)
+        self.viewport_center = (0, 0)
+        self.move_viewport((3, 3))
+
         EventHandler.subscribe(Subscription(
-            EventHandler.UI_EVENT, self.on_move,
+            EVENTS.UI_EVENT, self.on_move,
             priority=0, is_permanent=True,
         ))
 
     def on_move(self, event):
-        if hasattr(event, 'move'):
-            LOGGER.debug(u'on_move(%s)', event)
-            self.move_viewport((
-                self.viewport_pos[0] + event.move[0],
-                self.viewport_pos[1] + event.move[1]
-            ))
+        if hasattr(event, u'subtype') and event.subtype == SUBEVENTS.MOVE:
+            self.move_viewport(event.entity.pos)
 
-            EventHandler.publish(EventHandler.UI_EVENT, {u'is_updated': True})
+            EventHandler.publish(EVENTS.UI_EVENT, None, {
+                u'is_updated': True,
+            })
 
             return True
     
-    def move_viewport(self, top_left):
+    def move_viewport(self, center):
         u"""
         Moves the view of the game world to a new location, starting top left and ending bottom right.
 
-        :param top_left: (x, y) coordinate
+        :param center: (x, y) coordinate.
         """
-        self.viewport_pos = top_left
-    
+        self.viewport_center = center
+
+        x, y = center
+        width, height = self.viewport_size
+        self.viewport_topleft = (x - width // 2, y - height // 2)
+
+    def _get_topmost_drawable_object(self, point):
+        u"""
+        Gets the top-most drawable object present at the point.
+
+        Since all Surfaces have a solid-colored background, an Entity completely occludes the underlying terrain
+        regardless of size or shape.  Consequently, we can safely not draw an underlying Tile wherever an Entity is.
+
+        :param point: (x, y) coordinate.
+        :return: entity.Entity if present, else tile.Tile
+        """
+        return self.world.ent_man.get_at(point) or self.world.terrain.get_at_point(point)
+
     def draw_viewport(self):
         u"""Draws the view of the game world, including terrain and entities."""
-        a, b = self.viewport_pos
+        # Layer 0: Terrain + Entities
+        left, top = self.viewport_topleft
         view_width, view_height = self.viewport_size
-        
-        # Layer 0: Draw Terrain Tiles
+
         for y in xrange(0, view_height):
             for x in xrange(0, view_width):
-                surface = self.world.terrain.get_at_point((a + x, b + y)).surface
+                surface = self._get_topmost_drawable_object((left + x, top + y)).surface
                 surface_width, surface_height = surface.get_size()
+
                 pos = (x * surface_width, y * surface_height)
-                
                 self.window.blit(surface, pos)
-        
-        # Layer 1: Draw Entities
-    
+
     def draw(self):
         u"""Main draw call that draws the entire screen, inclusive of all steps."""
         LOGGER.debug(u'Redrawing screen.')

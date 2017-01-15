@@ -6,6 +6,33 @@ import pygame
 LOGGER = logging.getLogger()
 
 
+class EVENTS(object):
+    u"""
+    Primary event types left unused by PyGame + SDL for our custom use.
+
+    Only 8 user-defined events are allowed by PyGame's version of SDL, so use sparingly.  See events.SUBEVENTS for a
+    mechanism to add unlimited subtypes to an event.
+    """
+    WORLD_TICK = pygame.USEREVENT + 0
+    GAME_UPDATED = pygame.USEREVENT + 1
+    UI_EVENT = pygame.USEREVENT + 2
+    ENTITY_EVENT = pygame.USEREVENT + 3
+    USEREVENT_5 = pygame.USEREVENT + 4
+    USEREVENT_6 = pygame.USEREVENT + 5
+    USEREVENT_7 = pygame.USEREVENT + 6
+    USEREVENT_8 = pygame.USEREVENT + 7
+
+
+class SUBEVENTS(object):
+    u"""
+    Secondary event types that add resolution to the limited quantity "official" user events.
+
+    Examples here include breaking down what a UI_EVENT actually means or further specifying the kind of action an
+    Entity took to make the event more coherent and more likely to reach the intended recipient.
+    """
+    MOVE = 0
+
+
 class EventHandler(object):
     u"""
     Event handler that combines PyGame/SDL events and pub-sub.
@@ -22,17 +49,7 @@ class EventHandler(object):
 
     To unsubscribe from an event, pass the original Subscription object to EventHandler.unsubscribe().
     """
-    # PyGame's version of SDL exposes only 8 user-defined events, listed here
-    # for convenience.  Rename and use free event IDs as needed.
-    WORLD_TICK = pygame.USEREVENT + 0
     WORLD_TICK_RATE = 1000
-    GAME_UPDATED = pygame.USEREVENT + 1
-    UI_EVENT = pygame.USEREVENT + 2
-    USEREVENT_4 = pygame.USEREVENT + 3
-    USEREVENT_5 = pygame.USEREVENT + 4
-    USEREVENT_6 = pygame.USEREVENT + 5
-    USEREVENT_7 = pygame.USEREVENT + 6
-    USEREVENT_8 = pygame.USEREVENT + 7
 
     SUBSCRIPTIONS = {}
 
@@ -54,13 +71,17 @@ class EventHandler(object):
                         continue
 
     @classmethod
-    def publish(cls, event_type, payload={}):
+    def publish(cls, event_type, event_subtype=None, payload={}):
         u"""
         Sends an event to all subscribers of that event type.
 
-        :param event_type: See events.EventHandler and pygame.event for available event types.
+        :param event_type: See events.EVENTS and pygame.event for available event types.
+        :param event_subtype: events.SUBEVENTS for available subevent types.
         :param payload: Optional dict containing extra data.
         """
+        if event_subtype != None:
+            payload[u'subtype'] = event_subtype
+
         pygame.event.post(pygame.event.Event(event_type, payload))
 
     @classmethod

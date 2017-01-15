@@ -343,3 +343,18 @@ class TestGrid(unittest.TestCase):
                 p1, p2
             )
         )
+
+    def test_wrap_point_is_equivalent(self):
+        g = Grid(size=self.pipe_size, items=self.pipe_tiles)
+
+        p1 = (3, 2)
+        p2 = (8, 7)
+
+        p2_wrapped = g.get_wrapped_point(p2)
+
+        self.assertTrue(
+            p2_wrapped == p1,
+            u'{} is equivalent to {}, got {} instead.'.format(
+                p2, p1, p2_wrapped
+            )
+        )

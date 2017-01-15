@@ -34,7 +34,7 @@ class TileFactory(object):
         key = (glyph, color.normalize(), desc)
 
         if need_unique or key not in cls.tile_cache:
-            tile = Tile(glyph, color, desc)
+            tile = Tile(glyph, color, desc, need_unique)
 
             if need_unique:
                 return tile
@@ -46,10 +46,10 @@ class TileFactory(object):
 
 class Tile(object):
     u"""A simple terrain tile within the world."""
-    def __init__(self, glyph, color, desc):
+    def __init__(self, glyph, color, desc, need_unique):
         LOGGER.debug(u'Generating Tile for %s', (glyph, color.normalize(), desc))
         self.glyph = glyph
         self.color = color
         self.desc = desc if desc else glyph
 
-        self.surface = SurfaceFactory.get_glyph_surface(glyph, color)
+        self.surface = SurfaceFactory.get_glyph_surface(glyph, color, need_unique)

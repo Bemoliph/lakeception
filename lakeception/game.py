@@ -4,7 +4,7 @@ import logging
 import pygame
 
 from audio import Audio
-from events import EventHandler, Subscription
+from events import EventHandler, Subscription, EVENTS
 from input import Input
 from screen import Screen
 from surface_factory import SurfaceFactory
@@ -34,12 +34,12 @@ class Game(object):
         
         self.world = World()
         self.audio = Audio()
-        self.input = Input()
+        self.input = Input(self.world.player)
         self.screen = Screen(self.world)
 
         # Listen for changes to game or UI state so we know when to draw
         EventHandler.subscribe(Subscription(
-            EventHandler.UI_EVENT, self.on_updated,
+            EVENTS.UI_EVENT, self.on_updated,
             priority=0, is_permanent=True,
         ))
 
@@ -57,7 +57,7 @@ class Game(object):
 
             # Set a generic, repeating event to represent "time" passing in-world.
             pygame.time.set_timer(
-                EventHandler.WORLD_TICK,
+                EVENTS.WORLD_TICK,
                 EventHandler.WORLD_TICK_RATE
             )
 

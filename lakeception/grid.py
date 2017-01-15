@@ -51,13 +51,25 @@ class Grid(object):
         y = index // width % 5
         
         return x, y
-    
+
+    def get_wrapped_point(self, point):
+        u"""
+        Wraps the given point's coordinates to an equivalent location within the grid's dimensions.
+
+        :param point: Potentially out-of-bounds (x, y) coordinate.
+        :return: Equivalent point within the grid's dimensions.
+        """
+        x, y = point
+        width, height = self.size
+
+        return x % width, y % height
+
     def is_equivalent_point(self, p1, p2):
         u"""
         Determines if two points are equivalent in terms of a wrapping coordinate system.
 
-        :param p1: (x, y) coordinate
-        :param p2: (x, y) coordinate
+        :param p1: (x, y) coordinate.
+        :param p2: (x, y) coordinate.
         :return: True if both points refer to the same location.  False if they are distinct locations.
         """
         i1 = self._point_to_index(p1)
@@ -69,7 +81,7 @@ class Grid(object):
         u"""
         Retrieves the object stored at the given point.
 
-        :param point: (x, y) coordinate within the grid.
+        :param point: (x, y) coordinate.
         :return: The object stored at the given point.
         """
         return self.items[self._point_to_index(point)]
@@ -78,7 +90,7 @@ class Grid(object):
         u"""
         Stores the object at the given coordinate.
 
-        :param point: (x, y) coordinate within the grid.
+        :param point: (x, y) coordinate.
         :param item: The object to be stored at the given point.
         """
         self.items[self._point_to_index(point)] = item
@@ -114,7 +126,7 @@ class Grid(object):
         # Fill self with items from in_grid
         for y in xrange(0, height):
             for x in xrange(0, width):
-                item = in_grid.get_at_point((x, y))
+                item = in_grid.get_at((x, y))
                 self.set_at_point((a + x, b + y), item)
     
     def is_valid_size(self, size):

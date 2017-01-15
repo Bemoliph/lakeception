@@ -15,7 +15,7 @@ class SurfaceFactory(object):
     tile_font = None
     
     @classmethod
-    def get_glyph_surface(cls, glyph, color=Screen.TILE_FONT_COLOR, need_unique=False):
+    def get_glyph_surface(cls, glyph, color=Screen.TILE_FONT_DEFAULT_COLOR, need_unique=False):
         u"""
         Generates a square Surface containing the given glyph, centered and colored.
 

@@ -3,6 +3,8 @@
 import logging
 import pygame
 
+from entity import Entity
+from entity_manager import EntityManager
 from grid import Grid
 from tile import TileFactory
 
@@ -20,3 +22,7 @@ class World(object):
         ]
 
         self.terrain = Grid(size, items=tiles)
+        self.ent_man = EntityManager(self)
+
+        self.player = Entity(u'@', pygame.Color(u'red'), u'the player', need_unique_surface=True)
+        self.ent_man.add(self.player)

@@ -3,7 +3,7 @@
 import logging
 import pygame
 
-from events import EventHandler, Subscription
+from events import EventHandler, Subscription, EVENTS, SUBEVENTS
 
 LOGGER = logging.getLogger()
 
@@ -14,7 +14,9 @@ class Input(object):
 
     Inputs interpreted here publish events to be interpreted by subscribed objects according to their own logic.
     """
-    def __init__(self):
+    def __init__(self, player):
+        self.player = player
+
         repeat_delay = 35      # time between first press and start of repeats
         repeat_interval = 75   # time between each repeat
         pygame.key.set_repeat(repeat_delay, repeat_interval)
@@ -39,7 +41,6 @@ class Input(object):
     
     def on_key(self, event):
         u"""Routes KEYUP and KEYDOWN events to the correct function according to the key involved."""
-        LOGGER.debug(u'on_key(%s)', event)
         if event.key in self.keybinds:
             self.keybinds[event.key](event)
 
@@ -53,7 +54,10 @@ class Input(object):
                 pygame.K_RIGHT: (1, 0),
             }
 
-            EventHandler.publish(EventHandler.UI_EVENT, {u'move': moves[event.key]})
+            EventHandler.publish(EVENTS.UI_EVENT, SUBEVENTS.MOVE, {
+                u'vector': moves[event.key],
+                u'entity': self.player,
+            })
 
             return True
     

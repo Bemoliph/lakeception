@@ -1,44 +1,45 @@
 {
     "name": "Jungle Biome",
+    "id": 1,
     "tiles": {
         "water": {
-            "description": "some water",
-            "glyphs": ".",
-            "color": "62707D",
-            "adjacentTiles": [],
-            "collidable": false
+            "desc": "some water",
+            "glyph": ".",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
         },
         "empty water": {
-            "description": "some water",
-            "glyphs": " ",
-            "color": "62707D",
-            "adjacentTiles": [],
-            "collidable": false
+            "desc": "some water",
+            "glyph": " ",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
         },
         "vegetation": {
-            "description": "a patch of jungle vegetation",
-            "glyphs": "T",
-            "color": "438C15",
-            "adjacentTiles": [],
-            "collidable": true
+            "desc": "a patch of jungle vegetation",
+            "glyph": "T",
+            "color": "#438C15",
+            "adjacent_tiles": [],
+            "is_collidable": true
         },
         "dark vegetation": {
-            "description": "a patch of jungle vegetation",
-            "glyphs": "T",
-            "color": "316610",
-            "adjacentTiles": [],
-            "collidable": true
+            "desc": "a patch of jungle vegetation",
+            "glyph": "T",
+            "color": "#316610",
+            "adjacent_tiles": [],
+            "is_collidable": true
         },
         "sand": {
-            "description": "a sandy beach",
-            "glyphs": "#",
-            "color": "FFF495",
-            "adjacentTiles": [],
-            "collidable": true
+            "desc": "a sandy beach",
+            "glyph": "#",
+            "color": "#FFF495",
+            "adjacent_tiles": [],
+            "is_collidable": true
         }
     },
     "elevations": {
-        "defaultTiles": [["water", 1]],
+        "default": [["water", 1]],
         "9": [["empty water", 1]],
         "10": [["empty water", 1]],
         "11": [["empty water", 1]],

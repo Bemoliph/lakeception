@@ -91,7 +91,7 @@ def run(raw_args):
         LOGGER.debug(u'Beginning main game loop.')
         g.start()
         
-        LOGGER.info(u'Stopping: User requested to quit.')
+        LOGGER.info(u'Stopping %s.', PROJECT.NAME)
 
 if __name__ == u'__main__':
     # Fix current working directory so assets aren't "missing" when main.py

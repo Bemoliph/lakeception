@@ -2,6 +2,7 @@
 
 import logging
 import os
+import random
 
 from const import PROJECT
 
@@ -34,3 +35,13 @@ def asset_exists(asset_path):
         LOGGER.warning(u'Referenced missing asset: %s', asset_path)
     
     return exists
+
+
+# See "Giving up the temporary list"
+# http://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python
+def get_weighted_random_choice(ordered_weights):
+    rnd = random.random() * sum(ordered_weights)
+    for index, weight in enumerate(ordered_weights):
+        rnd -= weight
+        if rnd < 0:
+            return index

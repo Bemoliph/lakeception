@@ -79,7 +79,7 @@ class EventHandler(object):
         :param event_subtype: events.SUBEVENTS for available subevent types.
         :param payload: Optional dict containing extra data.
         """
-        if event_subtype != None:
+        if event_subtype is not None:
             payload[u'subtype'] = event_subtype
 
         pygame.event.post(pygame.event.Event(event_type, payload))

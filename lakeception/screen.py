@@ -18,12 +18,12 @@ class Screen(object):
 
     FONT = u'Courier New'
 
-    TILE_PIXEL_SIZE = (32, 32)
+    TILE_PIXEL_SIZE = (16, 16)
     # Font size is in pixels, so match font height to tile height
     TILE_FONT_SIZE = TILE_PIXEL_SIZE[1]
     TILE_FONT_DEFAULT_COLOR = pygame.Color(u'white')
 
-    def __init__(self, world, resolution=(640, 480), viewport_size=(20, 15)):
+    def __init__(self, world, resolution=(640, 480), viewport_size=(40, 30)):
         LOGGER.debug(u'Initializing Screen at res=%s', resolution)
         
         # Set Window Title and Icon
@@ -80,7 +80,7 @@ class Screen(object):
         :param point: (x, y) coordinate.
         :return: entity.Entity if present, else tile.Tile
         """
-        return self.world.ent_man.get_at(point) or self.world.terrain.get_at_point(point)
+        return self.world.entities.get_at(point) or self.world.terrain.get_at_point(point)
 
     def draw_viewport(self):
         u"""Draws the view of the game world, including terrain and entities."""

@@ -1,44 +1,45 @@
 {
     "name": "Volcanic Island Biome",
+    "id": 2,
     "tiles": {
         "water": {
-            "description": "some water",
-            "glyphs": ".",
-            "color": "62707D",
-            "adjacentTiles": [],
-            "collidable": false
+            "desc": "some water",
+            "glyph": ".",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
         },
         "empty water": {
-            "description": "some water",
-            "glyphs": " ",
-            "color": "62707D",
-            "adjacentTiles": [],
-            "collidable": false
+            "desc": "some water",
+            "glyph": " ",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
         },
         "volcanic ash": {
-            "description": "a volcanic island",
-            "glyphs": "#",
-            "color": "3f5427",
-            "adjacentTiles": [],
-            "collidable": false
+            "desc": "a volcanic island",
+            "glyph": "#",
+            "color": "#3f5427",
+            "adjacent_tiles": [],
+            "is_collidable": true
         },
         "volcanic rock": {
-            "description": "a piece of volcanic rock",
-            "glyphs": "#",
-            "color": "544C49",
-            "adjacentTiles": [],
-            "collidable": true
+            "desc": "a piece of volcanic rock",
+            "glyph": "#",
+            "color": "#544C49",
+            "adjacent_tiles": [],
+            "is_collidable": true
         },
         "lava": {
-            "description": "a pool of lava",
-            "glyphs": "L",
-            "color": "C95632",
-            "adjacentTiles": [],
-            "collidable": true
+            "desc": "a pool of lava",
+            "glyph": "L",
+            "color": "#C95632",
+            "adjacent_tiles": [],
+            "is_collidable": true
         }
     },
     "elevations": {
-        "defaultTiles": [["water", 1]],
+        "default": [["water", 1]],
         "9": [["empty water", 1]],
         "10": [["empty water", 1]],
         "11": [["empty water", 1]],

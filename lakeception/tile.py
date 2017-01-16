@@ -13,7 +13,7 @@ class TileFactory(object):
     tile_cache = {}
 
     @classmethod
-    def get_tile(cls, glyph, color, desc, need_unique=False):
+    def get_tile(cls, glyph, color, desc, is_collidable, need_unique=False):
         u"""
         Generates a Tile with graphic based on given glyph and color.
 
@@ -24,6 +24,7 @@ class TileFactory(object):
         :param glyph: The text to graphically represent this Tile, usually a single character (a "glyph").
         :param color: The color of the glyph.
         :param desc: A short description of the Tile, to be shown when the player inspects the Tile.
+        :param is_collidable: If True, the Tile will be considered solid and impassable.
         :param need_unique: If True, a new Tile will be generated and not cached.
         :return: lakeception.Tile
         """
@@ -31,10 +32,10 @@ class TileFactory(object):
             color = pygame.Color(color)
 
         # Use the generic RGBA tuple so whole Color objects don't pile up.
-        key = (glyph, color.normalize(), desc)
+        key = (glyph, color.normalize(), desc, is_collidable)
 
         if need_unique or key not in cls.tile_cache:
-            tile = Tile(glyph, color, desc, need_unique)
+            tile = Tile(glyph, color, desc, is_collidable, need_unique)
 
             if need_unique:
                 return tile
@@ -46,10 +47,11 @@ class TileFactory(object):
 
 class Tile(object):
     u"""A simple terrain tile within the world."""
-    def __init__(self, glyph, color, desc, need_unique):
+    def __init__(self, glyph, color, desc, is_collidable, need_unique):
         LOGGER.debug(u'Generating Tile for %s', (glyph, color.normalize(), desc))
         self.glyph = glyph
         self.color = color
         self.desc = desc if desc else glyph
+        self.is_collidable = is_collidable
 
         self.surface = SurfaceFactory.get_glyph_surface(glyph, color, need_unique)

@@ -33,13 +33,13 @@ class EntityManager(object):
             entity = event.entity
             vector = event.vector
 
-            entity.pos = self.world.terrain.get_wrapped_point((
-                entity.pos[0] + vector[0],
-                entity.pos[1] + vector[1]
-            ))
+            destination = (entity.pos[0] + vector[0], entity.pos[1] + vector[1])
 
-            if not self.entities.is_balanced:
-                self.entities.rebalance()
+            if not self.world.terrain.get_at_point(destination).is_collidable:
+                entity.pos = self.world.terrain.get_wrapped_point(destination)
+
+                if not self.entities.is_balanced:
+                    self.entities.rebalance()
 
         return False  # Don't end event; camera needs to update too
 

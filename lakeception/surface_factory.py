@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from screen import Screen
+from lakeception.screen import Screen
 
 LOGGER = logging.getLogger()
 
@@ -13,7 +15,7 @@ class SurfaceFactory(object):
 
     surface_cache = {}
     tile_font = None
-    
+
     @classmethod
     def get_glyph_surface(cls, glyph, color=Screen.TILE_FONT_DEFAULT_COLOR, need_unique=False):
         u"""
@@ -30,36 +32,36 @@ class SurfaceFactory(object):
         """
         if not isinstance(color, pygame.Color):
             color = pygame.Color(color)
-        
+
         # Use the generic RGBA tuple so whole Color objects don't pile up.
         key = (glyph, color.normalize())
-        
+
         if need_unique or key not in cls.surface_cache:
             LOGGER.debug(u'Generating texture for %s', key)
             # Render and crop text surface
             text_surface = cls.tile_font.render(glyph, True, color)
             cropped = text_surface.subsurface(text_surface.get_bounding_rect())
-            
+
             # Center text in standard size square tile_font
             tile = pygame.Surface(Screen.TILE_PIXEL_SIZE)
             tile.fill(Screen.BACKGROUND_COLOR)
-            
+
             tile_width, tile_height = tile.get_size()
             cropped_width, cropped_height = cropped.get_size()
             cropped_pos = (
                 (tile_width - cropped_width)/2.0,
                 (tile_height - cropped_height)/2.0
             )
-            
+
             tile.blit(cropped, cropped_pos)
 
             if need_unique:
                 return tile
             else:
                 cls.surface_cache[key] = tile
-        
+
         return cls.surface_cache[key]
-    
+
     @classmethod
     def init(cls):
         u"""Configures the texture factory.  Must be called after pygame.init()"""

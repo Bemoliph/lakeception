@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import json
 import logging
 import noise
 import os
 
-from lakeutils import get_abs_asset_path, get_weighted_random_choice
-from tile import TileFactory
+from lakeception.lakeutils import get_abs_asset_path, get_weighted_random_choice
+from lakeception.tile import TileFactory
 
 LOGGER = logging.getLogger()
 

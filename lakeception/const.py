@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 
 class PROJECT(object):
     NAME = u'Lakeception'

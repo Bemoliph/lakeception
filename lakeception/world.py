@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 import random
 
-from entity import Entity
-from entity_manager import EntityManager
-from grid import Grid
-from terrain import NoiseTerrain
+from lakeception.entity import Entity
+from lakeception.entity_manager import EntityManager
+from lakeception.grid import Grid
+from lakeception.terrain import NoiseTerrain
 
 LOGGER = logging.getLogger()
 

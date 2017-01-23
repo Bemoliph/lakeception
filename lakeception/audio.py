@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from lakeutils import asset_exists, get_abs_asset_path
+from lakeception.lakeutils import asset_exists, get_abs_asset_path
 
 LOGGER = logging.getLogger()
 
@@ -13,7 +15,7 @@ class Audio(object):
 
     def __init__(self):
         LOGGER.debug(u'Initializing Audio.')
-        
+
         try:
             pygame.mixer.init()
         except pygame.error:
@@ -30,7 +32,7 @@ class Audio(object):
     def pre_init(cls):
         u"""Configures pygame audio.  Must be called before pygame.init()"""
         LOGGER.debug(u'Pre-Initializing Audio.')
-        
+
         # TODO: Load audio settings from config file; detect frequency?
         pygame.mixer.pre_init(
             frequency=44100,
@@ -56,9 +58,9 @@ class Audio(object):
             LOGGER.debug(u'Playing sound: %s', asset_path)
             sound = pygame.mixer.Sound(get_abs_asset_path(asset_path))
             channel = sound.play(loops, max_time, fadein_time)
-            
+
             return sound, channel
-    
+
     def play_music(self, asset_path, loops=0, start_at=0.0, fadeout_time=1000):
         u"""
         Plays an audio file as "music".  Useful for long running audio.
@@ -75,31 +77,31 @@ class Audio(object):
             if self.is_playing_music() and fadeout_time:
                 LOGGER.debug(u'Fading out current music over %sms', fadeout_time)
                 pygame.mixer.music.fadeout(fadeout_time)
-            
+
             LOGGER.debug(u'Playing music: %s', asset_path)
             pygame.mixer.music.load(get_abs_asset_path(asset_path))
             pygame.mixer.music.play(loops, start_at)
-            
+
             self.is_music_paused = False
             self.current_music = asset_path
-    
+
     def stop_music(self):
         u"""Stops any currently playing music."""
         LOGGER.debug(u'Stopping music.')
         pygame.mixer.music.stop()
-    
+
     def pause_music(self):
         u"""Pauses any currently playing music."""
         LOGGER.debug(u'Pausing music.')
         pygame.mixer.music.pause()
         self.is_music_paused = True
-    
+
     def unpause_music(self):
         u"""Un-pauses any currently paused music."""
         LOGGER.debug(u'Unpausing music.')
         pygame.mixer.music.unpause()
         self.is_music_paused = False
-    
+
     def is_playing_music(self):
         u"""Determines if the music is playing, or paused or stopped."""
         return not self.is_music_paused and pygame.mixer.music.get_busy()

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from const import PROJECT
-from events import EventHandler, Subscription, EVENTS, SUBEVENTS
-from lakeutils import get_abs_asset_path
+from lakeception.const import PROJECT
+from lakeception.events import EventHandler, Subscription, EVENTS, SUBEVENTS
+from lakeception.lakeutils import get_abs_asset_path
 
 LOGGER = logging.getLogger()
 
@@ -25,17 +27,17 @@ class Screen(object):
 
     def __init__(self, world, resolution=(640, 480), viewport_size=(40, 30)):
         LOGGER.debug(u'Initializing Screen at res=%s', resolution)
-        
+
         # Set Window Title and Icon
         pygame.display.set_caption(PROJECT.NAME)
         pygame.display.set_icon(pygame.image.load(get_abs_asset_path(PROJECT.ICON)))
-        
+
         # Set Window Size
         self.window = pygame.display.set_mode(resolution)
-        
+
         # Set up frame rate limiter
         self.clock = pygame.time.Clock()
-        
+
         self.world = world
 
         self.viewport_size = viewport_size
@@ -57,7 +59,7 @@ class Screen(object):
             })
 
             return True
-    
+
     def move_viewport(self, center):
         u"""
         Moves the view of the game world to a new location, starting top left and ending bottom right.
@@ -99,12 +101,12 @@ class Screen(object):
     def draw(self):
         u"""Main draw call that draws the entire screen, inclusive of all steps."""
         LOGGER.debug(u'Redrawing screen.')
-        
+
         self.window.fill(self.BACKGROUND_COLOR)
-        
+
         self.draw_viewport()
-        
+
         pygame.display.update()
-        
+
         # Waste any remaining time to achieve desired frame rate.
         time_delta = self.clock.tick(self.FPS)

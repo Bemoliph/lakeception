@@ -1,9 +1,11 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import, division
 
 import logging
 import pygame
 
-from events import EventHandler, Subscription, EVENTS, SUBEVENTS
+from lakeception.events import EventHandler, Subscription, EVENTS, SUBEVENTS
 
 LOGGER = logging.getLogger()
 
@@ -30,7 +32,7 @@ class Input(object):
             pygame.KEYDOWN, self.on_key,
             priority=0, is_permanent=True
         ))
-        
+
         self.keybinds = {
             pygame.K_ESCAPE: self.quit,
             pygame.K_UP:     self.move,
@@ -38,7 +40,7 @@ class Input(object):
             pygame.K_LEFT:   self.move,
             pygame.K_RIGHT:  self.move,
         }
-    
+
     def on_key(self, event):
         u"""Routes KEYUP and KEYDOWN events to the correct function according to the key involved."""
         if event.key in self.keybinds:
@@ -60,7 +62,7 @@ class Input(object):
             })
 
             return True
-    
+
     def quit(self, event):
         u"""Closes the game."""
         if event.type == pygame.KEYDOWN:

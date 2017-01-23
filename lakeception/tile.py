@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from surface_factory import SurfaceFactory
+from lakeception.surface_factory import SurfaceFactory
 
 LOGGER = logging.getLogger()
 

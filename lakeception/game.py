@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from audio import Audio
-from events import EventHandler, Subscription, EVENTS
-from input import Input
-from screen import Screen
-from surface_factory import SurfaceFactory
-from world import World
+from lakeception.audio import Audio
+from lakeception.events import EventHandler, Subscription, EVENTS
+from lakeception.input import Input
+from lakeception.screen import Screen
+from lakeception.surface_factory import SurfaceFactory
+from lakeception.world import World
 
 LOGGER = logging.getLogger()
 
@@ -17,21 +19,21 @@ class Game(object):
     u"""Central point for initializing all other game components and host of main game loop."""
     def __init__(self):
         LOGGER.debug(u'Initializing Game.')
-        
+
         # When True, the game will close. Set via pygame.QUIT
         self.is_quitting = False
         # When True, the screen will redraw. Set via const.EVENTS.GAME_UPDATED
         self.is_updated = True
         self.is_running = False
-        
+
         # Set up audio BEFORE initializing pygame.
         Audio.pre_init()
-        
+
         pygame.init()
-        
+
         # Set up TextureFactory AFTER initializing pygame.
         SurfaceFactory.init()
-        
+
         self.world = World()
         self.audio = Audio()
         self.input = Input(self.world.player)
@@ -48,7 +50,7 @@ class Game(object):
             pygame.QUIT, self.on_quit,
             priority=0, is_permanent=True,
         ))
-    
+
     def start(self):
         u"""Initiates the main game loop, starting the game."""
         if not self.is_running:
@@ -68,7 +70,7 @@ class Game(object):
             LOGGER.debug(u'Exiting main game loop.')
             self.is_running = False
             # Fall-through here ends the game naturally
-    
+
     def tick(self):
         u"""Main game loop logic.  Called once per iteration of main game loop."""
         # Process any events sent since last tick:
@@ -84,10 +86,10 @@ class Game(object):
             self.is_updated = event.is_updated
 
             return True
-    
+
     def on_quit(self, event):
         LOGGER.debug(u'Quit requested by user.')
         # TODO: Save game state, other tear-down.
-        
+
         # Signal to main loop that it should end.
         self.is_quitting = True

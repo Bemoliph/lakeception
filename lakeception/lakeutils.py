@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import os
 import random
 
-from const import PROJECT
+from lakeception.const import PROJECT
 
 LOGGER = logging.getLogger()
 
@@ -30,10 +32,10 @@ def asset_exists(asset_path):
     :return: True if asset exists, False if asset doesn't exist.
     """
     exists = os.path.isfile(get_abs_asset_path(asset_path))
-    
+
     if not exists:
         LOGGER.warning(u'Referenced missing asset: %s', asset_path)
-    
+
     return exists
 
 

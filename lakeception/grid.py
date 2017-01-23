@@ -9,14 +9,15 @@ LOGGER = logging.getLogger()
 
 class Grid(object):
     u"""A 2D rectangular grid that can store any mixture of types.  Supports coordinate-based access."""
-    def __init__(self, size, items=None):
+    def __init__(self, size, items=[]):
         LOGGER.debug(u'Initializing Grid of size=%s', size)
 
+        # These get set below within set_contents() or set_size(), but listing their existence here for clarity.
         self.size = None
         self.items = None
 
         if items:
-            self.set_contents(items, size)
+            self.set_contents(size, items)
         else:
             self.set_size(size)
 
@@ -128,7 +129,7 @@ class Grid(object):
         # Fill self with items from in_grid
         for y in xrange(0, height):
             for x in xrange(0, width):
-                item = in_grid.get_at((x, y))
+                item = in_grid.get_at_point((x, y))
                 self.set_at_point((a + x, b + y), item)
 
     def is_valid_size(self, size):
@@ -146,18 +147,18 @@ class Grid(object):
         """
         if self.size != size and self.is_valid_size(size):
             items = [None] * (size[0] * size[1])
-            self.set_contents(items, size)
+            self.set_contents(size, items)
 
             return True
         else:
             return False
 
-    def set_contents(self, items, size):
+    def set_contents(self, size, items):
         u"""
         Replaces the grid's items with the given items.
 
-        :param items: Iterable of new items to use within the grid.
         :param size: New dimensions of the grid.  Area must match item count.
+        :param items: Iterable of new items to use within the grid.
         """
         if self.is_valid_size(size):
             width, height = size

@@ -21,24 +21,11 @@ class TestGrid(unittest.TestCase):
         width = 5
         height = 7
         fill_tile = None
-        g = Grid(size=(width, height), fill=fill_tile)
+        g = Grid(size=(width, height))
         
         self.assertTrue(
             all(x == fill_tile for x in g.items),
             u'g should be empty, but at least one element is not.'
-        )
-    
-    def test_filled_grid(self):
-        width = 5
-        height = 7
-        fill_tile = u'x'
-        g = Grid(size=(width, height), fill=fill_tile)
-        
-        self.assertTrue(
-            all(x == fill_tile for x in g.items),
-            u'g should be filled with {}, but at least one element is not.'.format(
-                fill_tile
-            )
         )
     
     def test_size_versus_count(self):
@@ -285,13 +272,19 @@ class TestGrid(unittest.TestCase):
     def test_set_tiles_in_rect(self):
         g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
-        x = Grid(size=(3, 3), fill=u'x')
+        x = Grid(size=(3, 3))
         top_left = (1, 1)
         
         g.set_from_grid(top_left, x)
-        
-        expected_tiles = list(u'╔═══╗║xxx║║xxx║║xxx║╚═══╝')
+
         actual_tiles = g.items
+        expected_tiles = [
+            u'╔', u'═', u'═', u'═', u'╗',
+            u'║', None, None, None,  u'║',
+            u'║', None, None, None,  u'║',
+            u'║', None, None, None,  u'║',
+            u'╚', u'═', u'═', u'═', u'╝',
+        ]
         
         self.assertEqual(
             expected_tiles, actual_tiles,
@@ -303,13 +296,20 @@ class TestGrid(unittest.TestCase):
     def test_set_tiles_in_rect_wrap(self):
         g = Grid(size=self.pipe_size, items=self.pipe_tiles)
         
-        x = Grid(size=(3, 3), fill=u'x')
+        x = Grid(size=(3, 3))
         top_left = (3, 3)
         
         g.set_from_grid(top_left, x)
         
         expected_tiles = list(u'x══xx║123║║456║x78xxx══xx')
         actual_tiles = g.items
+        expected_tiles = [
+            None, u'═', u'═', None, None,
+            u'║', u'1', u'2', u'3', u'║',
+            u'║', u'4', u'5', u'6', u'║',
+            None, u'7', u'8', None, None,
+            None, u'═', u'═', None, None,
+        ]
         
         self.assertEqual(
             expected_tiles, actual_tiles,

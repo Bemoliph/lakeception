@@ -6,6 +6,11 @@ import logging
 
 LOGGER = logging.getLogger()
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 
 class Grid(object):
     u"""A 2D rectangular grid that can store any mixture of types.  Supports coordinate-based access."""

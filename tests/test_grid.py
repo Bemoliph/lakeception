@@ -300,8 +300,7 @@ class TestGrid(unittest.TestCase):
         top_left = (3, 3)
         
         g.set_from_grid(top_left, x)
-        
-        expected_tiles = list(u'x══xx║123║║456║x78xxx══xx')
+
         actual_tiles = g.items
         expected_tiles = [
             None, u'═', u'═', None, None,

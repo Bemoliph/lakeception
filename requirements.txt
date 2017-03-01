@@ -1,2 +1,4 @@
 noise==1.2.2
-pygame==1.9.2
+pygame==1.9.3
+kdtree==0.15
+

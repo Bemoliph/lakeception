@@ -3,13 +3,10 @@
 block_cipher = None
 
 a = Analysis(
-        ['main.py'],
-        pathex=[],
+        ['lakeception/main.py'],
+        pathex=['lakeception'],
         binaries=None,
-        datas=[
-            ('biomes', 'biomes'),
-            ('audio', 'audio'),
-        ],
+        datas=[],
         hiddenimports=[],
         hookspath=[],
         runtime_hooks=[],
@@ -35,13 +32,14 @@ exe = EXE(
         debug=False,
         strip=False,
         upx=True,
-        console=False,
+        console=True,
         exclude_binaries=False,
 )
 
 coll = COLLECT(
         exe,
+        Tree('assets', 'assets'),
         strip=False,
         upx=True,
-        name='main',
+        name='lakeception',
 )

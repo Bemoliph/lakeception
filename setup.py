@@ -5,34 +5,33 @@ from pip.req import parse_requirements
 from pip.download import PipSession
 import os
 
+from lakeception.const import PROJECT
+
 REQUIREMENTS_PATH = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), "requirements.txt",
+        os.path.dirname(__file__), u'requirements.txt',
     )
 )
 
 setup(
-    name="lakeception",
-    url="https://github.com/bemoliph/lakeception",
-    version="0.0.1",
-    test_suite="tests",
+    name=PROJECT.NAME,
+    description=PROJECT.DESC,
+    url=PROJECT.URL,
+    version=PROJECT.VERSION,
+    test_suite=u'tests',
     packages=find_packages(),
     install_requires=[
         str(i.req)
         for i in parse_requirements(REQUIREMENTS_PATH, session=PipSession())
     ],
-    dependency_links=[
-        "hg+https://bitbucket.org/pygame/pygame#egg=pygame-dev",
-    ],
     tests_require=[
-        "tox",
-        "coverage",
+        u'tox',
+        u'coverage',
     ],
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
-        "Environment :: Console :: Curses",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Topic :: Games/Entertainment :: Arcade",
+        u'Development Status :: 2 - Pre-Alpha',
+        u'Programming Language :: Python',
+        u'Programming Language :: Python :: 2.7',
+        u'Topic :: Games/Entertainment :: Arcade',
     ],
 )

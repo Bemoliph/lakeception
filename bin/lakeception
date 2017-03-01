@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CURPATH=$(PWD)
+BINPATH=`dirname $0`
+cd "$BINPATH/.."
+python -m lakeception $@
+cd "$CURPATH"

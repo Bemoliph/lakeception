@@ -1,104 +1,95 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division
+
 import logging
 import pygame
 
-from lakeception.world import World
-from lakeception.screen import Screen
+from lakeception.audio import Audio
+from lakeception.events import EventHandler, Subscription, EVENTS
 from lakeception.input import Input
-from lakeception import audio
-from lakeception.entity import Entity
+from lakeception.screen import Screen
+from lakeception.surface_factory import SurfaceFactory
+from lakeception.world import World
 
-
-LOGGER = logging.getLogger("lakeception.game")
+LOGGER = logging.getLogger()
 
 
 class Game(object):
-    def __init__(self, debug=False):
-        LOGGER.debug("Initializing game")
+    u"""Central point for initializing all other game components and host of main game loop."""
+    def __init__(self):
+        LOGGER.debug(u'Initializing Game.')
 
-        pygame.mixer.pre_init(44100, 16, 2, 4096)  # setup mixer to avoid sound lag
+        # When True, the game will close. Set via pygame.QUIT
+        self.is_quitting = False
+        # When True, the screen will redraw. Set via const.EVENTS.GAME_UPDATED
+        self.is_updated = True
+        self.is_running = False
+
+        # Set up audio BEFORE initializing pygame.
+        Audio.pre_init()
+
         pygame.init()
-        pygame.display.set_caption("lakeception")
 
-        self.world = World("Test World", (100, 100), debug=debug)
-        Entity.world = self.world  # class level reference to world for AI
+        # Set up TextureFactory AFTER initializing pygame.
+        SurfaceFactory.init()
 
-        if not debug:
-                                            # resolution, viewport
-            self.screen = Screen(self.world, (800, 475), (99, 99))
-        else:
-            self.screen = Screen(self.world, (800, 475), (99, 99))  # debug res
+        self.world = World()
+        self.audio = Audio()
+        self.input = Input(self.world.player)
+        self.screen = Screen(self.world)
 
-        self.input = Input(self)
+        # Listen for changes to game or UI state so we know when to draw
+        EventHandler.subscribe(Subscription(
+            EVENTS.UI_EVENT, self.on_updated,
+            priority=0, is_permanent=True,
+        ))
 
-        self.fps = 60
-        self.clock = pygame.time.Clock()
+        # Listen for quits to handle them gracefully
+        EventHandler.subscribe(Subscription(
+            pygame.QUIT, self.on_quit,
+            priority=0, is_permanent=True,
+        ))
 
-        self.ANIMATE = pygame.USEREVENT + 0
-        self.AI_TICK = pygame.USEREVENT + 1
+    def start(self):
+        u"""Initiates the main game loop, starting the game."""
+        if not self.is_running:
+            LOGGER.debug(u'Starting main game loop.')
+            self.is_running = True
 
-        self.animationRate = 1 * 1000
-        self.ai_tick_rate = 410  # ms, go fast motherfs
+            # Set a generic, repeating event to represent "time" passing in-world.
+            pygame.time.set_timer(
+                EVENTS.WORLD_TICK,
+                EventHandler.WORLD_TICK_RATE
+            )
 
-        # Temporarily (?) disabled animations, because moving + animating was
-        # an INTENSE visual experience
-        # pygame.time.set_timer(self.ANIMATE, self.animationRate)
+            # Main game loop!
+            while not self.is_quitting:
+                self.tick()
 
-        pygame.time.set_timer(self.AI_TICK, self.ai_tick_rate)
-
-        self.updated = True
-        self.quitting = False
-        self.muted = False
-        self.inspecting = False
-        self.editing = False
-
-        self.init_audio()
-
-        LOGGER.debug("Initialized game")
-
-    def init_audio(self):
-        LOGGER.debug("Initializing audio")
-
-        try:
-            pygame.mixer.init()
-        except pygame.error:
-            LOGGER.warning("Unable to initialize audio")
-        else:
-            # From https://www.freesound.org/people/juskiddink/sounds/60507/
-            # albeit a bit mixed to allow for looping
-            tracks = [
-                pygame.mixer.Sound(path)
-                for path in audio.get_audio_files()
-            ]
-
-            # Play & loop crashing waves in the background
-            # Set the volume to an unobtrusive level
-            tracks[0].set_volume(0.1)
-            tracks[0].play(-1)
-
-            # Play the song at a slightly higher volume
-            # import pdb; pdb.set_trace()acks[1].set_volume(0.4)
-            # tracks[1].play()
-
-        LOGGER.debug("Initialized audio")
-
+            LOGGER.debug(u'Exiting main game loop.')
+            self.is_running = False
+            # Fall-through here ends the game naturally
 
     def tick(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                self.input.handleKey(event)
-            elif event.type == self.ANIMATE:
-                self.screen.draw()
-                self.updated = False
-            elif event.type == self.AI_TICK:
-                self.world.ent_man.do_ai_ticks()
-                self.updated = True
-            elif event.type == pygame.QUIT:
-                self.quitting = True
+        u"""Main game loop logic.  Called once per iteration of main game loop."""
+        # Process any events sent since last tick:
+        EventHandler.pump()
 
-        if self.updated:
-            self.screen.draw(self.inspecting, self.editing)
-            self.updated = False
+        # Redraw the screen as necessary:
+        if self.is_updated:
+            self.screen.draw()
+            self.is_updated = False
 
-        timeDelta = self.clock.tick(self.fps)
+    def on_updated(self, event):
+        if hasattr(event, 'is_updated'):
+            self.is_updated = event.is_updated
+
+            return True
+
+    def on_quit(self, event):
+        LOGGER.debug(u'Quit requested by user.')
+        # TODO: Save game state, other tear-down.
+
+        # Signal to main loop that it should end.
+        self.is_quitting = True

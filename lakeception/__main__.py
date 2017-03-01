@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import sys
 
-from lakeception import main
-
+import main
 
 if __name__ == "__main__":
-    main.main(sys.argv[1:])
+    main.run(sys.argv[1:])

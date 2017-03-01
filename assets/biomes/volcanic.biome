@@ -1,0 +1,56 @@
+{
+    "name": "Volcanic Island Biome",
+    "id": 2,
+    "tiles": {
+        "water": {
+            "desc": "some water",
+            "glyph": ".",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
+        },
+        "empty water": {
+            "desc": "some water",
+            "glyph": " ",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
+        },
+        "volcanic ash": {
+            "desc": "a volcanic island",
+            "glyph": "#",
+            "color": "#3f5427",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        },
+        "volcanic rock": {
+            "desc": "a piece of volcanic rock",
+            "glyph": "#",
+            "color": "#544C49",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        },
+        "lava": {
+            "desc": "a pool of lava",
+            "glyph": "L",
+            "color": "#C95632",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        }
+    },
+    "elevations": {
+        "default": [["water", 1]],
+        "9": [["empty water", 1]],
+        "10": [["empty water", 1]],
+        "11": [["empty water", 1]],
+        "12": [["volcanic ash", 7]],
+        "13": [["volcanic rock", 7]],
+        "14": [["lava", 6]],
+        "15": [["lava", 6]],
+        "16": [["lava", 6]],
+        "17": [["lava", 6]],
+        "18": [["lava", 6]],
+        "19": [["lava", 6]],
+        "20": [["lava", 6]]
+    }
+}

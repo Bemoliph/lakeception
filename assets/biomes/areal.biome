@@ -1,0 +1,70 @@
+{
+    "name": "Your First Biome",
+    "id": 0,
+    "tiles": {
+        "water": {
+            "desc": "some water",
+            "glyph": ".",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
+        },
+        "empty water": {
+            "desc": "some water",
+            "glyph": " ",
+            "color": "#62707D",
+            "adjacent_tiles": [],
+            "is_collidable": false
+        },
+        "port": {
+            "desc": "a bustling port",
+            "glyph": "H",
+            "color": "#b85a1c",
+            "adjacent_tiles": ["empty water", "island"],
+            "is_collidable": true
+        },
+        "island": {
+            "desc": "an exotic island",
+            "glyph": "#",
+            "color": "#F0E68C",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        },
+        "grasslands": {
+            "desc": "an exotic island",
+            "glyph": "#",
+            "color": "#70B347",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        },
+        "house": {
+            "desc": "a small house",
+            "glyph": "⌂",
+            "color": "#5B6266",
+            "adjacent_tiles": [],
+            "is_collidable": true
+        },
+        "clustered house": {
+            "desc": "a small town",
+            "glyph": "⌂",
+            "color": "#5B6266",
+            "adjacent_tiles": ["house"],
+            "is_collidable": true
+        }
+    },
+    "elevations": {
+        "default": [["water", 1]],
+        "9": [["empty water", 1]],
+        "10": [["empty water", 9]],
+        "11": [["island", 5], ["port", 2]],
+        "12": [["grasslands", 15], ["house", 1], ["clustered house", 10]],
+        "13": [["grasslands", 6]],
+        "14": [["grasslands", 6]],
+        "15": [["grasslands", 6]],
+        "16": [["grasslands", 7]],
+        "17": [["grasslands", 7]],
+        "18": [["grasslands", 7]],
+        "19": [["grasslands", 7]],
+        "20": [["grasslands", 7]]
+    }
+}

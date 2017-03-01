@@ -56,7 +56,7 @@ Additionally, you will need some way to display SDL if your CentOS is terminal o
 To start the game,
 
 ```sh
-python main.py
+bin/lakeception
 ```
 
 or

@@ -1,5 +1,5 @@
-recursive-include biomes *.biome
-recursive-include audio *.ogg
+recursive-include lakeception/res *.*
 
 include README.md
 include requirements.txt
+include tox.ini

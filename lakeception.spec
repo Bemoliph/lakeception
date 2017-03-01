@@ -32,7 +32,7 @@ exe = EXE(
         debug=False,
         strip=False,
         upx=True,
-        console=True,
+        console=False,
         exclude_binaries=False,
 )
 

@@ -17,8 +17,11 @@ install:
 build_script:
     - "pyinstaller lakeception.spec"
 
+after_build:
+    - "7z a dist\lakeception\lakeception.zip dist\lakeception -x!lakeception.exe.manifest"
+
 artifacts:
-    - path: dist\lakeception.exe
+    - path: dist\lakeception\lakeception.zip
       name: lakeception
 
 deploy:

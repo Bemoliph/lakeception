@@ -29,6 +29,7 @@ exe = EXE(
         a.zipfiles,
         a.datas,
         name='lakeception',
+        icon='assets/icon.ico',
         debug=False,
         strip=False,
         upx=True,
